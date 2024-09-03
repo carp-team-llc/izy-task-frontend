@@ -1,5 +1,4 @@
-import { useState,  } from "react";
-
+import { useState } from "react";
 
 interface InputValue {
   email: string;
@@ -20,13 +19,12 @@ const App = () => {
   };
 
   return (
-   
-    <div className="login-page  " >
-      <div >
-        <img src="./assets/Image/a.png"  />
+    <div className="login-page  ">
+      <div>
+        <img src="./assets/Image/a.png" />
       </div>
       <div>
-        <form className=" login-page flex flex-col justify-center items-center w-[400px] h-[650px] bg-black rounded-[20px] relative " >
+        <form className=" login-page flex flex-col justify-center items-center w-[400px] h-[650px] bg-red-500 rounded-[20px] relative ">
           <div>
             <label>Email:</label>
             <input
@@ -52,6 +50,5 @@ const App = () => {
     </div>
   );
 };
-
 
 export default App;
