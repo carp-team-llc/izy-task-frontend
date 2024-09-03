@@ -1,4 +1,5 @@
-import { useState, type CSSProperties } from "react";
+import { useState,  } from "react";
+
 
 interface InputValue {
   email: string;
@@ -19,12 +20,13 @@ const App = () => {
   };
 
   return (
-    <div className="login-page" style={styles.loginPage}>
-      <div style={styles.imageContainer}>
-        <img src="./assets/Image/a.png" style={styles.image} />
+   
+    <div className="login-page flex flex-col justify-center items-center w-[400px] h-[650px] rounded-[20px] relative " >
+      <div >
+        <img src="./assets/Image/a.png"  />
       </div>
-      <div style={styles.formContainer}>
-        <form className="login-form" style={styles.form}>
+      <div>
+        <form className=" login-page  " >
           <div>
             <label>Email:</label>
             <input
@@ -51,30 +53,5 @@ const App = () => {
   );
 };
 
-const styles: { [key: string]: CSSProperties } = {
-  imageContainer: {
-    flex: 1,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f0f0f0",
-  },
-  image: {
-    maxWidth: "100%",
-    maxHeight: "100%",
-    objectFit: "contain",
-  },
-  formContainer: {
-    flex: 1,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  form: {
-    width: "80%",
-    padding: "20px",
-    borderRadius: "8px",
-  },
-};
 
 export default App;
