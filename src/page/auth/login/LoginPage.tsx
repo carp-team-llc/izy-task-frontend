@@ -1,5 +1,4 @@
 import { useState, type CSSProperties } from "react";
-import useTheme from "../../../hook/useTheme";
 
 interface InputValue {
   username: string;
@@ -8,7 +7,7 @@ interface InputValue {
   password: string;
 }
 
-const theme = useTheme();
+
 
 const LoginPage = () => {
   const [input, setInput] = useState<InputValue>({
@@ -70,13 +69,13 @@ const styles: { [key: string]: CSSProperties } = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: theme.background,
+    
   },
   form: {
     width: "80%",
     padding: "20px",
     borderRadius: "8px",
-    backgroundColor: theme.background,
+  
   },
 };
 
