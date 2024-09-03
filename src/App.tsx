@@ -21,12 +21,12 @@ const App = () => {
 
   return (
    
-    <div className="login-page flex flex-col justify-center items-center w-[400px] h-[650px] rounded-[20px] relative " >
+    <div className="login-page  " >
       <div >
         <img src="./assets/Image/a.png"  />
       </div>
       <div>
-        <form className=" login-page  " >
+        <form className=" login-page flex flex-col justify-center items-center w-[400px] h-[650px] bg-black rounded-[20px] relative " >
           <div>
             <label>Email:</label>
             <input
