@@ -31,27 +31,17 @@ const AxiosClient = (url?: string, headers = {}) => {
 
   api.interceptors.response.use(
     (response) => {
-      // Xử lý dữ liệu response nếu cần
-      // Ví dụ: Log response hoặc kiểm tra các điều kiện cụ thể
       console.log('Response:', response);
 
-      // Nếu response có trường dữ liệu cụ thể, bạn có thể điều chỉnh dữ liệu ở đây
-      // return response.data; // Nếu bạn chỉ cần trả về dữ liệu và không cần toàn bộ response
-
-      return response; // Trả về toàn bộ response nếu cần
+      return response;
     },
     (error) => {
-      // Xử lý lỗi response
-      // Ví dụ: Xử lý lỗi 401 (Unauthorized) và logout người dùng, hoặc thông báo lỗi cho người dùng
 
       if (error.response && error.response.status === 401) {
-        // Ví dụ: Xử lý lỗi unauthorized (401) bằng cách logout người dùng
         const { removeToken } = useAuth();
         removeToken();
-        window.location.href = '/login'; // Điều hướng đến trang đăng nhập
+        window.location.href = '/login';
       }
-
-      // Bạn có thể thêm các điều kiện xử lý lỗi khác ở đây
 
       return Promise.reject(error);
     }
