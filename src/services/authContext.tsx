@@ -21,6 +21,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setToken(null);
   };
 
+  console.log("AuthProvider token:", token);
+
   return (
     <AuthContext.Provider value={{ token, setToken: handleSetToken, removeToken: handleRemoveToken }}>
       {children}

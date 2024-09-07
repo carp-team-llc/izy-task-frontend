@@ -1,5 +1,5 @@
 import AxiosClient from "./AxiosClient";
 
-const rootApi = AxiosClient(process.env.EXPO_PUBLIC_AUTH_API);
+const rootApi = AxiosClient(import.meta.env.VITE_DEV_API_HIHI);
 
 export default rootApi;

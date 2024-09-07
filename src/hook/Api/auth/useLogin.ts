@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import rootApi from '../../../services/initApi'
+import useApi from '../../../services/initApi'
 import endpoint from '../../../services/endpoint'
 
 type LoginParams = {
@@ -14,7 +14,7 @@ type Response = {
 const useLogin = () => {
   const { isError, data, error, mutateAsync } = useMutation({
     mutationFn: (variables: LoginParams) => {
-      return rootApi.post<LoginParams, Response>(
+      return useApi.post<LoginParams, Response>(
         endpoint.login,
         variables
       )
