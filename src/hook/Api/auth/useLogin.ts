@@ -26,7 +26,7 @@ const useLogin = () => {
   
   return {
     isError,
-    data,
+    data: data?.data,
     error,
     onLogin: mutateAsync
   }
