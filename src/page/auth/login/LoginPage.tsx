@@ -1,6 +1,7 @@
 import { Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 import useLogin from '../../../hook/Api/auth/useLogin';
+import { useNavigate } from 'react-router-dom';
 interface InputValue {
   email: string;
   password: string;
@@ -13,6 +14,8 @@ const LoginPage = () => {
     password: "",
   });
 
+  const register = useNavigate();
+
   const handleChangeInput = (value: string, keyInput: string) => {
     setInput((prev) => ({
       ...prev,
@@ -21,7 +24,9 @@ const LoginPage = () => {
   };
 
   const { onLogin, data } = useLogin();
-
+  const handleRegisterClick = () =>{
+    register("/register")
+  }
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
@@ -180,7 +185,8 @@ const LoginPage = () => {
           <div className="text-center">
             <p className="text-sm text-gray-400">
               Don't have an account?{' '}
-              <a href="#" className="font-medium text-purple-500 hover:text-purple-400">
+              <a href="#" className="font-medium text-purple-500 hover:text-purple-400"
+              onClick={handleRegisterClick}>                
                 Sign up now
               </a>
             </p>

@@ -1,6 +1,7 @@
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import UseRegister from "../../../hook/Api/auth/useRegister";
+import { useNavigate } from 'react-router-dom';
 interface InputValue {
   username: string;
   email: string;
@@ -16,6 +17,7 @@ const RegisterPage = () => {
     email: "",
     phone: "",
   });
+  const login = useNavigate();
 
   const handleChangeInput = (value: string, keyInput: string) => {
     setInput((prev) => ({
@@ -25,6 +27,9 @@ const RegisterPage = () => {
   };
 
   const { onRegister, data } = UseRegister();
+  const handleLoginClick = () =>{
+    login("/login")
+  }
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -64,7 +69,7 @@ const RegisterPage = () => {
             <div>
               <label
                 htmlFor="username"
-                className="block text-sm font-medium text-gray-400"
+                className="block text-sm font-medium text-gray-400 mt-[-30px]"
               >
                 UserName
               </label>
@@ -83,7 +88,7 @@ const RegisterPage = () => {
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-gray-400"
+                className="block text-sm font-medium text-gray-400 mt-[-10px]"
               >
                 Password
               </label>
@@ -114,7 +119,7 @@ const RegisterPage = () => {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-gray-400"
+                  className="block text-sm font-medium text-gray-400 mt-[10px]"
                 >
                   Email 
                 </label>
@@ -133,7 +138,7 @@ const RegisterPage = () => {
               <div>
                 <label
                   htmlFor="phone"
-                  className="block text-sm font-medium text-gray-400"
+                  className="block text-sm font-medium text-gray-400 mt-[10px]"
                 >
                    Phone number
                 </label>
@@ -142,7 +147,7 @@ const RegisterPage = () => {
                   name="phone"
                   type="text"
                   required
-                  className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="mt-2 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   placeholder="Enter your phone number"
                   onChange={(event) =>
                     handleChangeInput(event.target.value, "phone")
@@ -199,31 +204,19 @@ const RegisterPage = () => {
               </svg>
               Or sign in with GitHub
             </button>
-            <button className="w-full flex items-center justify-center px-4 py-2 border border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-300 bg-gray-700 hover:bg-gray-600">
-              <svg
-                className="w-5 h-5 mr-2"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M20 10c0-5.523-4.477-10-10-10S0 4.477 0 10c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V10h2.54V7.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V10h2.773l-.443 2.89h-2.33v6.988C16.343 19.128 20 14.991 20 10z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              Or sign in with Facebook
-            </button>
+            
           </div>
 
           {/* Sign up link */}
           <div className="text-center">
-            <p className="text-sm text-gray-400">
-              Don't have an account?{" "}
+            <p className="text-sm text-gray-400 mt-[-20px]">
+              Have an account?{" "}
               <a
                 href="#"
                 className="font-medium text-purple-500 hover:text-purple-400"
+                onClick={handleLoginClick}
               >
-                Sign up now
+                Sign in now
               </a>
             </p>
           </div>
