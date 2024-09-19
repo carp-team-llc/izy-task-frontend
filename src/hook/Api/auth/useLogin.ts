@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import useApi from '../../../services/initApi'
 import endpoint from '../../../services/endpoint'
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../services/authContext';
 
 
 type LoginParams = {
@@ -14,6 +15,7 @@ type Response = {
 }
 
 const useLogin = () => {
+  const { setToken } = useAuth();
   const success = useNavigate();
   const { isError, data, error, mutateAsync } = useMutation({
     mutationFn: (variables: LoginParams) => {
@@ -23,12 +25,13 @@ const useLogin = () => {
       )
     },
     onSuccess: (e: any) => {
-      alert(e?.response?.data?.message || 'Come on Baby')
+      setToken(e?.data?.accessToken)
+      alert(e?.data?.message || 'Come on Baby')
       success('/dashboard')
 
     },
     onError: (e: any) => {
-      alert(e?.response?.data?.message || 'Đã có lỗi xảy ra')
+      alert(e?.data?.message || 'Đã có lỗi xảy ra')
     }
   })
   

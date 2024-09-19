@@ -9,13 +9,13 @@ import { router } from "./router/index.tsx";
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
-  <AuthProvider>
-    <StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <Suspense fallback ="Loading">
-        <RouterProvider router={router}></RouterProvider>
-        </Suspense>
-      </QueryClientProvider>
-    </StrictMode>
-  </AuthProvider>
+  <StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <Suspense fallback="Loading">
+        <AuthProvider>
+          <RouterProvider router={router}></RouterProvider>
+        </AuthProvider>
+      </Suspense>
+    </QueryClientProvider>
+  </StrictMode>
 );
