@@ -1,23 +1,35 @@
-import React from "react";
 import { ChevronDown, Users } from "lucide-react";
 
-const RoundChart: React.FC = () => {
-  const total = 2500;
-  const active = 1500;
-  const inactive = 1000;
+interface RoundChartProps {
+  total: number;
+  completed: number;
+  completedName: string;
+  completedColor: string;
+  late: number;
+  lateName: string;
+  lateColor: string;
+}
 
+const RoundChart = ({
+  total,
+  completed,
+  completedName,
+  completedColor,
+  late,
+  lateName,
+  lateColor,
+}: RoundChartProps) => {
   // Tính toán tỷ lệ phần trăm của từng phần
   const calculatePercentage = (value: number) => (value / total) * 100;
 
-  const inactivePercentage = calculatePercentage(inactive);
-  const activePercentage = calculatePercentage(active);
+  const inactivePercentage = calculatePercentage(late);
+  const activePercentage = calculatePercentage(completed);
 
   // Chuyển đổi tỷ lệ phần trăm thành góc trong 360 độ
   const percentageToAngle = (percentage: number) => (percentage / 100) * 360;
 
   const inactiveAngle = percentageToAngle(inactivePercentage);
   const activeAngle = percentageToAngle(activePercentage);
-  const totalAngle = 360; // Đoạn total chiếm toàn bộ 360 độ
 
   // Tính góc bắt đầu và kết thúc cho từng phần
   const inactiveStartAngle = 0;
@@ -81,16 +93,16 @@ const RoundChart: React.FC = () => {
           <div>
             <div className="flex items-center">
               <div className="w-3 h-3 rounded-full bg-purple-500 mr-2"></div>
-              <span className="text-sm text-gray-400">Inactive</span>
+              <span className="text-sm text-gray-400">{completedName}</span>
             </div>
-            <p className="text-2xl font-bold">{inactive}</p>
+            <p className="text-2xl font-bold">{late}</p>
           </div>
           <div>
             <div className="flex items-center">
               <div className="w-3 h-3 rounded-full bg-orange-500 mr-2"></div>
-              <span className="text-sm text-gray-400">Active</span>
+              <span className="text-sm text-gray-400">{lateName}</span>
             </div>
-            <p className="text-2xl font-bold">{active}</p>
+            <p className="text-2xl font-bold">{completed}</p>
           </div>
           <div>
             <div className="flex items-center">
@@ -136,7 +148,6 @@ const RoundChart: React.FC = () => {
               stroke="#eab308"
               strokeWidth="8"
               strokeLinecap="butt"
-              
             >
               <animateTransform
                 attributeName="transform"
@@ -158,7 +169,7 @@ const RoundChart: React.FC = () => {
                 inactiveEndAngle
               )}
               fill="none"
-              stroke="#f97316"
+              stroke={completedColor}
               strokeWidth="8"
               strokeLinecap="round"
             >
@@ -176,7 +187,7 @@ const RoundChart: React.FC = () => {
             <path
               d={describeArc(100, 100, 50, activeStartAngle, activeEndAngle)}
               fill="none"
-              stroke="#9333ea"
+              stroke={lateColor}
               strokeWidth="8"
               strokeLinecap="round"
             >
