@@ -28,7 +28,7 @@ export default function ChartsOverviewDemo() {
                 {value}
               </text>
             )}
-            barSize={70}
+            barSize={50}
             radius={[5, 5, 0, 0]} // Bo tròn các góc của các cột
           >
             {data.map((entry, index) => (
