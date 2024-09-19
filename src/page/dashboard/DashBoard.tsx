@@ -5,6 +5,7 @@ import BarChartComponents from "../../component/chart/BarChartComponent";
 import RoundChart from "../../component/chart/RoundChart";
 import UseDailyChart from "../../hook/Api/task/Chart/useDailyChart";
 import SimpleLineChart from "../../component/chart/SimpleLineChart";
+import UsingRoundChart from "./component/UsingRoundChart";
 
 interface TopStatProps {
   title: string;
@@ -121,7 +122,7 @@ export default function Dashboard() {
           {/* Employees */}
           <div className="bg-[#1a1f37] rounded-lg p-4">
             <h2 className="text-lg font-semibold mb-4">Weekly Task</h2>
-            <RoundChart></RoundChart>
+            <UsingRoundChart />
           </div>
 
           {/* Project Deliveries */}
