@@ -13,7 +13,7 @@ export default function BarChartComponents({ data, colors, legends }: BarChartPr
     <div className="flex">
       {/* Bar Chart Column */}
       <div className="flex-3">
-        <BarChart width={Helper.normalize(600)} height={Helper.normalize(350)} data={data}>
+        <BarChart width={Helper.normalize(550)} height={Helper.normalize(350)} data={data}>
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
@@ -24,7 +24,7 @@ export default function BarChartComponents({ data, colors, legends }: BarChartPr
                 {value}
               </text>
             )}
-            barSize={70}
+            barSize={50}
             radius={[5, 5, 0, 0]}
           >
             {data?.map((entry: any, index: any) => (

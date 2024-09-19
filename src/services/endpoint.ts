@@ -4,5 +4,7 @@ export default {
 
   // #region Chart
   daily_chart: "api/v1/task/daily_chart",
+  weekly_chart:"api/v1/task/weekly_chart",
   // #endregion
+
 }

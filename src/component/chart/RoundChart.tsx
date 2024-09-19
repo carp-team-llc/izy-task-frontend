@@ -1,7 +1,71 @@
-import React from 'react'
-import { ChevronDown, Users } from 'lucide-react'
+import React from "react";
+import { ChevronDown, Users } from "lucide-react";
 
 const RoundChart: React.FC = () => {
+  const total = 2500;
+  const active = 1500;
+  const inactive = 1000;
+
+  // Tính toán tỷ lệ phần trăm của từng phần
+  const calculatePercentage = (value: number) => (value / total) * 100;
+
+  const inactivePercentage = calculatePercentage(inactive);
+  const activePercentage = calculatePercentage(active);
+
+  // Chuyển đổi tỷ lệ phần trăm thành góc trong 360 độ
+  const percentageToAngle = (percentage: number) => (percentage / 100) * 360;
+
+  const inactiveAngle = percentageToAngle(inactivePercentage);
+  const activeAngle = percentageToAngle(activePercentage);
+  const totalAngle = 360; // Đoạn total chiếm toàn bộ 360 độ
+
+  // Tính góc bắt đầu và kết thúc cho từng phần
+  const inactiveStartAngle = 0;
+  const inactiveEndAngle = inactiveAngle;
+
+  const activeStartAngle = inactiveEndAngle;
+  const activeEndAngle = activeStartAngle + activeAngle;
+
+  // Chuyển đổi từ tọa độ cực sang tọa độ Cartesian
+  const polarToCartesian = (
+    centerX: number,
+    centerY: number,
+    radius: number,
+    angleInDegrees: number
+  ) => {
+    const angleInRadians = (angleInDegrees - 90) * (Math.PI / 180);
+    return {
+      x: centerX + radius * Math.cos(angleInRadians),
+      y: centerY + radius * Math.sin(angleInRadians),
+    };
+  };
+
+  // Tạo đường cong (arc) cho SVG
+  const describeArc = (
+    x: number,
+    y: number,
+    radius: number,
+    startAngle: number,
+    endAngle: number
+  ) => {
+    const start = polarToCartesian(x, y, radius, endAngle);
+    const end = polarToCartesian(x, y, radius, startAngle);
+    const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+    return [
+      "M",
+      start.x,
+      start.y,
+      "A",
+      radius,
+      radius,
+      0,
+      largeArcFlag,
+      0,
+      end.x,
+      end.y,
+    ].join(" ");
+  };
+
   return (
     <div className="bg-[#1a1f37] text-white p-6 rounded-lg max-w-md">
       <div className="flex justify-between items-center mb-6">
@@ -19,37 +83,103 @@ const RoundChart: React.FC = () => {
               <div className="w-3 h-3 rounded-full bg-purple-500 mr-2"></div>
               <span className="text-sm text-gray-400">Inactive</span>
             </div>
-            <p className="text-2xl font-bold">254</p>
+            <p className="text-2xl font-bold">{inactive}</p>
           </div>
           <div>
             <div className="flex items-center">
               <div className="w-3 h-3 rounded-full bg-orange-500 mr-2"></div>
               <span className="text-sm text-gray-400">Active</span>
             </div>
-            <p className="text-2xl font-bold">3000</p>
+            <p className="text-2xl font-bold">{active}</p>
           </div>
           <div>
             <div className="flex items-center">
               <div className="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
               <span className="text-sm text-gray-400">Total</span>
             </div>
-            <p className="text-2xl font-bold">3254</p>
+            <p className="text-2xl font-bold">{total}</p>
           </div>
         </div>
 
         <div className="relative w-48 h-48">
           <svg className="w-full h-full" viewBox="0 0 200 200">
-            {/* Outer circle */}
-            <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
-            
-            {/* Middle circle */}
-            <circle cx="100" cy="100" r="70" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
-            
-            {/* Inner circle */}
-            <circle cx="100" cy="100" r="50" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
+            {/* Các vòng tròn nền */}
+            <circle
+              cx="100"
+              cy="100"
+              r="90"
+              fill="none"
+              stroke="rgba(255,255,255,0.1)"
+              strokeWidth="1"
+            />
+            <circle
+              cx="100"
+              cy="100"
+              r="70"
+              fill="none"
+              stroke="rgba(255,255,255,0.1)"
+              strokeWidth="1"
+            />
+            <circle
+              cx="100"
+              cy="100"
+              r="50"
+              fill="none"
+              stroke="rgba(255,255,255,0.1)"
+              strokeWidth="1"
+            />
 
-            {/* Orbiting elements */}
-            <circle className="animate-orbit" cx="190" cy="100" r="4" fill="#9333ea">
+            {/* Đoạn đường cong Total */}
+            <path
+              d={describeArc(100, 100, 90, -180, 179)}
+              fill="none"
+              stroke="#eab308"
+              strokeWidth="8"
+              strokeLinecap="butt"
+              
+            >
+              <animateTransform
+                attributeName="transform"
+                type="rotate"
+                from="0 100 100"
+                to="360 100 100"
+                dur="20s"
+                repeatCount="indefinite"
+              />
+            </path>
+
+            {/* Đoạn đường cong Active */}
+            <path
+              d={describeArc(
+                100,
+                100,
+                70,
+                inactiveStartAngle,
+                inactiveEndAngle
+              )}
+              fill="none"
+              stroke="#f97316"
+              strokeWidth="8"
+              strokeLinecap="round"
+            >
+              <animateTransform
+                attributeName="transform"
+                type="rotate"
+                from="0 100 100"
+                to="360 100 100"
+                dur="15s"
+                repeatCount="indefinite"
+              />
+            </path>
+
+            {/* Đoạn đường cong Inactive */}
+            <path
+              d={describeArc(100, 100, 50, activeStartAngle, activeEndAngle)}
+              fill="none"
+              stroke="#9333ea"
+              strokeWidth="8"
+              strokeLinecap="round"
+            >
               <animateTransform
                 attributeName="transform"
                 type="rotate"
@@ -58,29 +188,7 @@ const RoundChart: React.FC = () => {
                 dur="10s"
                 repeatCount="indefinite"
               />
-            </circle>
-            
-            <circle className="animate-orbit" cx="170" cy="100" r="4" fill="#f97316">
-              <animateTransform
-                attributeName="transform"
-                type="rotate"
-                from="120 100 100"
-                to="480 100 100"
-                dur="15s"
-                repeatCount="indefinite"
-              />
-            </circle>
-            
-            <circle className="animate-orbit" cx="150" cy="100" r="4" fill="#eab308">
-              <animateTransform
-                attributeName="transform"
-                type="rotate"
-                from="240 100 100"
-                to="600 100 100"
-                dur="20s"
-                repeatCount="indefinite"
-              />
-            </circle>
+            </path>
           </svg>
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="bg-orange-500 rounded-full p-4">
@@ -90,7 +198,7 @@ const RoundChart: React.FC = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default RoundChart
+export default RoundChart;
