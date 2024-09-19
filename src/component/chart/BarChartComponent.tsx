@@ -1,17 +1,12 @@
-import * as React from "react";
 import { BarChart, Bar, Cell, XAxis, YAxis, Tooltip } from "recharts";
 
-const data = [
-  { name: "Late", total: 35 },
-  { name: "Doing", total: 23 },
-  { name: "Pending", total: 34 },
-  { name: "New", total: 67 },
-];
+type BarChartProps = {
+  data?: any,
+  colors?: any,
+  legends?: any,
+}
 
-const COLORS = ["#FF5733", "#33FF57", "#3357FF", "#FF33A6"];
-const LEGENDS = ["Late", "Doing", "Pending", "New"];
-
-export default function ChartsOverviewDemo() {
+export default function ChartsOverviewDemo({ data, colors, legends }: BarChartProps) {
   
   return (
     <div className="flex">
@@ -31,10 +26,10 @@ export default function ChartsOverviewDemo() {
             barSize={70}
             radius={[5, 5, 0, 0]} // Bo tròn các góc của các cột
           >
-            {data.map((entry, index) => (
+            {data?.map((entry: any, index: any) => (
               <Cell
                 key={`cell-${index}`}
-                fill={COLORS[index % COLORS.length]}
+                fill={colors[index % colors?.length]}
               />
             ))}
           </Bar>
@@ -43,13 +38,13 @@ export default function ChartsOverviewDemo() {
 
       {/* Legend Column */}
       <div className="flex-1 mt-[90px] ml-16 space-y-6 ">
-        {COLORS.map((color, index) => (
+        {colors?.map((color: any, index: any) => (
           <div
             key={index}
             className="flex items-center mb-2"
           >
             <div style={{ backgroundColor: color }} className="w-6 h-6 mr-2 rounded-sm" />
-            <span>{LEGENDS[index]}</span>
+            <span>{legends[index]}</span>
           </div>
         ))}
       </div>

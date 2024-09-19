@@ -1,14 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Menu from "../../component/menu/Menu";
 import Header from "../../component/header/Header";
 import ChartsOverviewDemo from "../../component/chart/BarChartComponent";
 import RoundChart from "../../component/chart/RoundChart";
+import UseDailyChart from "../../hook/Api/task/Chart/useDailyChart";
 
 interface TopStatProps {
   title: string;
   subtitle: string;
   value: string;
   bgColor: string;
+}
+
+interface NotificationProps {
+  name: string;
+  action: string;
+  time: string;
+  avatar: string;
+}
+
+interface Variables {
+  status: any;
+  createdAt: string;
 }
 
 const TopStat: React.FC<TopStatProps> = ({
@@ -23,13 +36,6 @@ const TopStat: React.FC<TopStatProps> = ({
     <p className="text-xs mt-2 text-gray-500">{value}</p>
   </div>
 );
-
-interface NotificationProps {
-  name: string;
-  action: string;
-  time: string;
-  avatar: string;
-}
 
 const Notification: React.FC<NotificationProps> = ({
   name,
@@ -49,6 +55,39 @@ const Notification: React.FC<NotificationProps> = ({
 );
 
 export default function Dashboard() {
+  const [chartData, setChartData] = useState<string[]>([]);
+  const [createdAt, setCreatedAt] = useState("");
+
+  const body: Variables = {
+    status: chartData,
+    createdAt: createdAt,
+  };
+
+  const { data } = UseDailyChart(body);
+
+  const statusData = ["LATE", "DOING", "CANCEL", "PENDING", "COMPLETED", "NEW"];
+  const pickDate = "2024-09-19T10:46:01.538Z";
+
+  const loadData = data?.taskChart;
+
+  const totalData = loadData?.map((task: any) => {
+    return {
+      name: task?.statusInfo?.name,
+      total: task?.total,
+    };
+  });
+  const colorData = loadData?.map((color: any) => {
+    return color?.statusInfo?.color;
+  });
+  const legendData = loadData?.map((legend: any) => {
+    return legend?.statusInfo?.name;
+  });
+
+  useEffect(() => {
+    setChartData(statusData);
+    setCreatedAt(pickDate);
+  }, []);
+
   return (
     <div className="flex bg-[#13172b] min-h-screen text-white ]">
       {/* Sidebar */}
@@ -66,12 +105,18 @@ export default function Dashboard() {
           {/* Teams Strength */}
 
           <div className="col-span-2 bg-[#1a1f37] rounded-lg p-4">
-            <h2 className="text-lg font-semibold mb-4">Daily Chart</h2>
-            
-            <div >
-              <ChartsOverviewDemo></ChartsOverviewDemo>
+            <div className="flex flex-row justify-between">
+              <h2 className="text-lg font-semibold mb-4">Daily Chart</h2>
+              <h2 className="text-lg font-semibold mb-4">Total Task: {data?.totalTask}</h2>
             </div>
-            
+
+            <div>
+              <ChartsOverviewDemo
+                data={totalData}
+                colors={colorData}
+                legends={legendData}
+              />
+            </div>
           </div>
 
           {/* Employees */}

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useAuth } from "./authContext";
 
-const AxiosClient = (url: string, token: string | null, headers = {}) => {
+const AxiosClient = (url: string, headers = {}) => {
   if (!url) {
     throw new Error("URL is required");
   }
@@ -11,14 +11,22 @@ const AxiosClient = (url: string, token: string | null, headers = {}) => {
     headers: {
       "Content-Type": "application/json",
       accept: "*/*",
-      ...headers
-    }
-  })
+      ...headers,
+    },
+  });
 
   api.interceptors.request.use(
-    (config) => {
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+    async (config) => {
+      const token = await localStorage.getItem("AUTH_IZY_TASK")
+      if (!token) {
+        console.log("Need login!")
+      }
+      try {
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+      } catch (err) {
+        console.error("Error in handle auth: ", err)
       }
       return config;
     },
@@ -27,12 +35,11 @@ const AxiosClient = (url: string, token: string | null, headers = {}) => {
 
   api.interceptors.response.use(
     (response) => {
-      console.log('Response:', response);
+      console.log("Response:", response);
 
       return response;
     },
     (error) => {
-
       if (error.response && error.response.status === 401) {
         const { removeToken } = useAuth();
         removeToken();
@@ -44,6 +51,6 @@ const AxiosClient = (url: string, token: string | null, headers = {}) => {
   );
 
   return api;
-}
+};
 
 export default AxiosClient;
