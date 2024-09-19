@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Menu from "../../component/menu/Menu";
 import Header from "../../component/header/Header";
-import ChartsOverviewDemo from "../../component/chart/BarChartComponent";
+import BarChartComponents from "../../component/chart/BarChartComponent";
 import RoundChart from "../../component/chart/RoundChart";
 import UseDailyChart from "../../hook/Api/task/Chart/useDailyChart";
+import SimpleLineChart from "../../component/chart/SimpleLineChart";
 
 interface TopStatProps {
   title: string;
@@ -19,10 +20,11 @@ interface NotificationProps {
   avatar: string;
 }
 
-interface Variables {
+interface BarVariables {
   status: any;
   createdAt: string;
 }
+
 
 const TopStat: React.FC<TopStatProps> = ({
   title,
@@ -55,37 +57,36 @@ const Notification: React.FC<NotificationProps> = ({
 );
 
 export default function Dashboard() {
-  const [chartData, setChartData] = useState<string[]>([]);
-  const [createdAt, setCreatedAt] = useState("");
+  const [BarChartData, setBarChartData] = useState<string[]>([]);
+  const [BarCreatedAt, setBarCreatedAt] = useState("");
 
-  const body: Variables = {
-    status: chartData,
-    createdAt: createdAt,
+  const body: BarVariables = {
+    status: BarChartData,
+    createdAt: BarCreatedAt,
   };
 
   const { data } = UseDailyChart(body);
 
-  const statusData = ["LATE", "DOING", "CANCEL", "PENDING", "COMPLETED", "NEW"];
-  const pickDate = "2024-09-19T10:46:01.538Z";
+  const statusBarData = ["LATE", "DOING", "CANCEL", "PENDING", "COMPLETED", "NEW"];
+  const pickBarDate = "2024-09-19T10:46:01.538Z";
 
-  const loadData = data?.taskChart;
-
-  const totalData = loadData?.map((task: any) => {
+  const loadBarData = data?.taskChart;
+  const totalBarData = loadBarData?.map((task: any) => {
     return {
       name: task?.statusInfo?.name,
       total: task?.total,
     };
   });
-  const colorData = loadData?.map((color: any) => {
+  const colorBarData = loadBarData?.map((color: any) => {
     return color?.statusInfo?.color;
   });
-  const legendData = loadData?.map((legend: any) => {
+  const legendBarData = loadBarData?.map((legend: any) => {
     return legend?.statusInfo?.name;
   });
 
   useEffect(() => {
-    setChartData(statusData);
-    setCreatedAt(pickDate);
+    setBarChartData(statusBarData);
+    setBarCreatedAt(pickBarDate);
   }, []);
 
   return (
@@ -98,9 +99,7 @@ export default function Dashboard() {
       {/* Main content */}
       <div className="w-full mt-[100px] ml-[20px]">
         {" "}
-        {/* Thêm pt-24 để đẩy nội dung xuống */}
         <Header></Header>
-        {/* Dashboard content */}
         <div className="grid grid-cols-3 gap-6 pr-5">
           {/* Teams Strength */}
 
@@ -111,10 +110,10 @@ export default function Dashboard() {
             </div>
 
             <div>
-              <ChartsOverviewDemo
-                data={totalData}
-                colors={colorData}
-                legends={legendData}
+              <BarChartComponents
+                data={totalBarData}
+                colors={colorBarData}
+                legends={legendBarData}
               />
             </div>
           </div>
@@ -123,40 +122,14 @@ export default function Dashboard() {
           <div className="bg-[#1a1f37] rounded-lg p-4">
             <h2 className="text-lg font-semibold mb-4">Weekly Task</h2>
             <RoundChart></RoundChart>
-            {/* <div className="flex justify-center items-center h-40">
-              <div className="relative w-32 h-32">
-                <div className="absolute inset-0 border-4 border-purple-500 rounded-full"></div>
-                <div className="absolute inset-2 border-4 border-blue-500 rounded-full"></div>
-                <div className="absolute inset-4 border-4 border-green-500 rounded-full"></div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <img
-                    src="/placeholder.svg?height=64&width=64"
-                    alt="Employee"
-                    className="w-16 h-16 rounded-full"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="flex justify-between mt-4 text-sm">
-              <div>
-                <p className="text-purple-500">254</p>
-                <p className="text-gray-400">Active</p>
-              </div>
-              <div>
-                <p className="text-blue-500">3000</p>
-                <p className="text-gray-400">Inactive</p>
-              </div>
-              <div>
-                <p className="text-green-500">3254</p>
-                <p className="text-gray-400">Total</p>
-              </div>
-            </div> */}
           </div>
 
           {/* Project Deliveries */}
           <div className="col-span-2 bg-[#1a1f37] rounded-lg p-4">
             <h2 className="text-lg font-semibold mb-4">Project Deliveries</h2>
-            <div className="h-40 bg-gradient-to-r from-purple-500 via-blue-500 to-green-500 opacity-50 rounded"></div>
+            <SimpleLineChart></SimpleLineChart>
+            
+            {/* <div className="h-40 bg-gradient-to-r from-purple-500 via-blue-500 to-green-500 opacity-50 rounded"></div>
             <div className="flex justify-between mt-4 text-xs text-gray-400">
               <span>Oct 2021</span>
               <span>Nov 2021</span>
@@ -164,7 +137,7 @@ export default function Dashboard() {
               <span>Jan 2022</span>
               <span>Feb 2022</span>
               <span>Mar 2022</span>
-            </div>
+            </div> */}
           </div>
 
           {/* Top 10 and Notifications */}

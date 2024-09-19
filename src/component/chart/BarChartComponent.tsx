@@ -1,4 +1,5 @@
 import { BarChart, Bar, Cell, XAxis, YAxis, Tooltip } from "recharts";
+import Helper from "../../constant/Helper";
 
 type BarChartProps = {
   data?: any,
@@ -6,13 +7,13 @@ type BarChartProps = {
   legends?: any,
 }
 
-export default function ChartsOverviewDemo({ data, colors, legends }: BarChartProps) {
+export default function BarChartComponents({ data, colors, legends }: BarChartProps) {
   
   return (
     <div className="flex">
       {/* Bar Chart Column */}
       <div className="flex-3">
-        <BarChart width={600} height={350} data={data}>
+        <BarChart width={Helper.normalize(550)} height={Helper.normalize(350)} data={data}>
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
@@ -24,7 +25,7 @@ export default function ChartsOverviewDemo({ data, colors, legends }: BarChartPr
               </text>
             )}
             barSize={50}
-            radius={[5, 5, 0, 0]} // Bo tròn các góc của các cột
+            radius={[5, 5, 0, 0]}
           >
             {data?.map((entry: any, index: any) => (
               <Cell
