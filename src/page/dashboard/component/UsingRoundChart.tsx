@@ -24,17 +24,8 @@ const UsingRoundChart = () => {
   const RoundToDateData = "2024-09-19T10:46:09.964Z";
 
   const loadRoundData = data?.taskChart;
-  const totalRoundData = loadRoundData?.map((task: any) => {
-    return {
-      name: task?.statusInfo?.name,
-      engName: task?.statusInfo?.engName,
-      total: task?.total,
-      color: task?.statusInfo?.color,
-    };
-  });
-
-  const totalCompleted = totalRoundData[0]
-  const totalLate = totalRoundData[1]
+  const totalCompleted = loadRoundData?.find((task: any) => task.name === "COMPLETED");
+  const totalLate = loadRoundData?.find((task: any) => task.name === "LATE");
   
   useEffect(() => {
     setRouChartData(statusRoundData);
@@ -44,7 +35,15 @@ const UsingRoundChart = () => {
 
   return (
     <div>
-      <RoundChart completedName={totalCompleted?.engName} lateName={totalLate?.engName} total={data?.totalTask} completed={totalCompleted?.total} late={totalLate?.total} completedColor={totalCompleted?.color} lateColor={totalLate?.color} />
+      <RoundChart 
+        total={data?.totalTask} 
+        late={totalLate?.total} 
+        lateName={totalLate?.statusInfo?.engName}
+        lateColor={totalLate?.statusInfo?.color} 
+        completed={totalCompleted?.total}
+        completedColor={totalCompleted?.statusInfo?.color} 
+        completedName={totalCompleted?.statusInfo?.engName} 
+      />
     </div>
   );
 };
