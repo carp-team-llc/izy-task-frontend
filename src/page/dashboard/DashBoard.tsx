@@ -6,6 +6,8 @@ import RoundChart from "../../component/chart/RoundChart";
 import UseDailyChart from "../../hook/Api/task/Chart/useDailyChart";
 import SimpleLineChart from "../../component/chart/SimpleLineChart";
 import UsingRoundChart from "./component/UsingRoundChart";
+import NotificationsComponent from "../../component/Notifications/NotificationsComponent";
+import UsingNotification from "./component/UsingNotifications";
 
 interface TopStatProps {
   title: string;
@@ -14,18 +16,12 @@ interface TopStatProps {
   bgColor: string;
 }
 
-interface NotificationProps {
-  name: string;
-  action: string;
-  time: string;
-  avatar: string;
-}
+
 
 interface BarVariables {
   status: any;
   createdAt: string;
 }
-
 
 const TopStat: React.FC<TopStatProps> = ({
   title,
@@ -40,22 +36,6 @@ const TopStat: React.FC<TopStatProps> = ({
   </div>
 );
 
-const Notification: React.FC<NotificationProps> = ({
-  name,
-  action,
-  time,
-  avatar,
-}) => (
-  <div className="flex items-center space-x-3 p-2 hover:bg-gray-700 rounded-lg">
-    <img src={avatar} alt={name} className="w-10 h-10 rounded-full" />
-    <div>
-      <p className="text-sm text-white">
-        <span className="font-semibold">{name}</span> {action}
-      </p>
-      <p className="text-xs text-gray-400">{time}</p>
-    </div>
-  </div>
-);
 
 export default function Dashboard() {
   const [BarChartData, setBarChartData] = useState<string[]>([]);
@@ -68,7 +48,14 @@ export default function Dashboard() {
 
   const { data } = UseDailyChart(body);
 
-  const statusBarData = ["LATE", "DOING", "CANCEL", "PENDING", "COMPLETED", "NEW"];
+  const statusBarData = [
+    "LATE",
+    "DOING",
+    "CANCEL",
+    "PENDING",
+    "COMPLETED",
+    "NEW",
+  ];
   const pickBarDate = "2024-09-19T10:46:01.538Z";
 
   const loadBarData = data?.taskChart;
@@ -107,7 +94,9 @@ export default function Dashboard() {
           <div className="col-span-2 bg-[#1a1f37] rounded-lg p-4">
             <div className="flex flex-row justify-between">
               <h2 className="text-lg font-semibold mb-4">Daily Chart</h2>
-              <h2 className="text-lg font-semibold mb-4">Total Task: {data?.totalTask}</h2>
+              <h2 className="text-lg font-semibold mb-4">
+                Total Task: {data?.totalTask}
+              </h2>
             </div>
 
             <div>
@@ -129,16 +118,6 @@ export default function Dashboard() {
           <div className="col-span-2 bg-[#1a1f37] rounded-lg p-4">
             <h2 className="text-lg font-semibold mb-4">Project Deliveries</h2>
             <SimpleLineChart></SimpleLineChart>
-            
-            {/* <div className="h-40 bg-gradient-to-r from-purple-500 via-blue-500 to-green-500 opacity-50 rounded"></div>
-            <div className="flex justify-between mt-4 text-xs text-gray-400">
-              <span>Oct 2021</span>
-              <span>Nov 2021</span>
-              <span>Dec 2021</span>
-              <span>Jan 2022</span>
-              <span>Feb 2022</span>
-              <span>Mar 2022</span>
-            </div> */}
           </div>
 
           {/* Top 10 and Notifications */}
@@ -161,34 +140,7 @@ export default function Dashboard() {
               value="5% increase from last week"
               bgColor="bg-blue-100"
             />
-            <div className="bg-[#1a1f37] rounded-lg p-4">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold">Notifications</h2>
-                <a href="#" className="text-purple-500 text-sm">
-                  View All
-                </a>
-              </div>
-              <div className="space-y-2">
-                <Notification
-                  name="Ellie"
-                  action="joined team developers"
-                  time="2 mins ago"
-                  avatar="/placeholder.svg?height=40&width=40"
-                />
-                <Notification
-                  name="Jenny"
-                  action="joined team HR"
-                  time="1 hour ago"
-                  avatar="/placeholder.svg?height=40&width=40"
-                />
-                <Notification
-                  name="Adam"
-                  action="got employee of the month"
-                  time="2 hours ago"
-                  avatar="/placeholder.svg?height=40&width=40"
-                />
-              </div>
-            </div>
+           <UsingNotification></UsingNotification>
           </div>
         </div>
       </div>
