@@ -12,6 +12,8 @@ const UsingRoundChart = () => {
   const [RoundChartData, setRouChartData] = useState<string[]>([]);
   const [RoundFromDate, setRoundFromdate] = useState("");
   const [RoundToDate, setRoundTodate] = useState("");
+  const [completedData, setCompletedData] = useState();
+  const [lateData, setLateData] = useState();
 
   const body: RoundVariables = {
     status: RoundChartData,
@@ -24,25 +26,35 @@ const UsingRoundChart = () => {
   const RoundToDateData = "2024-09-19T10:46:09.964Z";
 
   const loadRoundData = data?.taskChart;
-  const totalCompleted = loadRoundData?.find((task: any) => task.name === "COMPLETED");
-  const totalLate = loadRoundData?.find((task: any) => task.name === "LATE");
-  
+  const totalCompleted: any = completedData || [];
+  const totalLate: any = lateData || [];
+
   useEffect(() => {
     setRouChartData(statusRoundData);
     setRoundFromdate(RoundFromDateData);
     setRoundTodate(RoundToDateData);
-  }, []);
+    if (data) {
+      const getCompletedData = loadRoundData?.find(
+        (task: any) => task.name === "COMPLETED"
+      )
+      const getLateData = loadRoundData?.find(
+        (task: any) => task.name === "LATE"
+      )
+      setCompletedData(getCompletedData);
+      setLateData(getLateData);
+    }
+  }, [data]);
 
   return (
     <div>
-      <RoundChart 
-        total={data?.totalTask} 
-        late={totalLate?.total} 
+      <RoundChart
+        total={data?.totalTask}
+        late={totalLate?.total}
         lateName={totalLate?.statusInfo?.engName}
-        lateColor={totalLate?.statusInfo?.color} 
+        lateColor={totalLate?.statusInfo?.color}
         completed={totalCompleted?.total}
-        completedColor={totalCompleted?.statusInfo?.color} 
-        completedName={totalCompleted?.statusInfo?.engName} 
+        completedColor={totalCompleted?.statusInfo?.color}
+        completedName={totalCompleted?.statusInfo?.engName}
       />
     </div>
   );

@@ -93,14 +93,14 @@ const RoundChart = ({
           <div>
             <div className="flex items-center">
               <div className="w-3 h-3 rounded-full bg-purple-500 mr-2"></div>
-              <span className="text-sm text-gray-400">{completedName}</span>
+              <span className="text-sm text-gray-400">{completedName || "No data"}</span>
             </div>
             <p className="text-2xl font-bold">{late}</p>
           </div>
           <div>
             <div className="flex items-center">
               <div className="w-3 h-3 rounded-full bg-orange-500 mr-2"></div>
-              <span className="text-sm text-gray-400">{lateName}</span>
+              <span className="text-sm text-gray-400">{lateName || "No data"}</span>
             </div>
             <p className="text-2xl font-bold">{completed}</p>
           </div>
