@@ -36,7 +36,6 @@ const useRepairPagination = (variables: Variables) => {
             });
         },
         initialPageParam: 0,
-      
         getNextPageParam: (lastPage, allPages) => {
             const totalCount = lastPage?.totalCount || 0;
             const loadedItems = allPages.map(page => page.data).flat().length;
