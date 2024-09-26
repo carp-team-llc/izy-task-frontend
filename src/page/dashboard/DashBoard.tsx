@@ -77,7 +77,7 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="flex bg-[#0A012E] min-h-screen text-white ]">
+    <div className="flex min-h-screen text-white ]">
       {/* Sidebar */}
      
 
