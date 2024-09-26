@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Menu from "../../component/menu/Menu";
+
 import Header from "../../component/header/Header";
 import BarChartComponents from "../../component/chart/BarChartComponent";
-import RoundChart from "../../component/chart/RoundChart";
 import UseDailyChart from "../../hook/Api/task/Chart/useDailyChart";
 import SimpleLineChart from "../../component/chart/SimpleLineChart";
 import UsingRoundChart from "./component/UsingRoundChart";
-import NotificationsComponent from "../../component/Notifications/NotificationsComponent";
+
 import UsingNotification from "./component/UsingNotifications";
 
 interface TopStatProps {
@@ -78,14 +77,12 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="flex bg-[#13172b] min-h-screen text-white ]">
+    <div className="flex bg-[#0A012E] min-h-screen text-white ]">
       {/* Sidebar */}
-      <div className="mt-[100px]">
-        <Menu></Menu>
-      </div>
+     
 
       {/* Main content */}
-      <div className="w-full mt-[100px] ml-[20px]">
+      <div className="w-full mt-[101px] ml-[20px]">
         {" "}
         <Header></Header>
         <div className="grid grid-cols-3 gap-6 pr-5">
