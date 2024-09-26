@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import useNotifications from "../../../hook/Api/notifications/useNotifications";
-import NotificationsComponent from "../../../component/Notifications/NotificationsComponent";
+import Notification from "../../../component/notifications/NotificationsComponent";
+
+interface TopStatProps {
+  title: string;
+  subtitle: string;
+  value: string;
+  bgColor: string;
+}
 
 const UsingNotification = () => {
   const { data } = useNotifications({
@@ -8,18 +15,23 @@ const UsingNotification = () => {
     skip: 0,
     take: 10,
   });
-  const getNotiData = data?.map((item: any) => {
-    return item?.data;
-  });
-  const getNotidata2 = getNotiData?.map((item: any) => {
-    return item?.map((hi: any) => {
+  const getNotiData: any = data?.flatMap((item: any) =>
+    item?.data?.map((noti: any) => {
       return {
-        id: hi?.taskId,
-        name: hi?.changes?.title,
-      }
-    });
-  });
-  console.log("getNotidata2 ====> ", getNotidata2)
-  return <div></div>;
+        taskId: noti.taskId,
+        title: noti.changes?.title,
+        createdAt: noti.createdAt,
+      };
+    })
+  );
+
+  return (
+    <div className={` rounded-lg`}>
+      <div className="font-bold text-xl">Notifications</div>
+      {getNotiData?.map((item: any) => (
+        <Notification name={item.title} time={item.createdAt} />
+      ))}
+    </div>
+  );
 };
 export default UsingNotification;

@@ -40,3 +40,19 @@
 .read-the-docs {
   color: #888;
 }
+/* styles.css */
+/* Ẩn thanh cuộn cho Chrome, Safari và Opera */
+/* Ẩn thanh cuộn cho Chrome, Safari và Opera */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE và Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Ẩn thanh cuộn cho Chrome, Safari và Opera */
+}
+
+
+
+
+
