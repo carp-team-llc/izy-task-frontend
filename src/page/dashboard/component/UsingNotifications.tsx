@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import useNotifications from "../../../hook/Api/notifications/useNotifications";
-import Notification from "../../../component/notifications/NotificationsComponent";
+import Notification from "../../../component/Notifications/NotificationsComponent";
 
 interface TopStatProps {
   title: string;
