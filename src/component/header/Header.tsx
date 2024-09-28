@@ -3,7 +3,7 @@ import { Bell, ChevronDown, Search } from 'lucide-react'
 
 const Header: React.FC = () => {
   return (
-    <div className="fixed top-0 left-[14.12%] w-[85.8%] h-20 z-50 flex justify-between items-center p-6 bg-[#1a1f37]">
+    <div className="fixed top-0 left-[17%] w-[85.8%] h-20 z-50 flex justify-between items-center p-6 bg-[#1a1f37]">
       <div>
         <h1 className="text-2xl font-bold text-white">Good Morning Anima</h1>
         <p className="text-sm text-gray-400">Hope you have a good day</p>
