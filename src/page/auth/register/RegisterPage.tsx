@@ -17,7 +17,7 @@ const RegisterPage = () => {
     email: "",
     phone: "",
   });
-  const login = useNavigate();
+  const verify = useNavigate();
 
   const handleChangeInput = (value: string, keyInput: string) => {
     setInput((prev) => ({
@@ -27,8 +27,8 @@ const RegisterPage = () => {
   };
 
   const { onRegister, data } = UseRegister();
-  const handleLoginClick = () =>{
-    login("/login")
+  const handleVerifyClick = () =>{
+    verify("/verify")
   }
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -214,7 +214,7 @@ const RegisterPage = () => {
               <a
                 href="#"
                 className="font-medium text-purple-500 hover:text-purple-400"
-                onClick={handleLoginClick}
+                onClick={handleVerifyClick}
               >
                 Sign in now
               </a>
