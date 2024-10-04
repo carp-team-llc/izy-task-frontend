@@ -14,7 +14,8 @@ const UserProfileForm: React.FC<UserProfileFormProps> = ({ onClose }) => {
     gender: '',
     email1: '',
     email2: '',
-    phone: ''
+    phone: '',
+    bio: '',
   })
   const [birthdayPickerOpen, setBirthdayPickerOpen] = useState(false)
 

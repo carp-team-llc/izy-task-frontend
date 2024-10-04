@@ -7,6 +7,7 @@ export default {
   weekly_chart:"api/v1/task/weekly_chart",
   load_new_notification: "api/v1/task/load_new_notification",
   createtask: "api/v1/task/create_task",
+  uploadfile: "api/v1/storage/upload/"
   // #endregion
 
 }
