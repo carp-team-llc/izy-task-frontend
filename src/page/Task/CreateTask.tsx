@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
-import { X, Calendar, Clock, Plus, FileText } from "lucide-react";
+import { X, Calendar, Clock } from "lucide-react";
 import "react-datepicker/dist/react-datepicker.css";
 import useCreateTask from "../../hook/Api/task/TaskManager/useCreateTask"; // Import hook useCreateTask
+import Upload from "../../component/upload/Upload";
 
 interface CreateNewTaskModalProps {
   onClose: () => void;
@@ -16,26 +17,13 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
   const [estimate, setEstimate] = useState("");
   const [project, setProject] = useState("");
   const [assignee, setAssignee] = useState("");
-  const [files, setFiles] = useState<
-    { name: string; size: string; type: string }[]
-  >([]);
-
+  
   const [startDatePickerOpen, setStartDatePickerOpen] = useState(false);
   const [endDatePickerOpen, setEndDatePickerOpen] = useState(false);
 
   const { onCreate, isError, error } = useCreateTask(); // Sử dụng hook useCreateTask
 
-  const handleAddFile = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFiles = event.target.files;
-    if (selectedFiles) {
-      const newFiles = Array.from(selectedFiles).map((file) => ({
-        name: file.name,
-        size: `${(file.size / (1024 * 1024)).toFixed(2)} MB`,
-        type: file.type,
-      }));
-      setFiles((prevFiles) => [...prevFiles, ...newFiles]);
-    }
-  };
+  
 
   const calculateEstimate = () => {
     if (startTime && endTime) {
@@ -67,8 +55,6 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
         alert("Vui lòng điền đầy đủ thông tin task.");
         return;
       }
-      const token = localStorage.getItem('AUTH_IZY_TASK') || '';
-
       const formData = {
         name: taskName,
         body: taskDescription,
@@ -236,42 +222,11 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
               </div>
             </div>
           </div>
-
           <div>
-            <label className="block text-sm font-medium mb-3 text-white">
-              Upload File
-            </label>
-            <div className="bg-[#2A2F4A] rounded p-3 text-white">
-              <div className="flex items-center space-x-2 mb-3">
-                <input
-                  type="file"
-                  onChange={handleAddFile}
-                  className="hidden"
-                  id="file-upload"
-                  multiple
-                />
-                <label
-                  htmlFor="file-upload"
-                  className="bg-[#1E2139] rounded-lg p-2 hover:bg-opacity-80 cursor-pointer"
-                >
-                  <Plus size={24} />
-                </label>
-                <div className="bg-[#1E2139] rounded-lg p-2 text-sm">
-                  More File
-                </div>
-              </div>
-
-              <ul className="space-y-2">
-                {files.map((file, index) => (
-                  <li key={index} className="flex justify-between">
-                    <FileText size={20} className="mr-2" />
-                    <span className="flex-1 truncate">{file.name}</span>
-                    <span>{file.size}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <Upload></Upload>
           </div>
+
+          
 
           {isError && <div className="text-red-500">{error?.message}</div>}
         </div>
