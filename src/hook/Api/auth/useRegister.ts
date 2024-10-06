@@ -25,8 +25,7 @@ const UseRegister = () => {
         onSuccess: (e: any) => {
             alert(e?.response?.data?.message || 'Đăng ký oke rồi đó cu')
             success('/verify')
-      
-          },
+        },
         onError: (e: any) => {
             alert(e.response?.data?.message || "Đã có lỗi xảy ra")
         }
