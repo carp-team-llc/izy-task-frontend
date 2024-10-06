@@ -2,7 +2,6 @@ import { useMutation } from "@tanstack/react-query";
 import endpoint from "../../../services/endpoint";
 import rootApi from "../../../services/initApi";
 import { useAuth } from "../../../services/authContext";
-import { useNavigate } from "react-router-dom";
 
 type UploadParams = {
   file: any;
@@ -13,30 +12,43 @@ type response = {
 
 const useUpload = () => {
   const { setToken, token } = useAuth();
-  const success = useNavigate();
   const { isError, data, error, mutateAsync } = useMutation({
-    mutationFn: (variables: UploadParams) => {
+    mutationFn: async (variables: UploadParams) => {
       const formdata = new FormData();
       formdata.append("file", variables.file);
-      console.log(variables.file)
+
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
-      return rootApi.post<FormData, response>(endpoint.uploadfile, formdata, {
-        headers,
-      });
+      try {
+        const response = await rootApi.post<FormData, response>(
+          endpoint.uploadfile,
+          formdata,
+          { headers: {
+            'Content-Type': 'multipart/form-data', // dit me doan nay lam bo may bug hoi lau roi day
+            Authorization: `Bearer ${headers}`,
+          }, }
+        );
+        return response;
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
     },
     onSuccess: (e: any) => {
-      setToken(e?.data?.accessToken);
+      if (e?.data?.accessToken) {
+        setToken(e.data.accessToken);
+      }
+      
       alert(e?.data?.message || "Upload file success");
-      success(e?.data?.data);
     },
     onError: (e: any) => {
-      alert(e?.data?.message || "Upload file error");
+      const errorMessage = e.response?.data?.message || "Upload file error";
+      alert(errorMessage);
     },
   });
-  
+
   return {
     isError,
-    data: data?.data,
+    data: data?.data?.data,
     error,
     onUpload: mutateAsync,
   };
