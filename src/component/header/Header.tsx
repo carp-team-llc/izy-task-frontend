@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
-import { Bell, ChevronDown, Search, User, LogIn, LogOut,  } from 'lucide-react'
-import CreateProfile from "../../page/profile/CreateProfile"
+import { Bell, ChevronDown, Search, User, LogIn, LogOut } from 'lucide-react'
+import { NavLink } from 'react-router-dom'; // Import NavLink
 
 const Header: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen)
 
@@ -18,17 +17,6 @@ const Header: React.FC = () => {
     setIsLoggedIn(false)
     setIsDropdownOpen(false)
   }
-  const handleMyProfile = () => {
-    console.log("My profile")
-    setIsDropdownOpen(false)
-  }
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
 
   return (
     <div className="fixed top-0 left-[17%] w-[83.8%] h-20 z-50 flex justify-between items-center p-6 bg-[#1a1f37]">
@@ -63,14 +51,15 @@ const Header: React.FC = () => {
             <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-[#13172b] ring-1 ring-black ring-opacity-5 focus:outline-none ">
               {isLoggedIn ? (
                 <>
-                  <button
-                    onClick={handleOpenModal}
-                    className="flex items-center px-4 py-2 text-sm text-white hover:bg-gray-800 w-full text-left "
+                  {/* Change button to NavLink */}
+                  <NavLink
+                    to="/profile" // Specify the path to the profile page
+                    className="flex items-center px-4 py-2 text-sm text-white hover:bg-gray-800 w-full text-left"
+                    onClick={() => setIsDropdownOpen(false)} // Close dropdown on click
                   >
                     <User className="mr-3 h-5 w-5 text-white" aria-hidden="true" />
                     My Profile
-                  </button>
-                  {isModalOpen && <CreateProfile onClose={handleCloseModal} />}
+                  </NavLink>
                   <button
                     onClick={handleLogout}
                     className="flex items-center px-4 py-2 text-sm text-white hover:bg-gray-800 w-full text-left"
@@ -88,7 +77,6 @@ const Header: React.FC = () => {
                     <LogIn className="mr-3 h-5 w-5 text-gray-400" aria-hidden="true" />
                     Login
                   </button>
-                  
                 </>
               )}
             </div>

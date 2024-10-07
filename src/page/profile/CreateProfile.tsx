@@ -1,166 +1,161 @@
 import React, { useState } from 'react'
-import { X, Camera, Calendar } from 'lucide-react'
-import DatePicker from "react-datepicker"
-import "react-datepicker/dist/react-datepicker.css"
+import { Upload, Calendar, Facebook, Twitter, Instagram } from 'lucide-react'
 
-interface UserProfileFormProps {
-  onClose: () => void
-}
-
-const UserProfileForm: React.FC<UserProfileFormProps> = ({ onClose }) => {
+const CreateProfileForm: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
-    birthday: new Date(),
+    dateOfBirth: '',
     gender: '',
-    email1: '',
-    email2: '',
-    phone: '',
-    bio: '',
+    description: '',
+    facebook: '',
+    twitter: '',
+    instagram: ''
   })
-  const [birthdayPickerOpen, setBirthdayPickerOpen] = useState(false)
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
-    setFormData(prevData => ({ ...prevData, [name]: value }))
-  }
-
-  const handleBirthdayChange = (date: Date | null) => {
-    if (date) {
-      setFormData(prevData => ({ ...prevData, birthday: date }))
-      setBirthdayPickerOpen(false)
-    }
+    setFormData(prevState => ({ ...prevState, [name]: value }))
   }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     console.log('Form submitted:', formData)
-    onClose()
+    // Handle form submission logic here
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 z-50">
-      <div className="bg-[#1E2139] rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto scrollbar-hide p-4">
-        <div className="flex justify-between items-center p-3 border-b border-gray-700">
-          <h2 className="text-xl font-bold text-white">Create Profile</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-white">
-            <X size={24} />
-          </button>
-        </div>
-
-        <form onSubmit={handleSubmit} className="p-3 space-y-4">
-          <div>
-            <h3 className="text-lg font-semibold text-white mb-2">Basic info</h3>
+    <div className="bg-[#1E1E2D] text-white p-6 rounded-lg w-full max-w-7xl mx-auto h-[calc(96vh-5rem)] overflow-y-auto relative top-20">
+      <h1 className="text-2xl font-bold mb-6">CREATE PROFILE</h1>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="flex items-center mb-6">
+          <div className="w-20 h-20 bg-[#151521] rounded-full flex items-center justify-center cursor-pointer hover:bg-opacity-80 transition-colors mr-4">
+            <Upload size={24} className="text-gray-400" />
           </div>
-
-          <div className="flex items-center space-x-4">
-            <span className="text-sm text-gray-400 w-1/3">Profile picture</span>
-            <div className="flex-1 flex items-center justify-between">
-              <span className="text-sm text-gray-400">Add a profile picture</span>
-              <div className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center text-gray-400 cursor-pointer hover:bg-gray-600 transition-colors">
-                <Camera className="w-6 h-6" />
+          <p className="text-sm text-gray-400">Profile picture</p>
+        </div>
+        <div className="grid grid-cols-2 gap-12">
+          <div className="space-y-4">
+            <h2 className="text-lg font-semibold mb-2">Public information</h2>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium mb-1">Name</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  placeholder="Your name"
+                  className="w-full bg-[#151521] rounded-md p-2 text-sm text-white placeholder-gray-400"
+                />
+              </div>
+              <div>
+                <label htmlFor="dateOfBirth" className="block text-sm font-medium mb-1">Date of Birth</label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    id="dateOfBirth"
+                    name="dateOfBirth"
+                    value={formData.dateOfBirth}
+                    onChange={handleInputChange}
+                    placeholder="Date of birth"
+                    className="w-full bg-[#151521] rounded-md p-2 text-sm text-white placeholder-gray-400 pr-10"
+                  />
+                  <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+                </div>
               </div>
             </div>
-          </div>
-
-          <ProfileInput label="Name" name="name" value={formData.name} onChange={handleChange} />
-
-          <div className="flex items-center space-x-4">
-            <span className="text-sm text-gray-400 w-1/3">Birthday</span>
-            <div className="flex-1 relative">
-              <input
-                type="text"
-                value={formData.birthday.toLocaleDateString()}
-                readOnly
-                className="w-full bg-[#2A2F4A] rounded px-2 py-1 text-white pr-10 cursor-pointer"
-                onClick={() => setBirthdayPickerOpen(true)}
-              />
-              <Calendar
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"
-                size={20}
-                onClick={() => setBirthdayPickerOpen(true)}
-              />
-              {birthdayPickerOpen && (
-                <DatePicker
-                  selected={formData.birthday}
-                  onChange={handleBirthdayChange}
-                  onClickOutside={() => setBirthdayPickerOpen(false)}
-                  inline
-                />
-              )}
+            <div>
+              <label htmlFor="gender" className="block text-sm font-medium mb-1">Gender</label>
+              <select
+                id="gender"
+                name="gender"
+                value={formData.gender}
+                onChange={handleInputChange}
+                className="w-full bg-[#151521] rounded-md p-2 text-sm text-white appearance-none"
+              >
+                <option value="">Choose your gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div>
+              <label htmlFor="description" className="block text-sm font-medium mb-1">Description</label>
+              <textarea
+                id="description"
+                name="description"
+                value={formData.description}
+                onChange={handleInputChange}
+                placeholder="Description"
+                rows={2}
+                className="w-full bg-[#151521] rounded-md p-2 text-sm text-white placeholder-gray-400"
+              ></textarea>
             </div>
           </div>
-
-          <div className="flex items-center space-x-4">
-            <span className="text-sm text-gray-400 w-1/3">Gender</span>
-            <select
-              name="gender"
-              value={formData.gender}
-              onChange={handleChange}
-              className="flex-1 bg-[#2A2F4A] rounded px-2 py-1 text-white"
-            >
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-
-          <div className="pt-4">
-            <h3 className="text-lg font-semibold text-white mb-2">Contact info</h3>
-          </div>
-
-          <ProfileInput label="Email" name="email1" value={formData.email1} onChange={handleChange} />
-          <ProfileInput label="Additional email" name="email2" value={formData.email2} onChange={handleChange} />
-          <ProfileInput 
-            label="Phone" 
-            name="phone" 
-            type="tel"
-            value={formData.phone} 
-            onChange={handleChange}
-            placeholder="Add a recovery phone number"
-          />
-
-          <div className="flex justify-center space-x-2 pt-4">
+          <div className="space-y-4 border-l border-gray-700 pl-12">
+            <h2 className="text-lg font-semibold mb-2">Social network</h2>
+            <div>
+              <label htmlFor="facebook" className="block text-sm font-medium mb-1">Facebook</label>
+              <div className="relative">
+                <input
+                  type="text"
+                  id="facebook"
+                  name="facebook"
+                  value={formData.facebook}
+                  onChange={handleInputChange}
+                  placeholder="https://www.facebook.com/your_id"
+                  className="w-full bg-[#151521] rounded-md p-2 pl-10 text-sm text-white placeholder-gray-400"
+                />
+                <Facebook className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500" size={16} />
+              </div>
+            </div>
+            <div>
+              <label htmlFor="twitter" className="block text-sm font-medium mb-1">X (Twitter)</label>
+              <div className="relative">
+                <input
+                  type="text"
+                  id="twitter"
+                  name="twitter"
+                  value={formData.twitter}
+                  onChange={handleInputChange}
+                  placeholder="https://x.com/your_id"
+                  className="w-full bg-[#151521] rounded-md p-2 pl-10 text-sm text-white placeholder-gray-400"
+                />
+                <Twitter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-400" size={16} />
+              </div>
+            </div>
+            <div>
+              <label htmlFor="instagram" className="block text-sm font-medium mb-1">Instagram</label>
+              <div className="relative">
+                <input
+                  type="text"
+                  id="instagram"
+                  name="instagram"
+                  value={formData.instagram}
+                  onChange={handleInputChange}
+                  placeholder="https://www.instagram.com/your_id"
+                  className="w-full bg-[#151521] rounded-md p-2 pl-10 text-sm text-white placeholder-gray-400"
+                />
+                <Instagram className="absolute left-3 top-1/2 transform -translate-y-1/2 text-pink-500" size={16} />
+              </div>
+            </div>
             <button
               type="button"
-              onClick={onClose}
-              className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600"
+              className="w-full bg-indigo-600 text-white rounded-md p-2 mt-2 flex items-center justify-center space-x-2 hover:bg-indigo-700 transition-colors text-sm"
             >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-500"
-            >
-              Save Changes
+              <span>Connect with google</span>
             </button>
           </div>
-        </form>
-      </div>
+        </div>
+        <div className="flex justify-center mt-4">
+          <button type="submit" className="bg-indigo-600 text-white rounded-md px-6 py-2 hover:bg-indigo-700 transition-colors text-sm">
+            Create
+          </button>
+        </div>
+      </form>
     </div>
   )
 }
 
-interface ProfileInputProps {
-  label: string
-  name: string
-  value: string
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  type?: string
-  placeholder?: string
-}
-
-const ProfileInput: React.FC<ProfileInputProps> = ({ label, name, value, onChange, type = "text", placeholder }) => (
-  <div className="flex items-center space-x-4">
-    <span className="text-sm text-gray-400 w-1/3">{label}</span>
-    <input
-      type={type}
-      name={name}
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
-      className="flex-1 bg-[#2A2F4A] rounded px-2 py-1 text-white placeholder-gray-500"
-    />
-  </div>
-)
-
-export default UserProfileForm
+export default CreateProfileForm

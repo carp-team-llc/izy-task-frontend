@@ -23,11 +23,12 @@ export const router = createBrowserRouter([
       { path: "/dashboard", element: <DashBoard /> },
       { path: "/task", element: <Task /> },
       { path: "/timeline", element: <TimeLine/> },
+      { path: "/profile", element: <CreateProfile /> },
     ],
   },
   { path: "/login", element: <LoginPage /> },
   { path: "/register", element: <RegisterPage /> },
   { path: "/verify", element: <Verify /> },
-  { path: "/profile", element: <CreateProfile /> },
+  
 ]);
 
