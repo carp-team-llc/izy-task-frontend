@@ -58,6 +58,7 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
         alert("Vui lòng điền đầy đủ thông tin task.");
         return;
       }
+      
       const formData = {
         name: taskName,
         body: taskDescription,
@@ -65,12 +66,7 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
         expirationDate: endTime ? endTime.toISOString() : "",
       };
 
-      console.log("Dữ liệu gửi lên API:", formData);
-
       const response = await onCreate(formData);
-
-      console.log("Response từ API:", response);
-
       if (response && response.task) {
         alert(response.message);
         onClose();
@@ -98,10 +94,6 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
   const handleFileLoding = (isLoding: boolean) => {
     setIsUploadLoading(isLoding)
   }
-
-  useEffect(() => {
-    
-  })
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 z-50">
@@ -255,7 +247,7 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
             onClick={handleSubmitWrapper}
             className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-500"
           >
-            Create Task
+            { isUploadLoading ? "Waiting..." : "Create task" }
           </button>
         </div>
       </div>

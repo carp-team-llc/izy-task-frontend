@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Plus, FileText } from "lucide-react";
 import useUpload from "../../hook/Api/upload/useUpload";
 import Spacing from "../common/Spacing";
@@ -29,7 +29,6 @@ const Upload: React.FC<UploadProps> = ({ onUploadComplete, uploadLoading }) => {
     }
 
     setIsUploading(true);
-    uploadLoading(true);
     const newUploadedImageUrls: string[] = [];
 
     try {
@@ -47,9 +46,16 @@ const Upload: React.FC<UploadProps> = ({ onUploadComplete, uploadLoading }) => {
       alert("An error occurred during upload.");
     } finally {
       setIsUploading(false);
-    uploadLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (isUploading) {
+      uploadLoading(true);
+    } else {
+      uploadLoading(false);
+    }
+  }, [isUploading])
 
   return (
     <div>
