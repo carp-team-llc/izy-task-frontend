@@ -18,7 +18,7 @@ type Respsone = {
 
 
 const useCreateTask = () => {
-    const {setToken, token } = useAuth();
+    const { token } = useAuth();
     const success = useNavigate();
     const {isError, data, error, mutateAsync } = useMutation({
         mutationFn: (variables: CreateTaskParams) => {
@@ -30,9 +30,8 @@ const useCreateTask = () => {
             )
         },
         onSuccess: (e: any) => {
-            setToken(e?.data?.accessToken)
             alert(e?.data?.message || 'Create Task success ')
-            success('/task/tasklist/personal_task')
+            success('/task')
         },
         onError: (e: any) => {
             alert(e?.data?.message || 'Create Task error ')

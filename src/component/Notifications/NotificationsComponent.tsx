@@ -11,16 +11,15 @@ const Notification: React.FC<NotificationProps> = ({
     name,
     action,
     time,
-    avatar,
   }) => (
     
-    <div className="flex items-center space-x-3 p-2 hover:bg-gray-700 bg-white rounded-lg mt-5">
-      <img src={avatar} alt={name} className="w-10 h-10 rounded-full" />
+    <div className="flex items-center space-x-3 p-2 hover:bg-purple-600 bg-gray-500 rounded-lg mt-5">
+      <p>📄</p>
       <div>
-        <p className="text-sm text-black ">
+        <p className="text-sm text-white ">
           <span className="font-semibold">{name}</span> {action}
         </p>
-        <p className="text-xs text-gray-400 ">{time}</p>
+        <p className="text-xs text-white ">{time}</p>
       </div>
     </div>
   );

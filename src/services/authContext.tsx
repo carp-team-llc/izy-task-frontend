@@ -9,11 +9,15 @@ interface AuthContextType {
   token: string | null;
   setToken: (token: string) => void;
   removeToken: () => void;
+  isLoggedIn: boolean;
+  login: () => void;
+  logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState<string | null>(
     localStorage.getItem("AUTH_IZY_TASK")
   );
@@ -25,11 +29,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       localStorage.getItem("AUTH_IZY_TASK")
     );
     setToken(newToken);
+    setIsLoggedIn(true); 
   };
 
   const handleRemoveToken = () => {
     localStorage.removeItem("AUTH_IZY_TASK");
     setToken(null);
+    setIsLoggedIn(false); 
+  };
+
+  const login = () => {
+    
+  };
+
+  const logout = () => {
+    handleRemoveToken();
   };
 
   return (
@@ -38,6 +52,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         token,
         setToken: handleSetToken,
         removeToken: handleRemoveToken,
+        isLoggedIn,
+        login,
+        logout,
       }}
     >
       {children}
