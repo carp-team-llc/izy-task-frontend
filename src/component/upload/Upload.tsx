@@ -5,9 +5,10 @@ import Spacing from "../common/Spacing";
 
 type UploadProps = {
   onUploadComplete: (urls: string[]) => void;
+  uploadLoading: any;
 };
 
-const Upload: React.FC<UploadProps> = ({ onUploadComplete }) => {
+const Upload: React.FC<UploadProps> = ({ onUploadComplete, uploadLoading }) => {
   const [files, setFiles] = useState<File[]>([]);
   const { onUpload } = useUpload();
   const [isUploading, setIsUploading] = useState<boolean>(false);
@@ -28,6 +29,7 @@ const Upload: React.FC<UploadProps> = ({ onUploadComplete }) => {
     }
 
     setIsUploading(true);
+    uploadLoading(true);
     const newUploadedImageUrls: string[] = [];
 
     try {
@@ -45,6 +47,7 @@ const Upload: React.FC<UploadProps> = ({ onUploadComplete }) => {
       alert("An error occurred during upload.");
     } finally {
       setIsUploading(false);
+    uploadLoading(false);
     }
   };
 

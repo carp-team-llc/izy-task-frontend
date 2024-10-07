@@ -20,6 +20,7 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
 
   const [startDatePickerOpen, setStartDatePickerOpen] = useState(false);
   const [endDatePickerOpen, setEndDatePickerOpen] = useState(false);
+  const [isUploadLoading, setIsUploadLoading] = useState(false);
 
   const { onCreate, isError, error } = useCreateTask(); // Sử dụng hook useCreateTask
 
@@ -93,6 +94,14 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
     event.preventDefault(); // Ngăn chặn hành vi mặc định của nút bấm
     handleSubmit(event as any); // Gọi hàm handleSubmit với đối số kiểu bất kỳ
   };
+
+  const handleFileLoding = (isLoding: boolean) => {
+    setIsUploadLoading(isLoding)
+  }
+
+  useEffect(() => {
+    
+  })
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 z-50">
@@ -229,7 +238,7 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
             </div>
           </div>
           <div>
-            <Upload onUploadComplete={handleUploadComplete} />
+            <Upload onUploadComplete={handleUploadComplete} uploadLoading={handleFileLoding} />
           </div>
 
           {isError && <div className="text-red-500">{error?.message}</div>}
