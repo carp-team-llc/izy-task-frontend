@@ -20,6 +20,7 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
 
   const [startDatePickerOpen, setStartDatePickerOpen] = useState(false);
   const [endDatePickerOpen, setEndDatePickerOpen] = useState(false);
+  const [isUploadLoading, setIsUploadLoading] = useState(false);
 
   const { onCreate, isError, error } = useCreateTask(); // Sử dụng hook useCreateTask
 
@@ -57,6 +58,7 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
         alert("Vui lòng điền đầy đủ thông tin task.");
         return;
       }
+      
       const formData = {
         name: taskName,
         body: taskDescription,
@@ -64,12 +66,7 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
         expirationDate: endTime ? endTime.toISOString() : "",
       };
 
-      console.log("Dữ liệu gửi lên API:", formData);
-
       const response = await onCreate(formData);
-
-      console.log("Response từ API:", response);
-
       if (response && response.task) {
         alert(response.message);
         onClose();
@@ -93,6 +90,10 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
     event.preventDefault(); // Ngăn chặn hành vi mặc định của nút bấm
     handleSubmit(event as any); // Gọi hàm handleSubmit với đối số kiểu bất kỳ
   };
+
+  const handleFileLoding = (isLoding: boolean) => {
+    setIsUploadLoading(isLoding)
+  }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 z-50">
@@ -229,7 +230,7 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
             </div>
           </div>
           <div>
-            <Upload onUploadComplete={handleUploadComplete} />
+            <Upload onUploadComplete={handleUploadComplete} uploadLoading={handleFileLoding} />
           </div>
 
           {isError && <div className="text-red-500">{error?.message}</div>}
@@ -246,7 +247,7 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
             onClick={handleSubmitWrapper}
             className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-500"
           >
-            Create Task
+            { isUploadLoading ? "Waiting..." : "Create task" }
           </button>
         </div>
       </div>

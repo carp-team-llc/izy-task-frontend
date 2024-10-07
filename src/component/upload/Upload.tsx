@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Plus, FileText } from "lucide-react";
 import useUpload from "../../hook/Api/upload/useUpload";
 import Spacing from "../common/Spacing";
 
 type UploadProps = {
   onUploadComplete: (urls: string[]) => void;
+  uploadLoading: any;
 };
 
-const Upload: React.FC<UploadProps> = ({ onUploadComplete }) => {
+const Upload: React.FC<UploadProps> = ({ onUploadComplete, uploadLoading }) => {
   const [files, setFiles] = useState<File[]>([]);
   const { onUpload } = useUpload();
   const [isUploading, setIsUploading] = useState<boolean>(false);
@@ -47,6 +48,14 @@ const Upload: React.FC<UploadProps> = ({ onUploadComplete }) => {
       setIsUploading(false);
     }
   };
+
+  useEffect(() => {
+    if (isUploading) {
+      uploadLoading(true);
+    } else {
+      uploadLoading(false);
+    }
+  }, [isUploading])
 
   return (
     <div>
