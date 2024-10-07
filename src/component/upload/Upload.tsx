@@ -1,7 +1,8 @@
+import { FileText, Plus } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { Plus, FileText } from "lucide-react";
 import useUpload from "../../hook/Api/upload/useUpload";
 import Spacing from "../common/Spacing";
+import { notifySuccess } from "../toastify/Toastify";
 
 type UploadProps = {
   onUploadComplete: (urls: string[]) => void;
@@ -40,7 +41,7 @@ const Upload: React.FC<UploadProps> = ({ onUploadComplete, uploadLoading }) => {
       }
       setUploadedImageUrls(newUploadedImageUrls);
       onUploadComplete(newUploadedImageUrls);
-      alert("All files uploaded successfully!");
+      notifySuccess("jdbsd");
     } catch (error) {
       console.error("Error uploading files:", error);
       alert("An error occurred during upload.");

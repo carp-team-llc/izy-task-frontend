@@ -16,7 +16,7 @@ export default function BarChartComponents({ data, colors, legends }: BarChartPr
         <BarChart width={Helper.normalize(550)} height={Helper.normalize(350)} data={data}>
           <XAxis dataKey="name" />
           <YAxis />
-          <Tooltip />
+          <Tooltip  cursor={false}/>
           <Bar
             dataKey="total"
             label={({ value }) => (

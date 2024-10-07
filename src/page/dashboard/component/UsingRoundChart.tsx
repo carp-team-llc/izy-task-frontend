@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import useWeeklyChart from "../../../hook/Api/task/Chart/useWeeklyChart";
-import { colors } from "@mui/material";
 import RoundChart from "../../../component/chart/RoundChart";
 
 interface RoundVariables {
@@ -8,22 +7,34 @@ interface RoundVariables {
   fromDate: string;
   toDate: string;
 }
+
 const UsingRoundChart = () => {
   const [RoundChartData, setRouChartData] = useState<string[]>([]);
   const [RoundFromDate, setRoundFromdate] = useState("");
   const [RoundToDate, setRoundTodate] = useState("");
   const [completedData, setCompletedData] = useState();
   const [lateData, setLateData] = useState();
+  const getCurrentWeekDates = () => {
+    const currentDate = new Date();
+    const firstDayOfWeek = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1)); // Monday
+    const lastDayOfWeek = new Date(currentDate.setDate(firstDayOfWeek.getDate() + 6)); // Sunday
+
+    const fromDate = firstDayOfWeek.toISOString(); 
+    const toDate = lastDayOfWeek.toISOString(); 
+
+    return { fromDate, toDate };
+  };
+
+  const { fromDate, toDate } = getCurrentWeekDates();
 
   const body: RoundVariables = {
     status: RoundChartData,
     fromDate: RoundFromDate,
     toDate: RoundToDate,
   };
+
   const { data } = useWeeklyChart(body);
   const statusRoundData = ["LATE", "COMPLETED"];
-  const RoundFromDateData = "2024-09-15T15:05:37.627Z";
-  const RoundToDateData = "2024-09-19T10:46:09.964Z";
 
   const loadRoundData = data?.taskChart;
   const totalCompleted: any = completedData || [];
@@ -31,19 +42,20 @@ const UsingRoundChart = () => {
 
   useEffect(() => {
     setRouChartData(statusRoundData);
-    setRoundFromdate(RoundFromDateData);
-    setRoundTodate(RoundToDateData);
+    setRoundFromdate(fromDate); 
+    setRoundTodate(toDate); 
+
     if (data) {
       const getCompletedData = loadRoundData?.find(
         (task: any) => task.name === "COMPLETED"
-      )
+      );
       const getLateData = loadRoundData?.find(
         (task: any) => task.name === "LATE"
-      )
+      );
       setCompletedData(getCompletedData);
       setLateData(getLateData);
     }
-  }, [data]);
+  }, [data, fromDate, toDate]);
 
   return (
     <div>
