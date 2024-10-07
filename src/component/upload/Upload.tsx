@@ -1,31 +1,52 @@
 import React, { useState } from "react";
 import { Plus, FileText } from "lucide-react";
-import useUpload from "../../hook/Api/upload/UseUpload";
+import useUpload from "../../hook/Api/upload/useUpload";
+import Spacing from "../common/Spacing";
 
-const Upload: React.FC = () => {
+type UploadProps = {
+  onUploadComplete: (urls: string[]) => void;
+};
+
+const Upload: React.FC<UploadProps> = ({ onUploadComplete }) => {
   const [files, setFiles] = useState<File[]>([]);
   const { onUpload } = useUpload();
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>([]);
 
   const handleAddFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = event.target.files;
     if (selectedFiles) {
-      const newFiles = Array.from(selectedFiles); // Đảm bảo lưu file với kiểu File
-      setFiles((prevFiles) => [...prevFiles, ...newFiles]); // Cập nhật danh sách file
+      const newFiles = Array.from(selectedFiles);
+      setFiles((prevFiles) => [...prevFiles, ...newFiles]);
     }
   };
+
   const handleUpload = async () => {
-    const formData = new FormData(); // Tạo FormData
-    files.forEach((file) => {
-      formData.append("file", file); // Thêm từng file vào FormData
-    });
+    if (files.length === 0) {
+      alert("Please choose at least one file to upload.");
+      return;
+    }
+
+    setIsUploading(true);
+    const newUploadedImageUrls: string[] = [];
 
     try {
-      await onUpload(formData); // Gửi formData qua hàm upload
+      for (const file of files) {
+        const response = await onUpload({ file });
+        if (response) {
+          newUploadedImageUrls.push(response.data?.data);
+        }
+      }
+      setUploadedImageUrls(newUploadedImageUrls);
+      onUploadComplete(newUploadedImageUrls);
+      alert("All files uploaded successfully!");
     } catch (error) {
-      console.error("Upload failed", error);
+      console.error("Error uploading files:", error);
+      alert("An error occurred during upload.");
+    } finally {
+      setIsUploading(false);
     }
   };
-
 
   return (
     <div>
@@ -60,11 +81,28 @@ const Upload: React.FC = () => {
           ))}
         </ul>
 
+        {uploadedImageUrls.length > 0 && (
+          <div>
+            <Spacing height={10} />
+            <ul className="space-y-2">
+              <b className="text-purple-600">Images: </b>
+              {uploadedImageUrls.map((file, index) => (
+                <li key={index} className="flex justify-between">
+                  <img
+                    className="flex-none w-24 h-24 object-cover border border-white rounded-md"
+                    src={file}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         <button
           onClick={handleUpload}
           className="bg-blue-500 text-white p-2 rounded-lg mt-3"
         >
-          Upload
+          {isUploading ? "Uploading..." : "Upload"}
         </button>
       </div>
     </div>

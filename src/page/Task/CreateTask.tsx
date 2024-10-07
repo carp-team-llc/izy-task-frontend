@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { Calendar, Clock, X } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
-import { X, Calendar, Clock } from "lucide-react";
 import "react-datepicker/dist/react-datepicker.css";
-import useCreateTask from "../../hook/Api/task/TaskManager/useCreateTask"; // Import hook useCreateTask
 import Upload from "../../component/upload/Upload";
+import useCreateTask from "../../hook/Api/task/TaskManager/useCreateTask"; // Import hook useCreateTask
 
 interface CreateNewTaskModalProps {
   onClose: () => void;
@@ -16,14 +16,16 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
   const [endTime, setEndTime] = useState<Date | null>(null);
   const [estimate, setEstimate] = useState("");
   const [project, setProject] = useState("");
-  const [assignee, setAssignee] = useState("");
-  
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+
   const [startDatePickerOpen, setStartDatePickerOpen] = useState(false);
   const [endDatePickerOpen, setEndDatePickerOpen] = useState(false);
 
   const { onCreate, isError, error } = useCreateTask(); // Sử dụng hook useCreateTask
 
-  
+  const handleUploadComplete = (urls: string[]) => {
+    setImageUrls(urls);
+  };
 
   const calculateEstimate = () => {
     if (startTime && endTime) {
@@ -58,13 +60,12 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
       const formData = {
         name: taskName,
         body: taskDescription,
-        images: ["https://www.wfla.com/wp-content/uploads/sites/71/2023/05/GettyImages-1389862392.jpg?w=2560&h=1440&crop=1"],
+        images: imageUrls,
         expirationDate: endTime ? endTime.toISOString() : "",
       };
 
       console.log("Dữ liệu gửi lên API:", formData);
 
-   
       const response = await onCreate(formData);
 
       console.log("Response từ API:", response);
@@ -86,6 +87,11 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
         alert("Có lỗi xảy ra. Vui lòng thử lại.");
       }
     }
+  };
+
+  const handleSubmitWrapper = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault(); // Ngăn chặn hành vi mặc định của nút bấm
+    handleSubmit(event as any); // Gọi hàm handleSubmit với đối số kiểu bất kỳ
   };
 
   return (
@@ -223,10 +229,8 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
             </div>
           </div>
           <div>
-            <Upload></Upload>
+            <Upload onUploadComplete={handleUploadComplete} />
           </div>
-
-          
 
           {isError && <div className="text-red-500">{error?.message}</div>}
         </div>
@@ -239,7 +243,7 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
             Cancel
           </button>
           <button
-            onClick={handleSubmit}
+            onClick={handleSubmitWrapper}
             className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-500"
           >
             Create Task
