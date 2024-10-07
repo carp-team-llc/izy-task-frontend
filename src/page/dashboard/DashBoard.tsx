@@ -39,7 +39,7 @@ const TopStat: React.FC<TopStatProps> = ({
 export default function Dashboard() {
   const [BarChartData, setBarChartData] = useState<string[]>([]);
   const [BarCreatedAt, setBarCreatedAt] = useState("");
-
+  const pickBarDate = new Date().toISOString();
   const body: BarVariables = {
     status: BarChartData,
     createdAt: BarCreatedAt,
@@ -55,7 +55,7 @@ export default function Dashboard() {
     "COMPLETED",
     "NEW",
   ];
-  const pickBarDate = "2024-09-19T10:46:01.538Z";
+  
 
   const loadBarData = data?.taskChart;
   const totalBarData = loadBarData?.map((task: any) => {
