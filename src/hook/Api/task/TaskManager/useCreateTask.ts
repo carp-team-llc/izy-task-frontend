@@ -3,6 +3,7 @@ import useApi from '../../../../services/initApi'
 import endpoint from '../../../../services/endpoint'
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../../services/authContext';
+import { notifyError, notifySuccess } from "../../../../component/toastify/Toastify";
 
 
 
@@ -30,11 +31,11 @@ const useCreateTask = () => {
             )
         },
         onSuccess: (e: any) => {
-            alert(e?.data?.message || 'Create Task success ')
+            notifySuccess(e?.data?.message || 'Create Task success ')
             success('/task')
         },
         onError: (e: any) => {
-            alert(e?.data?.message || 'Create Task error ')
+            notifyError(e?.data?.message || 'Create Task error ')
         }
     })
     return {

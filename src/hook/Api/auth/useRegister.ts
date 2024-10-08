@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import useApi from "../../../services/initApi";
 import endpoint from "../../../services/endpoint";
 import { useNavigate } from 'react-router-dom';
+import { notifyError, notifySuccess } from "../../../component/toastify/Toastify";
 
 type RegisterParams = {
     username : string;
@@ -23,11 +24,11 @@ const UseRegister = () => {
             )
         },
         onSuccess: (e: any) => {
-            alert(e?.response?.data?.message || 'Đăng ký oke rồi đó cu')
+            notifySuccess(e?.response?.data?.message || 'Registered successfully!')
             success('/verify')
         },
         onError: (e: any) => {
-            alert(e.response?.data?.message || "Đã có lỗi xảy ra")
+            notifyError(e.response?.data?.message || "An error occurred!")
         }
     })
     return {

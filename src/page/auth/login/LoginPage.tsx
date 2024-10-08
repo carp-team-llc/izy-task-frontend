@@ -2,6 +2,7 @@ import { Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 import useLogin from '../../../hook/Api/auth/useLogin';
 import { useNavigate } from 'react-router-dom';
+import { notifyError, notifySuccess } from '../../../component/toastify/Toastify';
 interface InputValue {
   email: string;
   password: string;
@@ -32,8 +33,10 @@ const LoginPage = () => {
     try {
       await onLogin(input); // Thực hiện gọi API login với thông tin từ form
       console.log("Login success"); // Xử lý response sau khi đăng nhập thành công
+      notifySuccess("Login success");
     } catch (err) {
       console.error("Login failed"); // Xử lý lỗi nếu có
+      notifyError("Login failed");
     }
   };
   return (

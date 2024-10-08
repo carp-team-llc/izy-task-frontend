@@ -1,11 +1,11 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
-import { AuthProvider } from "./services/authContext.tsx";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider } from "react-router-dom";
+import "./index.css";
 import { router } from "./router/index.tsx";
-import ToastifyProvider from "./component/toastify/Toastify.tsx";
+import { AuthProvider } from "./services/authContext.tsx";
+import { Bounce, ToastContainer } from "react-toastify";
 
 const queryClient = new QueryClient();
 
@@ -14,9 +14,19 @@ createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
       <Suspense fallback="Loading">
         <AuthProvider>
-          <ToastifyProvider>
-            <RouterProvider router={router}></RouterProvider>
-          </ToastifyProvider>
+          <>
+            <RouterProvider router={router} />
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              closeOnClick
+              pauseOnHover
+              draggable
+              draggablePercent={60}
+              transition={Bounce}
+            />
+          </>
         </AuthProvider>
       </Suspense>
     </QueryClientProvider>

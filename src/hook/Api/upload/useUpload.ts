@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import endpoint from "../../../services/endpoint";
 import rootApi from "../../../services/initApi";
 import { useAuth } from "../../../services/authContext";
+import { notifyError, notifySuccess } from "../../../component/toastify/Toastify";
 
 type UploadParams = {
   file: any;
@@ -38,11 +39,11 @@ const useUpload = () => {
         setToken(e.data.accessToken);
       }
       
-      alert(e?.data?.message || "Upload file success");
+      notifySuccess(e?.data?.message || "Upload file success");
     },
     onError: (e: any) => {
       const errorMessage = e.response?.data?.message || "Upload file error";
-      alert(errorMessage);
+      notifyError(errorMessage);
     },
   });
 
