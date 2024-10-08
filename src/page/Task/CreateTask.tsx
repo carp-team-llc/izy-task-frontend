@@ -4,6 +4,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Upload from "../../component/upload/Upload";
 import useCreateTask from "../../hook/Api/task/TaskManager/useCreateTask"; // Import hook useCreateTask
+import { notifyError, notifySuccess } from "../../component/toastify/Toastify";
 
 interface CreateNewTaskModalProps {
   onClose: () => void;
@@ -44,7 +45,7 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
 
   const handleEndTimeChange = (date: Date | null) => {
     if (date && startTime && date < startTime) {
-      alert("Thời gian kết thúc không thể trước thời gian bắt đầu.");
+      notifyError("Thời gian kết thúc không thể trước thời gian bắt đầu.");
       return;
     }
     setEndTime(date);
@@ -55,7 +56,7 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
     event.preventDefault();
     try {
       if (!taskName || !taskDescription || !endTime) {
-        alert("Vui lòng điền đầy đủ thông tin task.");
+        notifyError("Vui lòng điền đầy đủ thông tin task.");
         return;
       }
       
@@ -68,7 +69,7 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
 
       const response = await onCreate(formData);
       if (response && response.task) {
-        alert(response.message);
+        notifySuccess(response.message);
         onClose();
       }
     } catch (err) {
@@ -76,12 +77,12 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
 
       if (err instanceof Error) {
         if ((err as any).response && (err as any).response.data) {
-          alert(`Lỗi từ API: ${(err as any).response.data.message}`);
+          notifyError(`Lỗi từ API: ${(err as any).response.data.message}`);
         } else {
-          alert(`Lỗi: ${err.message}`);
+          notifyError(`Lỗi: ${err.message}`);
         }
       } else {
-        alert("Có lỗi xảy ra. Vui lòng thử lại.");
+        notifyError("Có lỗi xảy ra. Vui lòng thử lại.");
       }
     }
   };

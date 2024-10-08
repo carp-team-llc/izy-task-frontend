@@ -1,8 +1,8 @@
-import { useMutation } from '@tanstack/react-query'
-import useApi from '../../../services/initApi'
-import endpoint from '../../../services/endpoint'
+import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../services/authContext';
+import endpoint from '../../../services/endpoint';
+import useApi from '../../../services/initApi';
 
 
 type LoginParams = {
@@ -26,12 +26,12 @@ const useLogin = () => {
     },
     onSuccess: (e: any) => {
       setToken(e?.data?.accessToken)
-      alert(e?.data?.message || 'Come on Baby')
+      console.log(e?.data?.message || 'Login success!')
       success('/dashboard')
 
     },
     onError: (e: any) => {
-      alert(e?.data?.message || 'Đã có lỗi xảy ra')
+      console.log(e?.data?.message || 'Đã có lỗi xảy ra')
     }
   })
   

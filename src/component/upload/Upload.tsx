@@ -2,7 +2,7 @@ import { FileText, Plus } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import useUpload from "../../hook/Api/upload/useUpload";
 import Spacing from "../common/Spacing";
-import { notifySuccess } from "../toastify/Toastify";
+import { notifyError, notifySuccess } from "../toastify/Toastify";
 
 type UploadProps = {
   onUploadComplete: (urls: string[]) => void;
@@ -25,7 +25,7 @@ const Upload: React.FC<UploadProps> = ({ onUploadComplete, uploadLoading }) => {
 
   const handleUpload = async () => {
     if (files.length === 0) {
-      alert("Please choose at least one file to upload.");
+      notifyError("Please choose at least one file to upload.");
       return;
     }
 
@@ -41,10 +41,10 @@ const Upload: React.FC<UploadProps> = ({ onUploadComplete, uploadLoading }) => {
       }
       setUploadedImageUrls(newUploadedImageUrls);
       onUploadComplete(newUploadedImageUrls);
-      notifySuccess("jdbsd");
+      notifySuccess("File uploaded successfully!");
     } catch (error) {
       console.error("Error uploading files:", error);
-      alert("An error occurred during upload.");
+      notifyError("An error occurred during upload.");
     } finally {
       setIsUploading(false);
     }
