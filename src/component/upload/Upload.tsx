@@ -1,8 +1,8 @@
-import { FileText, Plus } from "lucide-react";
+import { FileText, Plus, X } from "lucide-react"; // Import the X icon
 import React, { useEffect, useState } from "react";
 import useUpload from "../../hook/Api/upload/useUpload";
 import Spacing from "../common/Spacing";
-import { notifyError, notifySuccess } from "../toastify/Toastify";
+import { notifyError } from "../toastify/Toastify";
 
 type UploadProps = {
   onUploadComplete: (urls: string[]) => void;
@@ -13,50 +13,110 @@ const Upload: React.FC<UploadProps> = ({ onUploadComplete, uploadLoading }) => {
   const [files, setFiles] = useState<File[]>([]);
   const { onUpload } = useUpload();
   const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [uploadedDocumentUrls, setUploadedDocumentUrls] = useState<string[]>(
+    []
+  );
   const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>([]);
+  const [isDocumentUpload, setIsDocumentUpload] = useState<boolean>(true);
+
+  const documentExtensions: string[] = [".pdf", ".txt"];
+  const imageExtensions: string[] = [".jpg", ".jpeg", ".png", ".gif"];
+
+  const isDocumentFile = (fileName: string) => {
+    return documentExtensions.some((ext) =>
+      fileName.toLowerCase().endsWith(ext)
+    );
+  };
+
+  const isImageFile = (fileName: string) => {
+    return imageExtensions.some((ext) => fileName.toLowerCase().endsWith(ext));
+  };
 
   const handleAddFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = event.target.files;
     if (selectedFiles) {
       const newFiles = Array.from(selectedFiles);
+
+      const hasDocuments = newFiles.some((file) => isDocumentFile(file.name));
+      const hasImages = newFiles.some((file) => isImageFile(file.name));
+
+      if (!hasDocuments && !hasImages) {
+        notifyError(
+          "Please upload valid document (.pdf, .txt) or image files."
+        );
+        return;
+      }
+
       setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+      setIsDocumentUpload(hasDocuments);
     }
   };
 
-  const handleUpload = async () => {
+  const handleUploadFiles = async () => {
     if (files.length === 0) {
       notifyError("Please choose at least one file to upload.");
       return;
     }
 
     setIsUploading(true);
+    const newUploadedDocumentUrls: string[] = [];
     const newUploadedImageUrls: string[] = [];
 
     try {
       for (const file of files) {
         const response = await onUpload({ file });
         if (response) {
-          newUploadedImageUrls.push(response.data?.data);
+          if (isDocumentFile(file.name)) {
+            newUploadedDocumentUrls.push(response.data?.data);
+          } else if (isImageFile(file.name)) {
+            newUploadedImageUrls.push(response.data?.data);
+          }
         }
       }
+
+      setUploadedDocumentUrls(newUploadedDocumentUrls);
       setUploadedImageUrls(newUploadedImageUrls);
-      onUploadComplete(newUploadedImageUrls);
-      notifySuccess("File uploaded successfully!");
+      onUploadComplete([...newUploadedDocumentUrls, ...newUploadedImageUrls]);
     } catch (error) {
       console.error("Error uploading files:", error);
-      notifyError("An error occurred during upload.");
     } finally {
       setIsUploading(false);
     }
   };
 
+  const handleRemoveFile = (index: number) => {
+    const newFiles = [...files];
+    newFiles.splice(index, 1);
+    setFiles(newFiles);
+  };
+
+  const handleRemoveUploadedDocument = (index: number) => {
+    const removedUrl = uploadedDocumentUrls[index];
+    setUploadedDocumentUrls((prevUrls) =>
+      prevUrls.filter((_, i) => i !== index)
+    );
+    handleRemoveFile(
+      files.findIndex(
+        (file) =>
+          isDocumentFile(file.name) && file.name === removedUrl.split("/").pop()
+      )
+    );
+  };
+
+  const handleRemoveUploadedImage = (index: number) => {
+    const removedUrl = uploadedImageUrls[index];
+    setUploadedImageUrls((prevUrls) => prevUrls.filter((_, i) => i !== index));
+    handleRemoveFile(
+      files.findIndex(
+        (file) =>
+          isImageFile(file.name) && file.name === removedUrl.split("/").pop()
+      )
+    );
+  };
+
   useEffect(() => {
-    if (isUploading) {
-      uploadLoading(true);
-    } else {
-      uploadLoading(false);
-    }
-  }, [isUploading])
+    uploadLoading(isUploading);
+  }, [isUploading]);
 
   return (
     <div>
@@ -83,36 +143,95 @@ const Upload: React.FC<UploadProps> = ({ onUploadComplete, uploadLoading }) => {
 
         <ul className="space-y-2">
           {files.map((file, index) => (
-            <li key={index} className="flex justify-between">
-              <FileText size={20} className="mr-2" />
+            <li key={index} className="flex justify-between items-center">
+              {isDocumentFile(file.name) ? (
+                <FileText size={20} className="mr-2" />
+              ) : (
+                <img
+                  src={URL.createObjectURL(file)}
+                  alt={file.name}
+                  className="h-8 w-8 mr-2"
+                />
+              )}
               <span className="flex-1 truncate">{file.name}</span>
               <span>{file.size}</span>
+              <button
+                onClick={() => handleRemoveFile(index)}
+                className="text-red-500 ml-2"
+                title="Remove file"
+              >
+                <X size={16} />
+              </button>
             </li>
           ))}
         </ul>
 
-        {uploadedImageUrls.length > 0 && (
+        {uploadedDocumentUrls.length > 0 && (
           <div>
             <Spacing height={10} />
             <ul className="space-y-2">
-              <b className="text-purple-600">Images: </b>
-              {uploadedImageUrls.map((file, index) => (
-                <li key={index} className="flex justify-between">
-                  <img
-                    className="flex-none w-24 h-24 object-cover border border-white rounded-md"
-                    src={file}
-                  />
+              <b className="text-purple-600">Uploaded Files: </b>
+              {uploadedDocumentUrls.map((file, index) => (
+                <li key={index} className="flex justify-between items-center">
+                  <a
+                    href={file}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 underline"
+                  >
+                    {file.split("/hehe").pop()}{" "}
+                    {/* Display just the file name */}
+                  </a>
+                  <div>
+                    <button
+                      onClick={() => handleRemoveUploadedDocument(index)} // Remove document
+                      className="text-red-500 ml-2"
+                      title="Remove uploaded document"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
                 </li>
               ))}
             </ul>
           </div>
         )}
 
+        {uploadedImageUrls.length > 0 && (
+          <>
+          < Spacing height={10}/> 
+            <b className="text-purple-600 ">Uploaded Images: </b>
+            <div className="flex space-x-2 mt-4">
+              {uploadedImageUrls.map((file, index) => (
+                <div key={index} className="relative">
+                  <img
+                    className="flex-none w-24 h-24 object-cover border border-white rounded-md "
+                    src={file}
+                    alt={`Uploaded ${index}`}
+                  />
+                  <button
+                    onClick={() => handleRemoveUploadedImage(index)} // Remove image
+                    className="absolute top-0 right-0 text-red-500"
+                    title="Remove uploaded image"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
         <button
-          onClick={handleUpload}
+          onClick={handleUploadFiles}
           className="bg-blue-500 text-white p-2 rounded-lg mt-3"
+          disabled={isUploading}
         >
-          {isUploading ? "Uploading..." : "Upload"}
+          {isUploading
+            ? "Uploading..."
+            : isDocumentUpload
+            ? "Upload Documents"
+            : "Upload Images"}
         </button>
       </div>
     </div>

@@ -4,6 +4,7 @@ import TaskList from "../../component/tasklist/TaskList";
 import Header2 from "../../component/header/Header2";
 import WeeklyTaskProgress from "../../component/tasklist/WeeklyTaskProgress";
 import ActivityChart from "../../component/chart/ActivityChart";
+
 export default function Task() {
   const personalTasks = [
     {
