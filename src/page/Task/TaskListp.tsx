@@ -11,7 +11,7 @@ const TaskListp: React.FC = () => {
   ]
 
   return (
-    <div className="bg-[#0F0F1A] text-white p-6 min-h-screen mt-28">
+    <div className="bg-[#0F0F1A] text-white p-6 min-h-screen mt-24">
       <header className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-4">
           <NavLink to="/task" className="text-indigo-500 flex items-center">

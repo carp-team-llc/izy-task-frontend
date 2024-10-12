@@ -15,8 +15,8 @@ type TaskListProps = {
 };
 
 const TaskList: React.FC<TaskListProps> = ({ title, tasks, showAll = false }) => (
-  <div className="bg-[#1a1f37] rounded-lg p-4 mb-4">
-    <div className="flex justify-between items-center mb-4">
+  <div className="bg-[#1a1f37] rounded-lg p-4 mb-3">
+    <div className="flex justify-between items-center mb-3">
       <h3 className="text-white text-lg font-semibold">{title}</h3>
       {showAll && (
         <NavLink to="/tasklist"> 
