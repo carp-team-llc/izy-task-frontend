@@ -1,5 +1,7 @@
 import React from 'react';
 import { FiMoreVertical } from 'react-icons/fi'; 
+import { NavLink } from 'react-router-dom'; // Import NavLink
+
 type TaskListProps = {
   title: string;  
   tasks: {
@@ -13,13 +15,17 @@ type TaskListProps = {
 };
 
 const TaskList: React.FC<TaskListProps> = ({ title, tasks, showAll = false }) => (
-  <div className="bg-[#1a1f37] rounded-lg p-4 mb-4">
-    <div className="flex justify-between items-center mb-4">
+  <div className="bg-[#1a1f37] rounded-lg p-4 mb-3">
+    <div className="flex justify-between items-center mb-3">
       <h3 className="text-white text-lg font-semibold">{title}</h3>
-      {showAll && <button className="text-purple-500 text-sm">Show All</button>}
+      {showAll && (
+        <NavLink to="/tasklist"> 
+          <button className="text-purple-500 text-sm">Show All</button>
+        </NavLink>
+      )}
     </div>
     <table className="w-full">
-    <colgroup>
+      <colgroup>
         <col style={{ width: "30%" }} />
         <col style={{ width: "15%" }} />
         <col style={{ width: "25%" }} />
