@@ -1,17 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Bell, ChevronDown, Search, User, LogIn, LogOut } from "lucide-react";
 import { NavLink } from "react-router-dom"; // Import NavLink
+import { useAuth } from "../../services/authContext";
 
 const Header: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
+  const { token } = useAuth();
+  useEffect(() => {
+    if (token) {
+      setIsLoggedIn(true);
+      setIsDropdownOpen(false);
+    }
+  }, [token]);
 
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-    setIsDropdownOpen(false);
-  };
+  const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
   const handleLogout = () => {
     setIsLoggedIn(false);
@@ -84,10 +88,10 @@ const Header: React.FC = () => {
               ) : (
                 <>
                   <NavLink
-                    to="/login" 
+                    to="/login"
                     className="flex items-center px-4 py-2 text-sm
                     text-white hover:bg-gray-800 w-full text-left"
-                    >
+                  >
                     <LogIn
                       className="mr-3 h-5 w-5 text-gray-400"
                       aria-hidden="true"
