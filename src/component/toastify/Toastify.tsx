@@ -12,7 +12,7 @@ export const notifySuccess = (message: string, options?: ToastOptions) => {
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
-    theme: "light",
+    theme: "dark",
     transition: Bounce,
   });
 };

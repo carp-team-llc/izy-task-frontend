@@ -4,6 +4,7 @@ import LoginPage from "../page/auth/login/LoginPage";
 import RegisterPage from "../page/auth/register/RegisterPage";
 import Verify from "../page/404/Verify"
 import CreateProfile from "../page/profile/CreateProfile"
+import TaskListp from "../page/Task/TaskListp";
 // Lazy load các trang chính
 const App = lazy(() => import("../App"));
 const HomePage = lazy(() => import("../page/home/HomePage"));
@@ -24,6 +25,7 @@ export const router = createBrowserRouter([
       { path: "/task", element: <Task /> },
       { path: "/timeline", element: <TimeLine/> },
       { path: "/profile", element: <CreateProfile /> },
+      { path: "/tasklist", element: <TaskListp/> },
     ],
   },
   { path: "/login", element: <LoginPage /> },
