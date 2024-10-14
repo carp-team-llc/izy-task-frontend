@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-
 import Header from "../../component/header/Header";
 import BarChartComponents from "../../component/chart/BarChartComponent";
 import UseDailyChart from "../../hook/Api/task/Chart/useDailyChart";
 import SimpleLineChart from "../../component/chart/SimpleLineChart";
 import UsingRoundChart from "./component/UsingRoundChart";
-
 import UsingNotification from "./component/UsingNotifications";
 
 interface TopStatProps {
@@ -14,9 +12,6 @@ interface TopStatProps {
   value: string;
   bgColor: string;
 }
-
-
-
 interface BarVariables {
   status: any;
   createdAt: string;
@@ -34,7 +29,6 @@ const TopStat: React.FC<TopStatProps> = ({
     <p className="text-xs mt-2 text-gray-500">{value}</p>
   </div>
 );
-
 
 export default function Dashboard() {
   const [BarChartData, setBarChartData] = useState<string[]>([]);
@@ -56,7 +50,6 @@ export default function Dashboard() {
     "NEW",
   ];
   
-
   const loadBarData = data?.taskChart;
   const totalBarData = loadBarData?.map((task: any) => {
     return {
@@ -77,17 +70,15 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="flex min-h-screen text-white ]">
+    <div className="flex min-h-screen text-white">
       {/* Sidebar */}
-     
+      {/* You can add your Sidebar component here */}
 
       {/* Main content */}
-      <div className="w-full mt-[101px] ml-[20px]">
-        {" "}
-        <Header></Header>
-        <div className="grid grid-cols-3 gap-6 pr-5">
+      <div className="flex-grow mt-[101px] ml-[20px] p-4">
+        <Header />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Teams Strength */}
-
           <div className="col-span-2 bg-[#1a1f37] rounded-lg p-4">
             <div className="flex flex-row justify-between">
               <h2 className="text-lg font-semibold mb-4">Daily Chart</h2>
@@ -95,14 +86,11 @@ export default function Dashboard() {
                 Total Task: {data?.totalTask}
               </h2>
             </div>
-
-            <div>
-              <BarChartComponents
-                data={totalBarData}
-                colors={colorBarData}
-                legends={legendBarData}
-              />
-            </div>
+            <BarChartComponents
+              data={totalBarData}
+              colors={colorBarData}
+              legends={legendBarData}
+            />
           </div>
 
           {/* Employees */}
@@ -114,7 +102,7 @@ export default function Dashboard() {
           {/* Project Deliveries */}
           <div className="col-span-2 bg-[#1a1f37] rounded-lg p-4">
             <h2 className="text-lg font-semibold mb-4">Project Deliveries</h2>
-            <SimpleLineChart></SimpleLineChart>
+            <SimpleLineChart />
           </div>
 
           {/* Top 10 and Notifications */}
@@ -137,7 +125,7 @@ export default function Dashboard() {
               value="5% increase from last week"
               bgColor="bg-blue-100"
             />
-           <UsingNotification></UsingNotification>
+            <UsingNotification />
           </div>
         </div>
       </div>
