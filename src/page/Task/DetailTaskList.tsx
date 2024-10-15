@@ -1,49 +1,35 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { ArrowLeft, Plus, Upload, Calendar, LayoutGrid, BarChart3, MoreVertical, ChevronUp } from 'lucide-react';
+import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
+import {
+  ArrowLeft,
+  Plus,
+  Upload,
+  Calendar,
+  LayoutGrid,
+  BarChart3,
+  MoreVertical,
+  ChevronUp,
+} from "lucide-react";
+import useDetailTask from "../../hook/Api/task/TaskManager/useDetailTask";
 
 const TaskListp: React.FC = () => {
-  const tasks = [
-    {
-      id: 1,
-      name: 'Task ngày thứ ba',
-      lastModified: 'Feb 25, 2022',
-      deadline: 'Feb 25, 2022',
-      status: 'Completed',
-      statusColor: 'green',
-      updatedAt: 'Feb 24, 2022',
-    },
-    {
-      id: 2,
-      name: 'Task ngày 22/09',
-      lastModified: 'Feb 25, 2022',
-      deadline: 'Feb 25, 2022',
-      status: 'In Progress',
-      statusColor: 'yellow',
-      updatedAt: 'Feb 24, 2022',
-    },
-    {
-      id: 3,
-      name: 'Làm trang web quản lý Task',
-      lastModified: 'Feb 25, 2022',
-      deadline: 'Feb 25, 2022',
-      status: 'Pending',
-      statusColor: 'orange',
-      updatedAt: 'Feb 24, 2022',
-    },
-    {
-      id: 4,
-      name: 'Làm task ngày 4',
-      lastModified: 'Feb 25, 2022',
-      deadline: 'Feb 25, 2022',
-      status: 'Completed',
-      statusColor: 'green',
-      updatedAt: 'Feb 24, 2022',
-    },
-  ];
+  const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
+
+  const {
+    data: taskDetails,
+    isLoading,
+    isError,
+  } = useDetailTask({
+    id: "670d4fff0d8a4c7267de4ce7",
+    // id: selectedTaskId ? selectedTaskId.toString() : undefined,
+  });
+
+  const handleTaskClick = (taskId: number) => {
+    setSelectedTaskId(taskId);
+  };
 
   return (
-    <div className=" text-white p-6 min-h-screen mt-24">
+    <div className="text-white p-6 min-h-screen mt-24">
       <header className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-4">
           <NavLink to="/tasklist" className="text-indigo-500 flex items-center">
@@ -67,20 +53,32 @@ const TaskListp: React.FC = () => {
       </header>
 
       <div className="bg-[#1E1E2D] rounded-lg p-4">
-        <h2 className="text-xl font-semibold mb-4">Detail List</h2>
+        <h2 className="text-xl font-semibold mb-4">{taskDetails?.name}</h2>
         <table className="w-full">
           <thead>
             <tr className="text-left text-gray-400 text-sm">
-              <th className="pb-3 font-medium">Name <ChevronUp size={14} className="inline ml-1" /></th>
-              <th className="pb-3 font-medium">Status <ChevronUp size={14} className="inline ml-1" /></th>
-              <th className="pb-3 font-medium">Last Modified <ChevronUp size={14} className="inline ml-1" /></th>
-              <th className="pb-3 font-medium">Deadline <ChevronUp size={14} className="inline ml-1" /></th>
+              <th className="pb-3 font-medium">
+                Name <ChevronUp size={14} className="inline ml-1" />
+              </th>
+              <th className="pb-3 font-medium">
+                Status <ChevronUp size={14} className="inline ml-1" />
+              </th>
+              <th className="pb-3 font-medium">
+                Last Modified <ChevronUp size={14} className="inline ml-1" />
+              </th>
+              <th className="pb-3 font-medium">
+                Deadline <ChevronUp size={14} className="inline ml-1" />
+              </th>
               <th className="pb-3"></th>
             </tr>
           </thead>
           <tbody>
-            {tasks.map((task) => (
-              <tr key={task.id} className="border-t border-gray-700">
+            {taskDetails?.tasks.map((task: any) => (
+              <tr
+                key={task.id}
+                className="border-t border-gray-700"
+                onClick={() => handleTaskClick(task.id)}
+              >
                 <td className="py-3 flex items-center space-x-3">
                   <div className="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center text-white font-bold">
                     T
@@ -88,10 +86,10 @@ const TaskListp: React.FC = () => {
                   <span>{task.name}</span>
                 </td>
                 <td className="py-3">
-                  <p style={{ color: task.statusColor }}>{task.status}</p> {/* Hiển thị trạng thái */}
+                  <p style={{ color: task.statusColor }}>{task.status}</p>
                 </td>
-                <td className="py-3 text-gray-400">{task.updatedAt}</td> {/* Thay đổi lastModified thành updatedAt */}
-                <td className="py-3 text-gray-400">{task.deadline}</td>
+                <td className="py-3 text-gray-400">{task.updatedAt}</td>
+                <td className="py-3 text-gray-400">{task.expirationDate}</td>
                 <td className="py-3 text-right">
                   <button className="text-gray-400 hover:text-white">
                     <MoreVertical size={16} />
@@ -101,6 +99,24 @@ const TaskListp: React.FC = () => {
             ))}
           </tbody>
         </table>
+
+        {/* Display Task Details */}
+        {selectedTaskId && (
+          <div className="mt-4">
+            <h3 className="text-lg font-semibold">Task Details</h3>
+            {isLoading && <p>Loading...</p>}
+            {isError && <p>Error loading task details.</p>}
+            {taskDetails && taskDetails.length > 0 && (
+              <div>
+                {/* Render your task details here */}
+                <p>Name: {taskDetails[0].name}</p>
+                <p>Status: {taskDetails[0].status}</p>
+                <p>Updated At: {taskDetails[0].updatedAt}</p>
+                <p>Deadline: {taskDetails[0].deadline}</p>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
