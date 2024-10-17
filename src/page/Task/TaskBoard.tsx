@@ -17,7 +17,6 @@ import {
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Plus, MessageCircle, Clock } from "lucide-react";
-import Header2 from "../../component/header/Header2";
 
 interface Task {
   id: string;
@@ -28,6 +27,7 @@ interface Task {
   users: string[];
   comments?: number;
   timeEstimate?: string;
+  isHidden?: boolean;
 }
 
 interface Column {
@@ -55,7 +55,7 @@ const TaskCard: React.FC<{ task: Task; isDragging?: boolean }> = ({
       style={style}
       {...attributes}
       {...listeners}
-      className={`bg-white rounded-lg shadow-md p-4 mb-4 cursor-move  ${
+      className={`bg-white rounded-lg shadow-md p-4 mb-4 w-40 h-80 cursor-move  ${
         isDragging ? "opacity-50" : ""
       }`}
     >
@@ -153,6 +153,15 @@ const TaskBoard: React.FC = () => {
       color: "bg-blue-500",
       tasks: [
         {
+          id: "new-hidden",
+          title: "Hidden New Task",
+          status: "New",
+          image: "/placeholder.svg?height=32&width=32",
+          date: "",
+          users: [],
+          isHidden: true,
+        },
+        {
           id: "1",
           title: "Create UI foundation",
           status: "New",
@@ -183,6 +192,15 @@ const TaskBoard: React.FC = () => {
       color: "bg-yellow-500",
       tasks: [
         {
+          id: "pending-hidden",
+          title: "Hidden Pending Task",
+          status: "Pending",
+          image: "/placeholder.svg?height=32&width=32",
+          date: "",
+          users: [],
+          isHidden: true,
+        },
+        {
           id: "3",
           title: "Create UI foundation",
           status: "Pending",
@@ -212,6 +230,15 @@ const TaskBoard: React.FC = () => {
       title: "Late",
       color: "bg-red-500",
       tasks: [
+        {
+          id: "late-hidden",
+          title: "Hidden Late Task",
+          status: "Late",
+          image: "/placeholder.svg?height=32&width=32",
+          date: "",
+          users: [],
+          isHidden: true,
+        },
         {
           id: "5",
           title: "Building information architecture",
@@ -246,6 +273,15 @@ const TaskBoard: React.FC = () => {
       color: "bg-gray-500",
       tasks: [
         {
+          id: "cancel-hidden",
+          title: "Hidden Cancel Task",
+          status: "Cancel",
+          image: "/placeholder.svg?height=32&width=32",
+          date: "",
+          users: [],
+          isHidden: true,
+        },
+        {
           id: "7",
           title: "Listing deliverables checklist",
           status: "Cancel",
@@ -277,6 +313,15 @@ const TaskBoard: React.FC = () => {
       color: "bg-orange-500",
       tasks: [
         {
+          id: "doing-hidden",
+          title: "Hidden Doing Task",
+          status: "Doing",
+          image: "/placeholder.svg?height=32&width=32",
+          date: "",
+          users: [],
+          isHidden: true,
+        },
+        {
           id: "9",
           title: "Design System",
           status: "Doing",
@@ -305,7 +350,16 @@ const TaskBoard: React.FC = () => {
       id: "completed",
       title: "Completed",
       color: "bg-green-500",
-      tasks: [ 
+      tasks: [
+        {
+          id: "completed-hidden",
+          title: "Hidden Completed Task",
+          status: "Completed",
+          image: "/placeholder.svg?height=32&width=32",
+          date: "",
+          users: [],
+          isHidden: true,
+        },
         {
           id: "11",
           title: "Design System",
@@ -346,7 +400,7 @@ const TaskBoard: React.FC = () => {
     );
     if (activeColumn) {
       const task = activeColumn.tasks.find((t) => t.id === active.id);
-      if (task) {
+      if (task && !task.isHidden) {
         setActiveTask(task);
       }
     }
@@ -365,19 +419,20 @@ const TaskBoard: React.FC = () => {
     );
 
     if (activeColumnId !== overColumnId) {
-      setColumns((columns) => {
-        const activeColumn = columns[activeColumnId];
-        const overColumn = columns[overColumnId];
+      setColumns((prevColumns) => {
+        const activeColumn = prevColumns[activeColumnId];
+        const overColumn = prevColumns[overColumnId];
 
         const activeTaskIndex = activeColumn.tasks.findIndex(
-          (task) => task.id === active.id
+          (task) => task.id  === active.id
         );
         const [removedTask] = activeColumn.tasks.splice(activeTaskIndex, 1);
 
         removedTask.status = overColumn.title;
-        overColumn.tasks.push(removedTask);
+        const hiddenTaskIndex = overColumn.tasks.findIndex((task) => task.isHidden);
+        overColumn.tasks.splice(hiddenTaskIndex + 1, 0, removedTask);
 
-        return [...columns];
+        return [...prevColumns];
       });
     }
   };
@@ -395,9 +450,9 @@ const TaskBoard: React.FC = () => {
     );
 
     if (activeColumnId !== overColumnId) {
-      setColumns((columns) => {
-        const activeColumn = columns[activeColumnId];
-        const overColumn = columns[overColumnId];
+      setColumns((prevColumns) => {
+        const activeColumn = prevColumns[activeColumnId];
+        const overColumn = prevColumns[overColumnId];
 
         const activeTaskIndex = activeColumn.tasks.findIndex(
           (task) => task.id === active.id
@@ -405,9 +460,10 @@ const TaskBoard: React.FC = () => {
         const [removedTask] = activeColumn.tasks.splice(activeTaskIndex, 1);
 
         removedTask.status = overColumn.title;
-        overColumn.tasks.push(removedTask);
+        const hiddenTaskIndex = overColumn.tasks.findIndex((task) => task.isHidden);
+        overColumn.tasks.splice(hiddenTaskIndex + 1, 0, removedTask);
 
-        return [...columns];
+        return [...prevColumns];
       });
     }
 
@@ -420,7 +476,6 @@ const TaskBoard: React.FC = () => {
 
   return (
     <div>
-        <Header2/>
       <div className="p-8 bg-gray-100 min-h-screen mt-20">
         
         <div className="mb-8">
