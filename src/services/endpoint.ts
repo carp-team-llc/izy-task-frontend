@@ -10,6 +10,7 @@ export default {
   uploadfile: "api/v1/storage/upload/",
   tasklist: "/api/v1/task/task_list_pagination",
   personal_tasks: "/api/v1/task/tasks_list",
+  task_list_detail: "/api/v1/task/task_list_detail",
   // #endregion
 
 }

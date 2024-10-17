@@ -6,6 +6,7 @@ import Verify from "../page/404/Verify"
 import CreateProfile from "../page/profile/CreateProfile"
 import TaskListp from "../page/Task/TaskListp";
 import DetailTaskList from "../page/Task/DetailTaskList"
+import TaskBoard from "../page/Task/TaskBoard";
 // Lazy load các trang chính
 const App = lazy(() => import("../App"));
 const HomePage = lazy(() => import("../page/home/HomePage"));
@@ -28,11 +29,14 @@ export const router = createBrowserRouter([
       { path: "/profile", element: <CreateProfile /> },
       { path: "/tasklist", element: <TaskListp/> },
       { path: "/detailtask", element: <DetailTaskList/> },
+      { path: "/taskboard", element: <TaskBoard /> },
     ],
   },
   { path: "/login", element: <LoginPage /> },
   { path: "/register", element: <RegisterPage /> },
   { path: "/verify", element: <Verify /> },
+  
+
   
 ]);
 
