@@ -20,16 +20,18 @@ const RoundChart = ({
   lateColor,
 }: RoundChartProps) => {
   // Tính toán tỷ lệ phần trăm của từng phần
-  const calculatePercentage = (value: number) => (value / total) * 100;
+  const calculatePercentage = (value: number) => {
+    return (value / total) * 100
+  };
 
-  const inactivePercentage = calculatePercentage(late);
-  const activePercentage = calculatePercentage(completed);
+  const inactivePercentage = calculatePercentage(Number(completed || 0)); // tính phần trăm task completed
+  const activePercentage = calculatePercentage(Number(late || 0)); // tính phần trăm task late
 
   // Chuyển đổi tỷ lệ phần trăm thành góc trong 360 độ
   const percentageToAngle = (percentage: number) => (percentage / 100) * 360;
 
-  const inactiveAngle = percentageToAngle(inactivePercentage);
-  const activeAngle = percentageToAngle(activePercentage);
+  const inactiveAngle = percentageToAngle(Number(inactivePercentage || 0)); // tính góc / 360 của task completed
+  const activeAngle = percentageToAngle(Number(activePercentage || 0)); // tính góc / 360 của task late
 
   // Tính góc bắt đầu và kết thúc cho từng phần
   const inactiveStartAngle = 0;
@@ -92,17 +94,17 @@ const RoundChart = ({
         <div className="space-y-4">
           <div>
             <div className="flex items-center">
-              <div className="w-3 h-3 rounded-full bg-purple-500 mr-2"></div>
-              <span className="text-sm text-gray-400">{completedName || "No data"}</span>
+              <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: `${completedColor}`}}></div>
+              <span className="text-sm text-gray-400">{completedName || "Completed"}</span>
             </div>
-            <p className="text-2xl font-bold">{late}</p>
+            <p className="text-2xl font-bold">{completed || 0}</p>
           </div>
           <div>
             <div className="flex items-center">
-              <div className="w-3 h-3 rounded-full bg-orange-500 mr-2"></div>
-              <span className="text-sm text-gray-400">{lateName || "No data"}</span>
+              <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: `${lateColor || "#c9069c"}`}}></div>
+              <span className="text-sm text-gray-400">{lateName || "Late"}</span>
             </div>
-            <p className="text-2xl font-bold">{completed}</p>
+            <p className="text-2xl font-bold">{late || 0}</p>
           </div>
           <div>
             <div className="flex items-center">
@@ -159,7 +161,7 @@ const RoundChart = ({
               />
             </path>
 
-            {/* Đoạn đường cong Active */}
+            {/* Đoạn đường cong Completed task */}
             <path
               d={describeArc(
                 100,
@@ -183,7 +185,7 @@ const RoundChart = ({
               />
             </path>
 
-            {/* Đoạn đường cong Inactive */}
+            {/* Đoạn đường cong late task */}
             <path
               d={describeArc(100, 100, 50, activeStartAngle, activeEndAngle)}
               fill="none"

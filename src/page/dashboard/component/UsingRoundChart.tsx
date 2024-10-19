@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import useWeeklyChart from "../../../hook/Api/task/Chart/useWeeklyChart";
 import RoundChart from "../../../component/chart/RoundChart";
 
@@ -25,7 +25,7 @@ const UsingRoundChart = () => {
     return { fromDate, toDate };
   };
 
-  const { fromDate, toDate } = getCurrentWeekDates();
+  const { fromDate, toDate } = useMemo(() => getCurrentWeekDates(), []);
 
   const body: RoundVariables = {
     status: RoundChartData,
@@ -41,10 +41,12 @@ const UsingRoundChart = () => {
   const totalLate: any = lateData || [];
 
   useEffect(() => {
-    setRouChartData(statusRoundData);
+    if (RoundChartData.length === 0) {
+      setRouChartData(statusRoundData);
+    }
     setRoundFromdate(fromDate); 
     setRoundTodate(toDate); 
-
+  
     if (data) {
       const getCompletedData = loadRoundData?.find(
         (task: any) => task.name === "COMPLETED"
