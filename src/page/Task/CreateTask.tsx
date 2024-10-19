@@ -68,7 +68,7 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
       };
 
       const response = await onCreate(formData);
-      if (response && response.task) {
+      if (response) {
         notifySuccess(response.message);
         onClose();
       }

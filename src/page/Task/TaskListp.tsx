@@ -1,8 +1,19 @@
 import React from 'react'
+import { useState } from "react";
 import { NavLink } from 'react-router-dom'
 import { ArrowLeft, Plus, Upload, Calendar, LayoutGrid, BarChart3, MoreVertical, ChevronUp } from 'lucide-react'
+import CreateTaskList from './CreateTaskList';
 
 const TaskListp: React.FC = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
   const tasks = [
     { id: 1, name: 'Task ngày thứ ba', lastModified: 'Feb 25,2022', deadline: 'Feb 25,2022' },
     { id: 2, name: 'Task ngày 22/09', lastModified: 'Feb 25,2022', deadline: 'Feb 25,2022' },
@@ -14,13 +25,16 @@ const TaskListp: React.FC = () => {
     <div className=" text-white p-6 min-h-screen mt-24">
       <header className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-4">
-          <NavLink to="/task" className="text-indigo-500 flex items-center">
+          <NavLink to="/tasks" className="text-indigo-500 flex items-center">
             <ArrowLeft />
           </NavLink>
           <h1 className="text-xl font-semibold">Task</h1>
-          <button className="bg-indigo-600 text-white rounded-md px-3 py-1.5 text-sm flex items-center space-x-1">
+          <button 
+            onClick={handleOpenModal} 
+            className="bg-indigo-600 text-white rounded-md px-3 py-1.5 text-sm flex items-center space-x-1"
+          >
             <Plus size={16} />
-            <span>Create New Task</span>
+            <span>Create New Task List</span>
           </button>
           <button className="bg-[#2D2D3D] text-white rounded-md px-3 py-1.5 text-sm flex items-center space-x-1">
             <Upload size={16} />
@@ -66,6 +80,7 @@ const TaskListp: React.FC = () => {
           </tbody>
         </table>
       </div>
+      {isModalOpen && <CreateTaskList onClose={handleCloseModal} />}
     </div>
   )
 }

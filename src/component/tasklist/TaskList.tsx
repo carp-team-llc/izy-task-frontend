@@ -30,7 +30,6 @@ const TaskList: React.FC<TaskListProps> = ({ title, showAll = false }) => {
   if (isError) {
     return <div>Error loading tasks: {error?.message}</div>;
   }
-  console.log("====>", tasks[0].tasks);
 
   return (
     <div className="bg-[#1a1f37] rounded-lg p-4 mb-3">
