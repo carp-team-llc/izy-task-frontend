@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import rootApi from "../../../../services/initApi";
 import endpoint from "../../../../services/endpoint";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +20,7 @@ type Respsone = {
 const useCreateTaskList = () => {
   const { token } = useAuth();
   const success = useNavigate();
+  const QueryClient = useQueryClient();
   const { isError, data, error, mutateAsync } = useMutation({
     mutationFn: (variables: CreateTaskParams) => {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
@@ -31,6 +32,9 @@ const useCreateTaskList = () => {
     },
     onSuccess: (e: any) => {
       notifySuccess(e?.data?.mesage || "Create Task List success");
+      QueryClient.invalidateQueries({
+        queryKey: [endpoint.personal_tasks],
+      });
       success("/tasklist");
     },
     onError: (e: any) => {
