@@ -8,7 +8,7 @@ const App = () => {
       <Header />
       <div className="flex flex-grow">
         <Menu className="w-64 fixed left-0 top-20  h-full bg-[#20263d]" />
-        <main className="ml-64 flex-grow p-4 bg-[#0A012E]">
+        <main className="ml-64 flex-grow p-4">
           <Outlet />
         </main>
       </div>
