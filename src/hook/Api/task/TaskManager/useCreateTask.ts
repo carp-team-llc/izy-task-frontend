@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query"
-import useApi from '../../../../services/initApi'
+import rootApi from '../../../../services/initApi'
 import endpoint from '../../../../services/endpoint'
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../../services/authContext';
@@ -24,7 +24,7 @@ const useCreateTask = () => {
     const {isError, data, error, mutateAsync } = useMutation({
         mutationFn: (variables: CreateTaskParams) => {
             const headers = token ? { Authorization: `Bearer ${token}` } : {};
-            return useApi.post<CreateTaskParams, Respsone>(
+            return rootApi.post<CreateTaskParams, Respsone>(
                 endpoint.createtask,
                 variables,
                 { headers }
@@ -32,7 +32,7 @@ const useCreateTask = () => {
         },
         onSuccess: (e: any) => {
             notifySuccess(e?.data?.message || 'Create Task success ')
-            success('/task')
+            success('/tasks')
         },
         onError: (e: any) => {
             notifyError(e?.data?.message || 'Create Task error ')

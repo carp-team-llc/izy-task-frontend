@@ -71,7 +71,7 @@ const SidebarApp = (props: SidebarAppProps) => {
                             component={<NavLink to="/dashboard"/>}
                             icon={<FontAwesomeIcon icon={faSquarePollVertical}/>}
                         >
-                            Product
+                            DashBoard
                         </MenuItem>
                         <MenuItem
                             component={<NavLink to="/teams"/>}
