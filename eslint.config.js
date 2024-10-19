@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
   { ignores: ['dist'] },
-  {
+    {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
@@ -17,13 +17,13 @@ export default tseslint.config(
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
     },
-    rules: {
-      ...reactHooks.configs.recommended.rules,
-      'no-unused-vars': 'off',
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
-    },
+      rules: {
+          ...reactHooks.configs.recommended.rules,
+          'no-unused-vars': ['warn', {vars: 'all', args: 'none'}],
+          'react-refresh/only-export-components': [
+              'warn',
+              {allowConstantExport: true},
+          ],
+      },
   },
 )

@@ -75,8 +75,7 @@ export default function Dashboard() {
       {/* You can add your Sidebar component here */}
 
       {/* Main content */}
-      <div className="flex-grow mt-[101px] ml-[20px] p-4">
-        <Header />
+      <div className="flex-grow p-1">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Teams Strength */}
           <div className="col-span-2 bg-[#1a1f37] rounded-lg p-4">

@@ -65,7 +65,7 @@ export default function Task() {
   ];
 
   return (
-    <div className="flex min-h-screen text-white mt-[95px]">
+    <div className="flex min-h-screen text-white">
     
 
       <div className="flex-1 p-6">
