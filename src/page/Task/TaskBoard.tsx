@@ -1,22 +1,21 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {
-  DndContext,
   closestCorners,
+  DndContext,
+  DragOverlay,
   KeyboardSensor,
   PointerSensor,
   useSensor,
   useSensors,
-  DragOverlay,
 } from "@dnd-kit/core";
 import {
-  arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
+  useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import { Plus, MessageCircle, Clock } from "lucide-react";
+import {CSS} from "@dnd-kit/utilities";
+import {Clock, MessageCircle, Plus} from "lucide-react";
 
 interface Task {
   id: string;
@@ -497,7 +496,7 @@ const TaskBoard: React.FC = () => {
           onDragEnd={handleDragEnd}
           onDragCancel={handleDragCancel}
         >
-          <div className="flex overflow-x-auto pb-8">
+          <div className=" w-full flex overflow-x-auto pb-8">
             {columns.map((column, index) => (
               <React.Fragment key={column.id}>
                 {index > 0 && (
