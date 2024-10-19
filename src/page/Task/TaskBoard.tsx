@@ -472,7 +472,6 @@ const TaskBoard: React.FC = () => {
   const handleDragCancel = () => {
     setActiveTask(null);
   };
-
   return (
     <div>
       <div className="p-8 bg-gray-100 min-h-screen mt-20">
