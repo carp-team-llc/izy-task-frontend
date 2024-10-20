@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Header from "../../component/header/Header";
 import BarChartComponents from "../../component/chart/BarChartComponent";
-import UseDailyChart from "../../hook/Api/task/Chart/useDailyChart";
 import SimpleLineChart from "../../component/chart/SimpleLineChart";
-import UsingRoundChart from "./component/UsingRoundChart";
+import UseDailyChart from "../../hook/Api/task/Chart/useDailyChart";
 import UsingNotification from "./component/UsingNotifications";
+import UsingRoundChart from "./component/UsingRoundChart";
 
 interface TopStatProps {
   title: string;
@@ -53,7 +52,7 @@ export default function Dashboard() {
   const loadBarData = data?.taskChart;
   const totalBarData = loadBarData?.map((task: any) => {
     return {
-      name: task?.statusInfo?.name,
+      name: task?.statusInfo?.engName,
       total: task?.total,
     };
   });
@@ -61,7 +60,7 @@ export default function Dashboard() {
     return color?.statusInfo?.color;
   });
   const legendBarData = loadBarData?.map((legend: any) => {
-    return legend?.statusInfo?.name;
+    return legend?.statusInfo?.engName;
   });
 
   useEffect(() => {

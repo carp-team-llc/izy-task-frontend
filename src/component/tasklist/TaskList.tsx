@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { FiFileText, FiMoreVertical } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
 import usePersonalTaskList from "../../hook/Api/task/TaskManager/usePersonalTask"; // Import your hook here
+import Helper from "../../constant/Helper";
 
 type TaskListProps = {
   title: string;
@@ -70,9 +71,9 @@ const TaskList: React.FC<TaskListProps> = ({ title, showAll = false }) => {
               <td className={`py-2`}>
                 <p style={{ color: task.statusColor }}>{task.status}</p>
               </td>
-              <td className="py-2 text-gray-400">{task.updatedAt}</td>
+              <td className="py-2 text-gray-400">{Helper.formatDate(task.updatedAt)}</td>
               <td className="py-2 text-gray-400">
-                {task.estimatetime || "null"}
+                {Helper.formatDate(task.estimatetime) || ""}
               </td>
               <td className="py-2">
                 <FiMoreVertical size={18} className="text-gray-400" />
