@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
 import {
-  LayoutDashboard,
-  Users,
-  User,
-  FolderOpen,
   Calendar,
   CheckSquare,
-  Settings,
-  Menu as MenuIcon,
   X as CloseIcon,
+  FolderOpen,
+  LayoutDashboard,
+  Menu as MenuIcon,
+  Settings,
+  User,
+  Users,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
 export default function Menu({ className = "" }) {

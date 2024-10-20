@@ -14,6 +14,7 @@ const UsingRoundChart = () => {
   const [RoundToDate, setRoundTodate] = useState("");
   const [completedData, setCompletedData] = useState();
   const [lateData, setLateData] = useState();
+  
   const getCurrentWeekDates = () => {
     const currentDate = new Date();
     const firstDayOfWeek = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1)); // Monday
@@ -27,23 +28,25 @@ const UsingRoundChart = () => {
 
   const { fromDate, toDate } = useMemo(() => getCurrentWeekDates(), []);
 
+  console.log("fromDate: ", fromDate);
+  console.log("toDate: ", toDate);
+
   const body: RoundVariables = {
     status: RoundChartData,
-    fromDate: RoundFromDate,
-    toDate: RoundToDate,
+    fromDate: '2024-10-20T11:57:40.954Z',
+    toDate: '2024-10-27T11:57:40.954Z',
   };
 
-  const { data } = useWeeklyChart(body);
   const statusRoundData = ["LATE", "COMPLETED"];
+
+  const { data } = useWeeklyChart(body);
 
   const loadRoundData = data?.taskChart;
   const totalCompleted: any = completedData || [];
   const totalLate: any = lateData || [];
 
   useEffect(() => {
-    if (RoundChartData.length === 0) {
-      setRouChartData(statusRoundData);
-    }
+    setRouChartData(statusRoundData);
     setRoundFromdate(fromDate); 
     setRoundTodate(toDate); 
   

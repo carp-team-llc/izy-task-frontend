@@ -1,14 +1,14 @@
-import React from "react";
-import {Menu, menuClasses, MenuItem, MenuItemStyles, Sidebar} from 'react-pro-sidebar';
-import {Link, NavLink} from 'react-router-dom';
-import {SidebarHeader} from "./components/sidebarHeader.tsx";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
     faBuildingUser, faFolder,
     faGear, faPeopleGroup,
     faPhone, faSquarePollVertical,
     faSuitcase
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
+import { Menu, menuClasses, MenuItem, MenuItemStyles, Sidebar } from 'react-pro-sidebar';
+import { NavLink } from 'react-router-dom';
+import { SidebarHeader } from "./components/sidebarHeader.tsx";
 
 type SidebarAppProps = {
     setBroken: (value: boolean) => void,
@@ -80,10 +80,10 @@ const SidebarApp = (props: SidebarAppProps) => {
                             Teams
                         </MenuItem>
                         <MenuItem
-                            component={<NavLink to="/employees"/>}
+                            component={<NavLink to="/timeline"/>}
                             icon={<FontAwesomeIcon icon={faBuildingUser}/>}
                         >
-                            Employees
+                            Timeline
                         </MenuItem>
                         <MenuItem
                             component={<NavLink to="/projects"/>}
