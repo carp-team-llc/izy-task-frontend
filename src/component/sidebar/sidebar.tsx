@@ -86,7 +86,7 @@ const SidebarApp = (props: SidebarAppProps) => {
                             Timeline
                         </MenuItem>
                         <MenuItem
-                            component={<NavLink to="/projects"/>}
+                            component={<NavLink to="/projectboard"/>}
                             icon={<FontAwesomeIcon icon={faSuitcase}/>}
                         >
                             Projects
