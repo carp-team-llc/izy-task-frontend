@@ -73,7 +73,7 @@ const TaskList: React.FC<TaskListProps> = ({ title, showAll = false }) => {
               </td>
               <td className="py-2 text-gray-400">{Helper.formatDate(task.updatedAt)}</td>
               <td className="py-2 text-gray-400">
-                {Helper.formatDate(task.estimatetime) || ""}
+                {Helper.formatDate(task.expirationDate) || ""}
               </td>
               <td className="py-2">
                 <FiMoreVertical size={18} className="text-gray-400" />

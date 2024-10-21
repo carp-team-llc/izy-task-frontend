@@ -1,11 +1,28 @@
-import React from 'react'
-import { useState } from "react";
-import { NavLink } from 'react-router-dom'
-import { ArrowLeft, Plus, Upload, Calendar, LayoutGrid, BarChart3, MoreVertical, ChevronUp } from 'lucide-react'
+import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import { ArrowLeft, Plus, Upload, Calendar, LayoutGrid, BarChart3, MoreVertical, ChevronUp } from 'lucide-react';
 import CreateTaskList from './CreateTaskList';
+import usePersonalTaskList from '../../hook/Api/task/TaskManager/useTaskListPagination'; // Import the hook
 
 const TaskListp: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+ 
+  const variables = {
+    where: {}, 
+    skip: 0,
+    take: 10, 
+  };
+
+  
+  const {
+    data: tasks,
+    isLoading,
+    isError,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = usePersonalTaskList(variables);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -14,15 +31,16 @@ const TaskListp: React.FC = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-  const tasks = [
-    { id: 1, name: 'Task ngày thứ ba', lastModified: 'Feb 25,2022', deadline: 'Feb 25,2022' },
-    { id: 2, name: 'Task ngày 22/09', lastModified: 'Feb 25,2022', deadline: 'Feb 25,2022' },
-    { id: 3, name: 'Làm trang web quản lý Task', lastModified: 'Feb 25,2022', deadline: 'Feb 25,2022' },
-    { id: 4, name: 'Làm task ngày 4', lastModified: 'Feb 25,2022', deadline: 'Feb 25,2022' },
-  ]
 
+  if (isLoading) {
+    return <div className="text-white p-6 min-h-screen mt-24">Loading tasks...</div>;
+  }
+
+  if (isError) {
+    return <div className="text-white p-6 min-h-screen mt-24">Error loading tasks</div>;
+  }
   return (
-    <div className=" text-white p-6 min-h-screen mt-24">
+    <div className="text-white p-6 min-h-screen mt-24">
       <header className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-4">
           <NavLink to="/tasks" className="text-indigo-500 flex items-center">
@@ -53,14 +71,20 @@ const TaskListp: React.FC = () => {
         <table className="w-full">
           <thead>
             <tr className="text-left text-gray-400 text-sm">
-              <th className="pb-3 font-medium">Name <ChevronUp size={14} className="inline ml-1" /></th>
-              <th className="pb-3 font-medium">Last Modified <ChevronUp size={14} className="inline ml-1" /></th>
-              <th className="pb-3 font-medium">Deadline <ChevronUp size={14} className="inline ml-1" /></th>
+              <th className="pb-3 font-medium">
+                Name <ChevronUp size={14} className="inline ml-1" />
+              </th>
+              <th className="pb-3 font-medium">
+                Last Modified <ChevronUp size={14} className="inline ml-1" />
+              </th>
+              <th className="pb-3 font-medium">
+                Deadline <ChevronUp size={14} className="inline ml-1" />
+              </th>
               <th className="pb-3"></th>
             </tr>
           </thead>
           <tbody>
-            {tasks.map((task) => (
+            {tasks.map((task: any) => (
               <tr key={task.id} className="border-t border-gray-700">
                 <td className="py-3 flex items-center space-x-3">
                   <div className="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center text-white font-bold">
@@ -68,8 +92,8 @@ const TaskListp: React.FC = () => {
                   </div>
                   <span>{task.name}</span>
                 </td>
-                <td className="py-3 text-gray-400">{task.lastModified}</td>
-                <td className="py-3 text-gray-400">{task.deadline}</td>
+                <td className="py-3 text-gray-400">{task.updatedAt}</td>
+                <td className="py-3 text-gray-400">{task.createdAt}</td>
                 <td className="py-3 text-right">
                   <button className="text-gray-400 hover:text-white">
                     <MoreVertical size={16} />
@@ -79,10 +103,24 @@ const TaskListp: React.FC = () => {
             ))}
           </tbody>
         </table>
+
+        {/* Load more button */}
+        {hasNextPage && (
+          <div className="flex justify-center mt-4">
+            <button
+              onClick={() => fetchNextPage()}
+              className="bg-indigo-600 text-white rounded-md px-4 py-2 text-sm"
+              disabled={isFetchingNextPage}
+            >
+              {isFetchingNextPage ? 'Loading more...' : 'Load More'}
+            </button>
+          </div>
+        )}
       </div>
+
       {isModalOpen && <CreateTaskList onClose={handleCloseModal} />}
     </div>
-  )
-}
+  );
+};
 
-export default TaskListp
+export default TaskListp;
