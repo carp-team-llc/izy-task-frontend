@@ -18,6 +18,17 @@ const Helper = {
     return `${day}/${month}/${year}`;
   },
 
+  // ham lay ngay thang nam viet tat tu data 
+  formatEngDate (dateString: string): string {
+    const date = new Date(dateString);
+  
+    const month = date.toLocaleString('en-US', { month: 'short' });
+    const day = date.getDate();
+    const year = date.getFullYear();
+  
+    return `${month} ${day} ${year}`;
+  },
+
   // ham lay ngay thang nam va gio phut giay tu data
   formatDateTime (dateString: string): string {
     const date = new Date(dateString);
