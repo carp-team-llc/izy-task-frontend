@@ -3,11 +3,11 @@ import { NavLink } from 'react-router-dom';
 import { ArrowLeft, Plus, Upload, Calendar, LayoutGrid, BarChart3, MoreVertical, ChevronUp } from 'lucide-react';
 import CreateTaskList from './CreateTaskList';
 import usePersonalTaskList from '../../hook/Api/task/TaskManager/useTaskListPagination'; // Import the hook
+import Helper from '../../constant/Helper';
 
 const TaskListp: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
- 
   const variables = {
     where: {}, 
     skip: 0,
@@ -32,6 +32,14 @@ const TaskListp: React.FC = () => {
     setIsModalOpen(false);
   };
 
+  const mapDataToTasks = tasks.map((task) => {
+    return task.data
+  })
+
+  const dataFlatmap = mapDataToTasks.flatMap((task) => {
+    return task.taskList[0]
+  })
+
   if (isLoading) {
     return <div className="text-white p-6 min-h-screen mt-24">Loading tasks...</div>;
   }
@@ -40,7 +48,7 @@ const TaskListp: React.FC = () => {
     return <div className="text-white p-6 min-h-screen mt-24">Error loading tasks</div>;
   }
   return (
-    <div className="text-white p-6 min-h-screen mt-24">
+    <div className="text-white p-6 min-h-screen">
       <header className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-4">
           <NavLink to="/tasks" className="text-indigo-500 flex items-center">
@@ -84,7 +92,7 @@ const TaskListp: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {tasks.map((task: any) => (
+            {dataFlatmap.map((task: any) => (
               <tr key={task.id} className="border-t border-gray-700">
                 <td className="py-3 flex items-center space-x-3">
                   <div className="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center text-white font-bold">
@@ -92,8 +100,8 @@ const TaskListp: React.FC = () => {
                   </div>
                   <span>{task.name}</span>
                 </td>
-                <td className="py-3 text-gray-400">{task.updatedAt}</td>
-                <td className="py-3 text-gray-400">{task.createdAt}</td>
+                <td className="py-3 text-gray-400">{Helper.formatDate(task.updatedAt)}</td>
+                <td className="py-3 text-gray-400">{Helper.formatDate(task.createdAt)}</td>
                 <td className="py-3 text-right">
                   <button className="text-gray-400 hover:text-white">
                     <MoreVertical size={16} />

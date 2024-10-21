@@ -94,7 +94,7 @@ const RoundChart = ({
         <div className="space-y-4">
           <div>
             <div className="flex items-center">
-              <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: `${completedColor}`}}></div>
+              <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: `${completedColor || "#0eb53b"}`}}></div>
               <span className="text-sm text-gray-400">{completedName || "Completed"}</span>
             </div>
             <p className="text-2xl font-bold">{completed || 0}</p>
