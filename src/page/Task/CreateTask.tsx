@@ -64,6 +64,7 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
         name: taskName,
         body: taskDescription,
         images: imageUrls,
+        startTime: startTime ? startTime.toISOString() : "",
         expirationDate: endTime ? endTime.toISOString() : "",
       };
 
