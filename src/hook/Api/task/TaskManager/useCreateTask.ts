@@ -28,11 +28,16 @@ const useCreateTask = () => {
                 { headers }
             )
         },
-        onSuccess: (e: any) => {
+        onSuccess: async (e: any) => {
             notifySuccess(e?.data?.message || 'Create Task success ')
-            QueryClient.invalidateQueries({
-                queryKey: [endpoint.personal_tasks]
-            })
+            const refetchBody = {
+                where: {},
+                skip: 0,
+                take: 10,
+            };
+            await QueryClient.invalidateQueries({
+                queryKey: [endpoint.personal_tasks, refetchBody],
+            });
             success('/tasks')
         },
         onError: (e: any) => {
