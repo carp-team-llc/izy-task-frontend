@@ -23,7 +23,7 @@ const TaskList: React.FC<TaskListProps> = ({ title, showAll = false }) => {
     if (hasNextPage) {
       fetchNextPage();
     }
-  }, [hasNextPage, fetchNextPage, isFetchingNextPage]);
+  }, [hasNextPage, fetchNextPage]);
 
   if (isLoading) {
     return <div>Loading tasks...</div>;
