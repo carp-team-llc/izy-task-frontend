@@ -32,7 +32,7 @@ const Upload: React.FC<UploadProps> = ({ onUploadComplete, uploadLoading }) => {
     return imageExtensions.some((ext) => fileName.toLowerCase().endsWith(ext));
   };
 
-  const handleAddFile = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAddFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = event.target.files;
     if (selectedFiles) {
       const newFiles = Array.from(selectedFiles);
@@ -49,38 +49,31 @@ const Upload: React.FC<UploadProps> = ({ onUploadComplete, uploadLoading }) => {
 
       setFiles((prevFiles) => [...prevFiles, ...newFiles]);
       setIsDocumentUpload(hasDocuments);
-    }
-  };
 
-  const handleUploadFiles = async () => {
-    if (files.length === 0) {
-      notifyError("Please choose at least one file to upload.");
-      return;
-    }
+      setIsUploading(true);
+      const newUploadedDocumentUrls: string[] = [];
+      const newUploadedImageUrls: string[] = [];
 
-    setIsUploading(true);
-    const newUploadedDocumentUrls: string[] = [];
-    const newUploadedImageUrls: string[] = [];
-
-    try {
-      for (const file of files) {
-        const response = await onUpload({ file });
-        if (response) {
-          if (isDocumentFile(file.name)) {
-            newUploadedDocumentUrls.push(response.data?.data);
-          } else if (isImageFile(file.name)) {
-            newUploadedImageUrls.push(response.data?.data);
+      try {
+        for (const file of newFiles) {
+          const response = await onUpload({ file });
+          if (response) {
+            if (isDocumentFile(file.name)) {
+              newUploadedDocumentUrls.push(response.data?.data);
+            } else if (isImageFile(file.name)) {
+              newUploadedImageUrls.push(response.data?.data);
+            }
           }
         }
-      }
 
-      setUploadedDocumentUrls(newUploadedDocumentUrls);
-      setUploadedImageUrls(newUploadedImageUrls);
-      onUploadComplete([...newUploadedDocumentUrls, ...newUploadedImageUrls]);
-    } catch (error) {
-      console.error("Error uploading files:", error);
-    } finally {
-      setIsUploading(false);
+        setUploadedDocumentUrls(newUploadedDocumentUrls);
+        setUploadedImageUrls(newUploadedImageUrls);
+        onUploadComplete([...newUploadedDocumentUrls, ...newUploadedImageUrls]);
+      } catch (error) {
+        console.error("Error uploading files:", error);
+      } finally {
+        setIsUploading(false);
+      }
     }
   };
 
@@ -124,7 +117,7 @@ const Upload: React.FC<UploadProps> = ({ onUploadComplete, uploadLoading }) => {
         Upload File
       </label>
       <div className="bg-[#2A2F4A] rounded p-3 text-white">
-        <div className="flex items-center space-x-2 mb-3">
+        <div className="flex items-center space-x-2 mb-1">
           <input
             type="file"
             onChange={handleAddFile}
@@ -136,39 +129,13 @@ const Upload: React.FC<UploadProps> = ({ onUploadComplete, uploadLoading }) => {
             htmlFor="file-upload"
             className="bg-[#1E2139] rounded-lg p-2 hover:bg-opacity-80 cursor-pointer"
           >
-            <Plus size={24} />
+            {isUploading ? "Uploading..." : <Plus size={20} />}
           </label>
           <div className="bg-[#1E2139] rounded-lg p-2 text-sm">More File</div>
         </div>
 
-        <ul className="space-y-2">
-          {files.map((file, index) => (
-            <li key={index} className="flex justify-between items-center">
-              {isDocumentFile(file.name) ? (
-                <FileText size={20} className="mr-2" />
-              ) : (
-                <img
-                  src={URL.createObjectURL(file)}
-                  alt={file.name}
-                  className="h-8 w-8 mr-2"
-                />
-              )}
-              <span className="flex-1 truncate">{file.name}</span>
-              <span>{file.size}</span>
-              <button
-                onClick={() => handleRemoveFile(index)}
-                className="text-red-500 ml-2"
-                title="Remove file"
-              >
-                <X size={16} />
-              </button>
-            </li>
-          ))}
-        </ul>
-
         {uploadedDocumentUrls.length > 0 && (
           <div>
-            <Spacing height={10} />
             <ul className="space-y-2">
               <b className="text-purple-600">Uploaded Files: </b>
               {uploadedDocumentUrls.map((file, index) => (
@@ -199,7 +166,7 @@ const Upload: React.FC<UploadProps> = ({ onUploadComplete, uploadLoading }) => {
 
         {uploadedImageUrls.length > 0 && (
           <>
-          < Spacing height={10}/> 
+            <Spacing height={10} />
             <b className="text-purple-600 ">Uploaded Images: </b>
             <div className="flex space-x-2 mt-4">
               {uploadedImageUrls.map((file, index) => (
@@ -221,18 +188,6 @@ const Upload: React.FC<UploadProps> = ({ onUploadComplete, uploadLoading }) => {
             </div>
           </>
         )}
-
-        <button
-          onClick={handleUploadFiles}
-          className="bg-blue-500 text-white p-2 rounded-lg mt-3"
-          disabled={isUploading}
-        >
-          {isUploading
-            ? "Uploading..."
-            : isDocumentUpload
-            ? "Upload Documents"
-            : "Upload Images"}
-        </button>
       </div>
     </div>
   );
