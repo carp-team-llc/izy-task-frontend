@@ -8,6 +8,7 @@ import TaskListp from "../page/Task/TaskListp";
 import DetailTaskList from "../page/Task/DetailTaskList"
 import TaskBoard from "../page/Task/TaskBoard"; 
 import ProjectDashboard from "../page/project/ProjectBoard";
+import DetailTask from "../page/Task/DetailTask";
 // Lazy load các trang chính
 const App = lazy(() => import("../App"));
 const HomePage = lazy(() => import("../page/home/HomePage"));
@@ -28,9 +29,10 @@ export const router = createBrowserRouter([
       { path: "/timeline", element: <TimeLine/> },
       { path: "/profile", element: <CreateProfile /> },
       { path: "/tasklist", element: <TaskListp/> },
-      { path: "/detailtask", element: <DetailTaskList/> },
+      { path: "/detailtasklist", element: <DetailTaskList/> },
       { path: "/taskboard", element: <TaskBoard /> },
       { path: "/projectboard", element: <ProjectDashboard/> },
+      { path: "/detailtask", element: <DetailTask/> },
       { path: "*", element: <Navigate to="/" /> },
     ],
   },
