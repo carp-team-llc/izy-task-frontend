@@ -5,7 +5,7 @@ import CreateTaskList from './CreateTaskList';
 import usePersonalTaskList from '../../hook/Api/task/TaskManager/useTaskListPagination'; // Import the hook
 import Helper from '../../constant/Helper';
 
-const TaskListp: React.FC = () => {
+const TaskListParams: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const variables = {
@@ -14,7 +14,6 @@ const TaskListp: React.FC = () => {
     take: 10, 
   };
 
-  
   const {
     data: tasks,
     isLoading,
@@ -33,12 +32,12 @@ const TaskListp: React.FC = () => {
   };
 
   const mapDataToTasks = tasks.map((task) => {
-    return task.data
-  })
+    return task.data;
+  });
 
   const dataFlatmap = mapDataToTasks.flatMap((task) => {
-    return task.taskList[0]
-  })
+    return task.taskList;
+  });
 
   if (isLoading) {
     return <div className="text-white p-6 min-h-screen mt-24">Loading tasks...</div>;
@@ -47,6 +46,7 @@ const TaskListp: React.FC = () => {
   if (isError) {
     return <div className="text-white p-6 min-h-screen mt-24">Error loading tasks</div>;
   }
+
   return (
     <div className="text-white p-6 min-h-screen">
       <header className="flex items-center justify-between mb-6">
@@ -93,17 +93,22 @@ const TaskListp: React.FC = () => {
           </thead>
           <tbody>
             {dataFlatmap.map((task: any) => (
-              <tr key={task.id} className="border-t border-gray-700">
+              <tr key={task.id} className="border-t border-gray-700 hover:bg-gray-700">
                 <td className="py-3 flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center text-white font-bold">
-                    T
-                  </div>
-                  <span>{task.name}</span>
+                  <NavLink 
+                    to={`/tasklist/${task.id}`} // Navigate to DetailTaskList with task ID
+                    className="flex items-center space-x-3 hover:bg-gray-700 rounded-lg p-2" // Add hover effect
+                  >
+                    <div className="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center text-white font-bold">
+                      T
+                    </div>
+                    <span>{task.name}</span>
+                  </NavLink>
                 </td>
-                <td className="py-3 text-gray-400">{Helper.formatDate(task.updatedAt)}</td>
-                <td className="py-3 text-gray-400">{Helper.formatDate(task.createdAt)}</td>
+                <td className="py-3 text-gray-400">{Helper.formatEngDate(task.updatedAt)}</td>
+                <td className="py-3 text-gray-400">{Helper.formatEngDate(task.createdAt)}</td>
                 <td className="py-3 text-right">
-                  <button className="text-gray-400 hover:text-white">
+                  <button className="text-gray-400 ">
                     <MoreVertical size={16} />
                   </button>
                 </td>
@@ -131,4 +136,4 @@ const TaskListp: React.FC = () => {
   );
 };
 
-export default TaskListp;
+export default TaskListParams;
