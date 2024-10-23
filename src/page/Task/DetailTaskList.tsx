@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import React from "react";
+import { NavLink, useParams } from "react-router-dom";
 import {
   ArrowLeft,
   Plus,
@@ -10,26 +10,21 @@ import {
   MoreVertical,
   ChevronUp,
 } from "lucide-react";
+import { FiFileText } from "react-icons/fi";
 import useDetailTask from "../../hook/Api/task/TaskManager/useDetailTask";
+import Helper from "../../constant/Helper";
 
-const TaskListp: React.FC = () => {
-  const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
+const DetailTaskList: React.FC = () => {
+  const { id } = useParams<{ id: string }>(); 
 
   const {
     data: taskDetails,
     isLoading,
     isError,
-  } = useDetailTask({
-    id: "670d4fff0d8a4c7267de4ce7",
-    // id: selectedTaskId ? selectedTaskId.toString() : undefined,
-  });
-
-  const handleTaskClick = (taskId: number) => {
-    setSelectedTaskId(taskId);
-  };
+  } = useDetailTask({ id });
 
   return (
-    <div className="text-white p-6 min-h-screen mt-24">
+    <div className="text-white p-6 min-h-screen ">
       <header className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-4">
           <NavLink to="/tasklist" className="text-indigo-500 flex items-center">
@@ -76,23 +71,20 @@ const TaskListp: React.FC = () => {
             {taskDetails?.tasks.map((task: any) => (
               <tr
                 key={task.id}
-                className="border-t border-gray-700"
-                onClick={() => handleTaskClick(task.id)}
+                className="border-t border-gray-700 hover:bg-gray-700 cursor-pointer" // Add hover effect
               >
                 <td className="py-3 flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center text-white font-bold">
-                    T
-                  </div>
+                  <div className="w-8 h-8 bg-gray-700 rounded mr-2 flex items-center justify-center text-lg">
+                   <FiFileText size={25} className="text-gray-400" />
+                   </div>
                   <span>{task.name}</span>
                 </td>
-                <td className="py-3">
-                  <p style={{ color: task.statusColor }}>{task.status}</p>
-                </td>
-                <td className="py-3 text-gray-400">{task.updatedAt}</td>
-                <td className="py-3 text-gray-400">{task.expirationDate}</td>
+                <td className="py-3" style={{color: task.statusColor, fontWeight: 600}} >{task.status}</td>
+                <td className="py-3 text-gray-400">{Helper.formatEngDate(task.updatedAt)}</td>
+                <td className="py-3 text-gray-400">{Helper.formatEngDate(task.expirationDate)}</td>
                 <td className="py-3 text-right">
                   <button className="text-gray-400 hover:text-white">
-                    <MoreVertical size={16} />
+                    <ChevronUp size={16} />
                   </button>
                 </td>
               </tr>
@@ -100,26 +92,11 @@ const TaskListp: React.FC = () => {
           </tbody>
         </table>
 
-        {/* Display Task Details */}
-        {selectedTaskId && (
-          <div className="mt-4">
-            <h3 className="text-lg font-semibold">Task Details</h3>
-            {isLoading && <p>Loading...</p>}
-            {isError && <p>Error loading task details.</p>}
-            {taskDetails && taskDetails.length > 0 && (
-              <div>
-                {/* Render your task details here */}
-                <p>Name: {taskDetails[0].name}</p>
-                <p>Status: {taskDetails[0].status}</p>
-                <p>Updated At: {taskDetails[0].updatedAt}</p>
-                <p>Deadline: {taskDetails[0].deadline}</p>
-              </div>
-            )}
-          </div>
-        )}
+        {isLoading && <p>Loading...</p>}
+        {isError && <p>Error loading task details.</p>}
       </div>
     </div>
   );
 };
 
-export default TaskListp;
+export default DetailTaskList;
