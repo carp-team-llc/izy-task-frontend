@@ -21,7 +21,7 @@ const Header2 = () => {
         <div className="flex items-center space-x-4 mb-">
           <NavLink
             to="/tasklist"
-            className="bg-purple-600 text-white px-3 py-1.5 rounded-lg flex items-center text-sm"
+            className="bg-purple-600 text-white px-3 py-1.5 rounded-lg flex items-center text-sm "
           >
             <span>Task List</span>
           </NavLink>
