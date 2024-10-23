@@ -75,13 +75,9 @@ const Upload: React.FC<UploadProps> = ({ onUploadComplete, uploadLoading }) => {
 
   const handleRemoveUploadedFile = (index: number) => {
     const removedUrl = uploadedFiles[index];
-    setUploadedFiles((prevUrls) =>
-      prevUrls.filter((_, i) => i !== index)
-    );
+    setUploadedFiles((prevUrls) => prevUrls.filter((_, i) => i !== index));
     handleRemoveFile(
-      files.findIndex(
-        (file) => file.name === removedUrl.split("/").pop()
-      )
+      files.findIndex((file) => file.name === removedUrl.split("/").pop())
     );
   };
 
@@ -116,35 +112,44 @@ const Upload: React.FC<UploadProps> = ({ onUploadComplete, uploadLoading }) => {
           <div>
             <ul className="space-y-2">
               <b className="text-purple-600">Uploaded Files: </b>
-              {uploadedFiles.map((file, index) => (
-                <li key={index} className="flex justify-between items-center">
-                  <a
-                    href={file}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 underline"
-                  >
-                    {file.split("/").pop()}{" "}
-                    {/* Display just the file name */}
-                  </a>
-                  <div>
-                    <button
-                      onClick={() => handleRemoveUploadedFile(index)} // Remove file
-                      className="text-red-500 ml-2"
-                      title="Remove uploaded file"
-                    >
-                      <X size={16} />
-                    </button>
-                  </div>
-                </li>
-              ))}
+              {uploadedFiles.map((file, index) => {
+                const fileExtension = "." + file.split(".").pop();
+                const isDocument = documentExtensions.includes(fileExtension);
+                return (
+                  <>
+                    {isDocument && (
+                      <li
+                        key={index}
+                        className="flex justify-between items-center"
+                      >
+                        <a
+                          href={file}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-500 underline"
+                        >
+                          {file.split("/").pop()}
+                        </a>
+                        <div>
+                          <button
+                            onClick={() => handleRemoveUploadedFile(index)} // Remove file
+                            className="text-red-500 ml-2"
+                            title="Remove uploaded file"
+                          >
+                            <X size={16} />
+                          </button>
+                        </div>
+                      </li>
+                    )}
+                  </>
+                );
+              })}
             </ul>
           </div>
         )}
 
         {uploadedFiles.length > 0 && (
           <>
-            <Spacing height={10} />
             <div className="flex space-x-2 mt-4">
               {uploadedFiles
                 .filter((file) => isImageFile(file))

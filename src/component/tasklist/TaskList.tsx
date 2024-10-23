@@ -42,46 +42,47 @@ const TaskList: React.FC<TaskListProps> = ({ title, showAll = false }) => {
           </NavLink>
         )}
       </div>
-      <table className="w-full">
-        <colgroup>
-          <col style={{ width: "30%" }} />
-          <col style={{ width: "15%" }} />
-          <col style={{ width: "25%" }} />
-          <col style={{ width: "25%" }} />
-          <col style={{ width: "5%" }} />
-        </colgroup>
-        <thead>
-          <tr className="text-gray-400 text-xs">
-            <th className="text-left pb-2 font-normal">Name</th>
-            <th className="text-left pb-2 font-normal">Status</th>
-            <th className="text-left pb-2 font-normal">Last Modified</th>
-            <th className="text-left pb-2 font-normal">Deadline</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {tasks[0].tasks.map((task: any, index: number) => (
-            <tr key={index} className="text-white text-sm">
-              <td className="py-2 flex items-center">
-                <div className="w-8 h-8 bg-gray-700 rounded mr-2 flex items-center justify-center text-lg">
-                  <FiFileText size={18} className="text-gray-400" />
+      <div className="overflow-x-auto">
+        <div className="flex flex-col">
+          <div className="flex text-gray-400 text-xs">
+            <div className="flex-[30] text-left pb-2 font-normal mr-5">
+              Name
+            </div>
+            <div className="flex-[15] text-left pb-2 font-normal">Status</div>
+            <div className="flex-[25] text-left pb-2 font-normal">
+              Last Modified
+            </div>
+            <div className="flex-[25] text-left pb-2 font-normal">Deadline</div>
+            <div className="flex-[5]"></div>
+          </div>
+          <div>
+            {tasks[0].tasks.map((task: any, index: number) => (
+              <div key={index} className="flex text-white text-sm py-2">
+                <div className="flex-[30] flex items-center mr-5">
+                  <div className="w-8 h-8 bg-gray-700 rounded mr-2 flex items-center justify-center text-lg">
+                    <FiFileText size={18} className="text-gray-400" />
+                  </div>
+                  <div className="flex-grow max-w-[70%] overflow-hidden">
+                    <span className="block break-all">{task.name}</span>
+                  </div>
                 </div>
-                {task.name}
-              </td>
-              <td className={`py-2`}>
-                <p style={{ color: task.statusColor }}>{task.status}</p>
-              </td>
-              <td className="py-2 text-gray-400">{Helper.formatEngDate(task.updatedAt)}</td>
-              <td className="py-2 text-gray-400">
-                {Helper.formatEngDate(task.expirationDate) || ""}
-              </td>
-              <td className="py-2">
-                <FiMoreVertical size={18} className="text-gray-400" />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                <div className="flex-[15]">
+                  <p style={{ color: task.statusColor }}>{task.status}</p>
+                </div>
+                <div className="flex-[25] text-gray-400">
+                  {Helper.formatEngDate(task.updatedAt)}
+                </div>
+                <div className="flex-[25] text-gray-400">
+                  {Helper.formatEngDate(task.expirationDate) || ""}
+                </div>
+                <div className="flex-[5] flex justify-center">
+                  <FiMoreVertical size={18} className="text-gray-400" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
       {isFetchingNextPage && <div>Loading more tasks...</div>}
       {hasNextPage && (
         <button
