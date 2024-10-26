@@ -12,6 +12,8 @@ export default {
   personal_tasks: "api/v1/task/tasks_list",
   task_list_detail: "api/v1/task/task_list_detail",
   createtasklist: "api/v1/task/create_task_list",
+  comments: "api/v1/comments/create_comment",
+  detailtask: "api/v1/task/task_detail",
   // #endregion
 
 }

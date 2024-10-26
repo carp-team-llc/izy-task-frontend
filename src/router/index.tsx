@@ -32,7 +32,6 @@ export const router = createBrowserRouter([
       { path: "/tasklist/:id", element: <DetailTaskList /> }, // Add dynamic route for DetailTaskList
       { path: "/taskboard", element: <TaskBoard /> },
       { path: "/projectboard", element: <ProjectDashboard /> },
-      { path: "/detailtask", element: <DetailTask /> },
       { path: "*", element: <Navigate to="/" /> },
     ],
   },
