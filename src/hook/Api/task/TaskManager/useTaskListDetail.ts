@@ -11,7 +11,7 @@ type Response = {
   data: any;
 };
 
-const useDetailTask = (variables: Variables) => {
+const useTaskListDetail = (variables: Variables) => {
   const {
     data,
     error,
@@ -27,7 +27,6 @@ const useDetailTask = (variables: Variables) => {
     return response.data.detail
     },
   });
-  console.log("====", data);
   return {
     isLoading,
     isError,
@@ -39,4 +38,4 @@ const useDetailTask = (variables: Variables) => {
   };
 };
 
-export default useDetailTask;
+export default useTaskListDetail;

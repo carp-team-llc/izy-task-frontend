@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
-import useApi from "../../../services/initApi";
-import endpoint from "../../../services/endpoint";
 import { useNavigate } from 'react-router-dom';
 import { notifyError, notifySuccess } from "../../../component/toastify/Toastify";
+import endpoint from "../../../services/endpoint";
+import rootApi from "../../../services/initApi";
 
 type RegisterParams = {
     username : string;
@@ -18,7 +18,7 @@ const UseRegister = () => {
     const success = useNavigate();
     const { isError, data, error, mutateAsync } = useMutation({
         mutationFn: (Variable: RegisterParams) => {
-            return useApi.post<RegisterParams, Response>(
+            return rootApi.post<RegisterParams, Response>(
                 endpoint.register,
                 Variable
             )
