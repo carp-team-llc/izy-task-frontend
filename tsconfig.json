@@ -6,8 +6,6 @@
   ],
   "compilerOptions": {
     // ...
-    "types": [
-      "vite-plugin-terminal/client"
-    ],
+    "types": [],
   },
 }
