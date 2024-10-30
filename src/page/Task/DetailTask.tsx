@@ -4,10 +4,8 @@ import {
   CircleUser,
   Clock,
   Edit,
-  FileText,
   Flag,
   FolderOpenDot,
-  Image,
   LayoutList,
   Trash2,
   Users,
@@ -19,6 +17,7 @@ import "react-quill/dist/quill.snow.css";
 import CommentDetailTask from "../../component/interactions/CommentDetailTask";
 import Helper from "../../constant/Helper";
 import useTaskDetail from "../../hook/Api/task/TaskManager/useTaskDetail";
+import ShowFiles from "../../component/ShowFiles/ShowFiles";
 
 interface ActivityItem {
   action: string;
@@ -66,18 +65,18 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
             <X size={20} />
           </button>
         </div>
-        <div className="flex justify-between items-center p-1 pb-4 border-b border-gray-700">
-          <div className="max-w-4xl w-full">
+        <div className="flex justify-between items-center p-1 pb-4 w-full border-b border-gray-700">
+          <div className="max-w-4xl">
             <div className="flex flex-row items-center">
               <h1 className="text-lg font-semibold text-blue-400">
                 {data?.name}
               </h1>
-              <p className="text-sm text-gray-400 ml-auto">
-                Created at: {Helper.formatEngDate(data?.createdAt)}
-              </p>
             </div>
             <p className="text-sm text-gray-400">calangtrang</p>
           </div>
+          <p className="text-sm text-gray-400 ml-auto">
+            Created at: {Helper.formatEngDate(data?.createdAt)}
+          </p>
         </div>
 
         <div className="flex-1 overflow-y-auto">
@@ -114,26 +113,7 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
                   Attachments ({data?.images.length})
                 </h2>
                 <div className="space-y-2">
-                  {data?.images.map((attachment: any, index: any) => (
-                    <div
-                      key={index}
-                      className="flex items-center bg-blue-500 text-white rounded p-1.5 text-sm"
-                    >
-                      {attachment.type === "pdf" ? (
-                        <FileText size={16} className="mr-2" />
-                      ) : (
-                        <Image size={16} className="mr-2" />
-                      )}
-                      <span>{attachment?.name}</span>
-                      {attachment.type === "image" && attachment.url && (
-                        <img
-                          src={attachment?.url}
-                          alt={attachment?.name}
-                          className="ml-2 w-6 h-6 object-cover rounded"
-                        />
-                      )}
-                    </div>
-                  ))}
+                  <ShowFiles urls={data?.images} />
                 </div>
               </div>
 
@@ -154,6 +134,7 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
                     </div>
                   ))}
                 </div>
+                <div></div>
               </div>
             </div>
 
@@ -162,7 +143,7 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
                 {/* <DropList options={statuses} onSelect={() => {}} /> */}
                 <div className="flex justify-between items-center">
                   <ChartLine size={14} className="inline " />
-                  <span className="ml-[-42px]">Status</span>
+                  <span className="w-20 text-sm mr-2">Status</span>
                   <span className="px-2 py-1 bg-green-500 text-white rounded text-sm ">
                     Completed
                   </span>
@@ -172,8 +153,15 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
                   <CircleUser size={14} className="mr-2" />
                   <span className="w-20 text-sm mr-2">Author</span>
                   <div className="flex items-center">
-                    <div className="w-5 h-5 rounded-full bg-gray-700 flex items-center justify-center mr-1">
-                      <span className="text-[12px]">C</span>
+                    <div className="w-5 h-5 rounded-full flex items-center justify-center mr-1">
+                      <img
+                        src={data?.author?.profile?.avatar}
+                        style={{
+                          width: Helper.normalize(18),
+                          height: "auto",
+                          borderRadius: "50%",
+                        }}
+                      />
                     </div>
                     <span className="text-sm mr-[-30px]">
                       {data?.author.username}
@@ -185,8 +173,15 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
                   <CircleUser size={14} className="mr-2" />
                   <span className="w-20 text-sm mr-2">Assigned to</span>
                   <div className="flex items-center">
-                    <div className="w-5 h-5 rounded-full bg-gray-700 flex items-center justify-center mr-1">
-                      <span className="text-[12px]">C</span>
+                    <div className="w-5 h-5 rounded-full flex items-center justify-center mr-1">
+                      <img
+                        src={data?.employee?.profile?.avatar}
+                        style={{
+                          width: Helper.normalize(18),
+                          height: "auto",
+                          borderRadius: "50%",
+                        }}
+                      />
                     </div>
                     <span className="text-sm mr-[-30px]">
                       {data?.employee.username}
@@ -256,42 +251,44 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
             </div>
           </div>
         </div>
-        <style jsx global>{`
-          * {
-            scrollbar-width: none;
-          }
+        <React.Fragment>
+          <style jsx global>{`
+            * {
+              scrollbar-width: none;
+            }
 
-          *::-webkit-scrollbar {
-            display: none;
-          }
+            *::-webkit-scrollbar {
+              display: none;
+            }
 
-          *::-webkit-scrollbar-track {
-            background: #2d3748;
-          }
+            *::-webkit-scrollbar-track {
+              background: #2d3748;
+            }
 
-          *::-webkit-scrollbar-thumb {
-            background-color: #4a5568;
-            border-radius: 3px;
-          }
+            *::-webkit-scrollbar-thumb {
+              background-color: #4a5568;
+              border-radius: 3px;
+            }
 
-          .quill {
-            height: 200px;
-            width: 100%;
-          }
-          .ql-container {
-            height: calc(100% - 42px);
-          }
-          .ql-editor {
-            min-height: 150px;
-            overflow-y: visible;
-            overflow-wrap: break-word;
-            word-wrap: break-word;
-            word-break: break-word;
-          }
-          .ql-editor p {
-            white-space: pre-wrap;
-          }
-        `}</style>
+            .quill {
+              height: 200px;
+              width: 100%;
+            }
+            .ql-container {
+              height: calc(100% - 42px);
+            }
+            .ql-editor {
+              min-height: 150px;
+              overflow-y: visible;
+              overflow-wrap: break-word;
+              word-wrap: break-word;
+              word-break: break-word;
+            }
+            .ql-editor p {
+              white-space: pre-wrap;
+            }
+          `}</style>
+        </React.Fragment>
       </div>
     </div>
   );
