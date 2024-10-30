@@ -139,103 +139,121 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
             </div>
 
             <div className="w-1/4 flex flex-col">
-              <div className="bg-[#0f0a2a] p-3 space-y-4">
-                {/* <DropList options={statuses} onSelect={() => {}} /> */}
-                <div className="flex justify-between items-center">
-                  <ChartLine size={14} className="inline " />
-                  <span className="w-20 text-sm mr-2">Status</span>
-                  <span className="px-2 py-1 bg-green-500 text-white rounded text-sm ">
-                    Completed
-                  </span>
-                </div>
-
-                <div className="flex items-center">
-                  <CircleUser size={14} className="mr-2" />
-                  <span className="w-20 text-sm mr-2">Author</span>
-                  <div className="flex items-center">
-                    <div className="w-5 h-5 rounded-full flex items-center justify-center mr-1">
-                      <img
-                        src={data?.author?.profile?.avatar}
-                        style={{
-                          width: Helper.normalize(18),
-                          height: "auto",
-                          borderRadius: "50%",
-                        }}
-                      />
+              <div className="bg-[#0f0a2a] p-6 space-y-6 text-white">
+                <div className="space-y-4">
+                  {/* Status */}
+                  <div className="flex items-center justify-start">
+                    <div className="flex items-center">
+                      <ChartLine size={14} className="mr-2" />
+                      <span className="w-20 text-sm">Status</span>
                     </div>
-                    <span className="text-sm mr-[-30px]">
-                      {data?.author.username}
+                    <span className="px-2 py-1 bg-green-500 text-white rounded text-sm">
+                      Completed
                     </span>
                   </div>
-                </div>
 
-                <div className="flex items-center">
-                  <CircleUser size={14} className="mr-2" />
-                  <span className="w-20 text-sm mr-2">Assigned to</span>
-                  <div className="flex items-center">
-                    <div className="w-5 h-5 rounded-full flex items-center justify-center mr-1">
-                      <img
-                        src={data?.employee?.profile?.avatar}
-                        style={{
-                          width: Helper.normalize(18),
-                          height: "auto",
-                          borderRadius: "50%",
-                        }}
-                      />
+                  {/* Author */}
+                  <div className="flex items-center jjustify-start">
+                    <div className="flex items-center">
+                      <CircleUser size={14} className="mr-2" />
+                      <span className="w-20 text-sm">Author</span>
                     </div>
-                    <span className="text-sm mr-[-30px]">
-                      {data?.employee.username}
+                    <div className="flex items-center">
+                      <div className="w-5 h-5 rounded-full flex items-center justify-center mr-2">
+                        <img
+                          src={data?.author?.profile?.avatar}
+                          alt="Author Avatar"
+                          className="w-5 h-5 rounded-full"
+                        />
+                      </div>
+                      <span className="text-sm">{data?.author.username}</span>
+                    </div>
+                  </div>
+
+                  {/* Assigned to */}
+                  <div className="flex items-center justify-start">
+                    <div className="flex items-center">
+                      <CircleUser size={14} className="mr-2" />
+                      <span className="w-20 text-sm">Assigned to</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-5 h-5 rounded-full flex items-center justify-center mr-2">
+                        <img
+                          src={data?.employee?.profile?.avatar}
+                          alt="Employee Avatar"
+                          className="w-5 h-5 rounded-full"
+                        />
+                      </div>
+                      <span className="text-sm">{data?.employee.username}</span>
+                    </div>
+                  </div>
+
+                  {/* Task List */}
+                  <div className="flex items-center justify-start">
+                    <div className="flex items-center">
+                      <LayoutList size={14} className="mr-2" />
+                      <span className="w-20 text-sm">Task List</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-5 h-5 rounded-full bg-gray-700 flex items-center justify-center mr-2">
+                        <span className="text-[12px]">1</span>
+                      </div>
+                      <span className="text-sm">{data?.taskList?.name}</span>
+                    </div>
+                  </div>
+
+                  {/* Team */}
+                  <div className="flex items-center justify-start">
+                    <div className="flex items-center">
+                      <Users size={14} className="mr-2" />
+                      <span className="w-20 text-sm">Team</span>
+                    </div>
+                    <span className="text-xs text-gray-400">
+                      {data?.team || "None"}
                     </span>
                   </div>
-                </div>
 
-                <div className="flex items-center">
-                  <LayoutList size={14} className="mr-2" />
-                  <span className="w-20 text-sm mr-2">Task List</span>
-                  <div className="flex items-center">
-                    <div className="w-5 h-5 rounded-full bg-gray-700 flex items-center justify-center mr-1">
-                      <span className="text-[12px]">1</span>
+                  {/* Project */}
+                  <div className="flex items-center justify-start">
+                    <div className="flex items-center">
+                      <FolderOpenDot size={14} className="mr-2" />
+                      <span className="w-20 text-sm">Project</span>
                     </div>
-                    <span className="text-sm mr-2">{data?.taskList?.name}</span>
+                    <span className="text-xs text-gray-400">
+                      {data?.project || "None"}
+                    </span>
                   </div>
-                </div>
 
-                <div className="flex items-center">
-                  <Users size={14} className="mr-2" />
-                  <span className="w-20 text-sm mr-2">Team</span>
-                  <span className="text-xs text-gray-400 mr-2">
-                    {data?.team || "None"}
-                  </span>
-                </div>
+                  {/* Start Time */}
+                  <div className="flex items-center justify-start">
+                    <div className="flex items-center">
+                      <Clock size={14} className="mr-2" />
+                      <span className="w-20 text-sm">Start time</span>
+                    </div>
+                    <span className="text-sm">
+                      {Helper.formatEngDate(data?.startTime)}
+                    </span>
+                  </div>
 
-                <div className="flex items-center">
-                  <FolderOpenDot size={14} className="mr-2" />
-                  <span className="w-20 text-sm mr-2">Project</span>
-                  <span className="text-xs text-gray-400 ">
-                    {data?.project || "None"}
-                  </span>
-                </div>
+                  {/* End Time */}
+                  <div className="flex items-center justify-start">
+                    <div className="flex items-center">
+                      <Flag size={14} className="mr-2" />
+                      <span className="w-20 text-sm">End time</span>
+                    </div>
+                    <span className="text-sm">
+                      {Helper.formatEngDate(data?.expirationDate)}
+                    </span>
+                  </div>
 
-                <div className="flex items-center text-sm">
-                  <Clock size={14} className="mr-2" />
-                  <span className="w-20 mr-2">Start time</span>
-                  <span className="ml-1">
-                    {Helper.formatEngDate(data?.startTime)}
-                  </span>
-                </div>
-
-                <div className="flex items-center text-sm">
-                  <Flag size={14} className="mr-2" />
-                  <span className="w-20 mr-2">End time</span>
-                  <span className="ml-1">
-                    {Helper.formatEngDate(data?.expirationDate)}
-                  </span>
-                </div>
-
-                <div className="flex items-center text-sm">
-                  <Calendar size={14} className="mr-2" />
-                  <span className="w-20 mr-2">Estimate</span>
-                  <span className="ml-auto">{data?.estimatetime}</span>
+                  {/* Estimate */}
+                  <div className="flex items-center justify-start">
+                    <div className="flex items-center">
+                      <Calendar size={14} className="mr-2" />
+                      <span className="w-20 text-sm">Estimate</span>
+                    </div>
+                    <span className="text-sm">{data?.estimatetime}</span>
+                  </div>
                 </div>
               </div>
 
