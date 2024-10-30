@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FiFileText, FiMoreVertical } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
-import usePersonalTaskList from "../../hook/Api/task/TaskManager/usePersonalTask"; // Import your hook here
 import Helper from "../../constant/Helper";
+import usePersonalTaskList from "../../hook/Api/task/TaskManager/usePersonalTask"; // Import your hook here
+import DetailTask from "../../page/Task/DetailTask";
 
 type TaskListProps = {
   title: string;
@@ -10,6 +11,19 @@ type TaskListProps = {
 };
 
 const TaskList: React.FC<TaskListProps> = ({ title, showAll = false }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<any>(null);
+
+  const handleTaskClick = (task: any) => {
+    setSelectedTask(task);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedTask(null);
+  };
+
   const {
     isLoading,
     isError,
@@ -56,8 +70,8 @@ const TaskList: React.FC<TaskListProps> = ({ title, showAll = false }) => {
             <div className="flex-[5]"></div>
           </div>
           <div>
-            {tasks[0].tasks.map((task: any, index: number) => (
-              <div key={index} className="flex text-white text-sm py-2">
+            {tasks[0]?.tasks?.map((task: any, index: number) => (
+              <div key={index} className="flex text-white text-sm py-2" onClick={() => handleTaskClick(task)}>
                 <div className="flex-[30] flex items-center mr-5">
                   <div className="w-8 h-8 bg-gray-700 rounded mr-2 flex items-center justify-center text-lg">
                     <FiFileText size={18} className="text-gray-400" />
@@ -91,6 +105,14 @@ const TaskList: React.FC<TaskListProps> = ({ title, showAll = false }) => {
         >
           Load More
         </button>
+      )}
+
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center">
+          <div className="bg-[#0f0a2a] rounded-lg max-w-5xl p-4 w-full transition-transform transform scale-100 duration-300 ease-in-out">
+            <DetailTask task={selectedTask} onClose={closeModal} />
+          </div>
+        </div>
       )}
     </div>
   );

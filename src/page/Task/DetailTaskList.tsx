@@ -1,18 +1,17 @@
-import React, { useState } from "react";
-import { NavLink, useParams } from "react-router-dom";
 import {
   ArrowLeft,
-  Plus,
-  Upload,
-  Calendar,
-  LayoutGrid,
   BarChart3,
+  Calendar,
   ChevronUp,
-  X,
+  LayoutGrid,
+  Plus,
+  Upload
 } from "lucide-react";
+import React, { useState } from "react";
 import { FiFileText } from "react-icons/fi";
-import useTaskListDetail from "../../hook/Api/task/TaskManager/useTaskListDetail";
+import { NavLink, useParams } from "react-router-dom";
 import Helper from "../../constant/Helper";
+import useTaskListDetail from "../../hook/Api/task/TaskManager/useTaskListDetail";
 import DetailTask from "../../page/Task/DetailTask";
 
 const DetailTaskList: React.FC = () => {
