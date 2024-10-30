@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import {
   closestCorners,
   DndContext,
@@ -14,8 +14,8 @@ import {
   useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import {CSS} from "@dnd-kit/utilities";
-import {Clock, MessageCircle, Plus} from "lucide-react";
+import { CSS } from "@dnd-kit/utilities";
+import { Clock, MessageCircle, Plus } from "lucide-react";
 
 interface Task {
   id: string;
@@ -26,7 +26,6 @@ interface Task {
   users: string[];
   comments?: number;
   timeEstimate?: string;
-  isHidden?: boolean;
 }
 
 interface Column {
@@ -54,7 +53,7 @@ const TaskCard: React.FC<{ task: Task; isDragging?: boolean }> = ({
       style={style}
       {...attributes}
       {...listeners}
-      className={`bg-white rounded-lg shadow-md p-4 mb-4 w-40 h-80 cursor-move  ${
+      className={`bg-white rounded-lg shadow-md p-4 mb-4 w-40 h-80 cursor-move ${
         isDragging ? "opacity-50" : ""
       }`}
     >
@@ -120,46 +119,36 @@ const TaskCard: React.FC<{ task: Task; isDragging?: boolean }> = ({
 const ColumnContainer: React.FC<{ column: Column; tasks: Task[] }> = ({
   column,
   tasks,
-}) => {
-  return (
-    <div className="bg-gray-100 p-6 rounded-lg w-44  ">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="font-bold text-sm">{column.title}</h2>
-        <button
-          className={`w-6 h-6 rounded-full text-white flex items-center justify-center ${column.color}`}
-        >
-          <Plus size={16} />
-        </button>
-      </div>
-      <SortableContext
-        items={tasks.map((task) => task.id)}
-        strategy={verticalListSortingStrategy}
+}) => (
+  <div className="bg-gray-100 p-6 rounded-lg w-44 min-h-[10rem]">
+    {" "}
+    {/* min-height */}
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="font-bold text-sm">{column.title}</h2>
+      <button
+        className={`w-6 h-6 rounded-full text-white flex items-center justify-center ${column.color}`}
       >
-        {tasks.map((task) => (
-          <TaskCard key={task.id} task={task} />
-        ))}
-      </SortableContext>
+        <Plus size={16} />
+      </button>
     </div>
-  );
-};
+    <SortableContext
+      items={tasks.map((task) => task.id)}
+      strategy={verticalListSortingStrategy}
+    >
+      {tasks.map((task) => (
+        <TaskCard key={task.id} task={task} />
+      ))}
+    </SortableContext>
+  </div>
+);
 
 const TaskBoard: React.FC = () => {
   const [columns, setColumns] = useState<Column[]>([
-    
     {
       id: "new",
       title: "New",
       color: "bg-blue-500",
       tasks: [
-        {
-          id: "new-hidden",
-          title: "Hidden New Task",
-          status: "New",
-          image: "/placeholder.svg?height=32&width=32",
-          date: "",
-          users: [],
-          isHidden: true,
-        },
         {
           id: "1",
           title: "Create UI foundation",
@@ -191,15 +180,6 @@ const TaskBoard: React.FC = () => {
       color: "bg-yellow-500",
       tasks: [
         {
-          id: "pending-hidden",
-          title: "Hidden Pending Task",
-          status: "Pending",
-          image: "/placeholder.svg?height=32&width=32",
-          date: "",
-          users: [],
-          isHidden: true,
-        },
-        {
           id: "3",
           title: "Create UI foundation",
           status: "Pending",
@@ -229,15 +209,6 @@ const TaskBoard: React.FC = () => {
       title: "Late",
       color: "bg-red-500",
       tasks: [
-        {
-          id: "late-hidden",
-          title: "Hidden Late Task",
-          status: "Late",
-          image: "/placeholder.svg?height=32&width=32",
-          date: "",
-          users: [],
-          isHidden: true,
-        },
         {
           id: "5",
           title: "Building information architecture",
@@ -272,15 +243,6 @@ const TaskBoard: React.FC = () => {
       color: "bg-gray-500",
       tasks: [
         {
-          id: "cancel-hidden",
-          title: "Hidden Cancel Task",
-          status: "Cancel",
-          image: "/placeholder.svg?height=32&width=32",
-          date: "",
-          users: [],
-          isHidden: true,
-        },
-        {
           id: "7",
           title: "Listing deliverables checklist",
           status: "Cancel",
@@ -312,15 +274,6 @@ const TaskBoard: React.FC = () => {
       color: "bg-orange-500",
       tasks: [
         {
-          id: "doing-hidden",
-          title: "Hidden Doing Task",
-          status: "Doing",
-          image: "/placeholder.svg?height=32&width=32",
-          date: "",
-          users: [],
-          isHidden: true,
-        },
-        {
           id: "9",
           title: "Design System",
           status: "Doing",
@@ -350,15 +303,6 @@ const TaskBoard: React.FC = () => {
       title: "Completed",
       color: "bg-green-500",
       tasks: [
-        {
-          id: "completed-hidden",
-          title: "Hidden Completed Task",
-          status: "Completed",
-          image: "/placeholder.svg?height=32&width=32",
-          date: "",
-          users: [],
-          isHidden: true,
-        },
         {
           id: "11",
           title: "Design System",
@@ -399,7 +343,7 @@ const TaskBoard: React.FC = () => {
     );
     if (activeColumn) {
       const task = activeColumn.tasks.find((t) => t.id === active.id);
-      if (task && !task.isHidden) {
+      if (task) {
         setActiveTask(task);
       }
     }
@@ -419,19 +363,19 @@ const TaskBoard: React.FC = () => {
 
     if (activeColumnId !== overColumnId) {
       setColumns((prevColumns) => {
-        const activeColumn = prevColumns[activeColumnId];
-        const overColumn = prevColumns[overColumnId];
+        const newColumns = [...prevColumns];
+        const activeColumn = newColumns[activeColumnId];
+        const overColumn = newColumns[overColumnId];
 
         const activeTaskIndex = activeColumn.tasks.findIndex(
-          (task) => task.id  === active.id
+          (task) => task.id === active.id
         );
         const [removedTask] = activeColumn.tasks.splice(activeTaskIndex, 1);
 
         removedTask.status = overColumn.title;
-        const hiddenTaskIndex = overColumn.tasks.findIndex((task) => task.isHidden);
-        overColumn.tasks.splice(hiddenTaskIndex + 1, 0, removedTask);
+        overColumn.tasks.push(removedTask);
 
-        return [...prevColumns];
+        return newColumns;
       });
     }
   };
@@ -450,8 +394,9 @@ const TaskBoard: React.FC = () => {
 
     if (activeColumnId !== overColumnId) {
       setColumns((prevColumns) => {
-        const activeColumn = prevColumns[activeColumnId];
-        const overColumn = prevColumns[overColumnId];
+        const newColumns = [...prevColumns];
+        const activeColumn = newColumns[activeColumnId];
+        const overColumn = newColumns[overColumnId];
 
         const activeTaskIndex = activeColumn.tasks.findIndex(
           (task) => task.id === active.id
@@ -459,10 +404,9 @@ const TaskBoard: React.FC = () => {
         const [removedTask] = activeColumn.tasks.splice(activeTaskIndex, 1);
 
         removedTask.status = overColumn.title;
-        const hiddenTaskIndex = overColumn.tasks.findIndex((task) => task.isHidden);
-        overColumn.tasks.splice(hiddenTaskIndex + 1, 0, removedTask);
+        overColumn.tasks.push(removedTask);
 
-        return [...prevColumns];
+        return newColumns;
       });
     }
 
@@ -472,44 +416,34 @@ const TaskBoard: React.FC = () => {
   const handleDragCancel = () => {
     setActiveTask(null);
   };
+
   return (
-    <div>
-      <div className="p-8 bg-gray-100 min-h-screen mt-20">
-        
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-800">
-            Task Management Board
-          </h1>
-          <div className="flex items-center space-x-2 mt-2">
-            <button className="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-medium">
-              Today
-            </button>
-            <span className="text-gray-400">June, 20,2022</span>
-          </div>
+    <div className="p-8 bg-gray-100 min-h-screen mt-20">
+      <h1 className="text-2xl font-bold text-gray-800">
+        Task Management Board
+      </h1>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCorners}
+        onDragStart={handleDragStart}
+        onDragOver={handleDragOver}
+        onDragEnd={handleDragEnd}
+        onDragCancel={handleDragCancel}
+      >
+        <div className="w-full flex overflow-x-auto pb-8">
+          {columns.map((column, index) => (
+            <React.Fragment key={column.id}>
+              {index > 0 && (
+                <div className="w-px bg-gray-300 self-stretch mx-4"></div>
+              )}
+              <ColumnContainer column={column} tasks={column.tasks} />
+            </React.Fragment>
+          ))}
         </div>
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCorners}
-          onDragStart={handleDragStart}
-          onDragOver={handleDragOver}
-          onDragEnd={handleDragEnd}
-          onDragCancel={handleDragCancel}
-        >
-          <div className=" w-full flex overflow-x-auto pb-8">
-            {columns.map((column, index) => (
-              <React.Fragment key={column.id}>
-                {index > 0 && (
-                  <div className="w-px bg-gray-300 self-stretch mx-4"></div>
-                )}
-                <ColumnContainer column={column} tasks={column.tasks} />
-              </React.Fragment>
-            ))}
-          </div>
-          <DragOverlay>
-            {activeTask ? <TaskCard task={activeTask} isDragging /> : null}
-          </DragOverlay>
-        </DndContext>
-      </div>
+        <DragOverlay>
+          {activeTask ? <TaskCard task={activeTask} isDragging /> : null}
+        </DragOverlay>
+      </DndContext>
     </div>
   );
 };
