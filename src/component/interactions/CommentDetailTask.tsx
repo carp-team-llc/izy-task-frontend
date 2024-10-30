@@ -1,29 +1,17 @@
 import { ArrowUp, Edit, Trash2 } from "lucide-react";
-import React, { useState } from "react";
-import useComments from "../../hook/Api/comments/useComments"; // Import your hook
+import { useState } from "react";
 import Helper from "../../constant/Helper";
+import useComments from "../../hook/Api/comments/useComments"; // Import your hook
+import { notifyError, notifySuccess } from "../toastify/Toastify";
 
-interface Comment {
-  author: string;
-  text: string;
-  date: string;
-}
-
-const CommentDetailTask = ({ onConmments }: any) => {
+const CommentDetailTask = ({ onConmments, id }: any) => {
   const { onComment } = useComments();
   const [newComment, setNewComment] = useState<string>("");
-  const [comments, setComments] = useState<Comment[]>([
-    {
-      author: "Calangtrang",
-      text: "Đây là comment của người dùng",
-      date: "2 days ago",
-    },
-  ]);
 
   const handleCommentSubmit = async () => {
     if (!newComment.trim()) return;
 
-    const taskId = "6719166dac3a1694f237905b";
+    const taskId = id || "";
     const commentParams = {
       content: newComment,
       taskId,
@@ -31,17 +19,11 @@ const CommentDetailTask = ({ onConmments }: any) => {
 
     try {
       await onComment(commentParams);
-      setComments((prev) => [
-        ...prev,
-        {
-          author: "Your Name", // Thay thế bằng tên của người dùng thực tế
-          text: newComment,
-          date: "Just now", // Có thể cập nhật thời gian thực tế
-        },
-      ]);
       setNewComment("");
+      notifySuccess("Comment posted successfully");
     } catch (error) {
       console.error("Failed to post comment:", error);
+      notifyError("Failed to post comment");
     }
   };
 

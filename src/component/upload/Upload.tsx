@@ -1,7 +1,6 @@
-import { FileText, Plus, X } from "lucide-react"; // Import the X icon
+import { Plus, X } from "lucide-react"; // Import the X icon
 import React, { useEffect, useState } from "react";
 import useUpload from "../../hook/Api/upload/useUpload";
-import Spacing from "../common/Spacing";
 import { notifyError } from "../toastify/Toastify";
 
 type UploadProps = {
