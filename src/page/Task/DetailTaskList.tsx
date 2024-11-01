@@ -5,7 +5,7 @@ import {
   ChevronUp,
   LayoutGrid,
   Plus,
-  Upload
+  Upload,
 } from "lucide-react";
 import React, { useState } from "react";
 import { FiFileText } from "react-icons/fi";
@@ -13,11 +13,13 @@ import { NavLink, useParams } from "react-router-dom";
 import Helper from "../../constant/Helper";
 import useTaskListDetail from "../../hook/Api/task/TaskManager/useTaskListDetail";
 import DetailTask from "../../page/Task/DetailTask";
+import CreateTask from "./CreateTask";
 
 const DetailTaskList: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { data: taskDetails, isLoading, isError } = useTaskListDetail({ id });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalCreate, setIsModalCreate] = useState(false);
   const [selectedTask, setSelectedTask] = useState<any>(null);
 
   const handleTaskClick = (task: any) => {
@@ -30,6 +32,14 @@ const DetailTaskList: React.FC = () => {
     setSelectedTask(null);
   };
 
+  const handleOpenModal = () => {
+    setIsModalCreate(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalCreate(false);
+  };
+
   return (
     <div className="text-white p-6 min-h-screen">
       <header className="flex items-center justify-between mb-6">
@@ -38,7 +48,10 @@ const DetailTaskList: React.FC = () => {
             <ArrowLeft />
           </NavLink>
           <h1 className="text-xl font-semibold">Task</h1>
-          <button className="bg-indigo-600 text-white rounded-md px-3 py-1.5 text-sm flex items-center space-x-1">
+          <button
+            onClick={handleOpenModal}
+            className="bg-indigo-600 text-white rounded-md px-3 py-1.5 text-sm flex items-center space-x-1"
+          >
             <Plus size={16} />
             <span>Create New Task</span>
           </button>
@@ -87,9 +100,18 @@ const DetailTaskList: React.FC = () => {
                   </div>
                   <span>{task.name}</span>
                 </td>
-                <td className="py-3" style={{ color: task.statusColor, fontWeight: 600 }}>{task.status}</td>
-                <td className="py-3 text-gray-400">{Helper.formatEngDate(task.updatedAt)}</td>
-                <td className="py-3 text-gray-400">{Helper.formatEngDate(task.expirationDate)}</td>
+                <td
+                  className="py-3"
+                  style={{ color: task.statusColor, fontWeight: 600 }}
+                >
+                  {task.status}
+                </td>
+                <td className="py-3 text-gray-400">
+                  {Helper.formatEngDate(task.updatedAt)}
+                </td>
+                <td className="py-3 text-gray-400">
+                  {Helper.formatEngDate(task.expirationDate)}
+                </td>
                 <td className="py-3 text-right">
                   <button className="text-gray-400 hover:text-white">
                     <ChevronUp size={16} />
@@ -112,6 +134,7 @@ const DetailTaskList: React.FC = () => {
           </div>
         </div>
       )}
+      {isModalCreate && <CreateTask onClose={handleCloseModal} taskListId={taskDetails?.id}/>}
     </div>
   );
 };

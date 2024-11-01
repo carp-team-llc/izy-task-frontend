@@ -5,14 +5,19 @@ import "react-datepicker/dist/react-datepicker.css";
 import Upload from "../../component/upload/Upload";
 import useCreateTask from "../../hook/Api/task/TaskManager/useCreateTask"; // Import hook useCreateTask
 import { notifyError, notifySuccess } from "../../component/toastify/Toastify";
+import { useNavigate } from "react-router-dom";
 
 interface CreateNewTaskModalProps {
   onClose: () => void;
   taskListId?: string;
-  projectId?: string
+  projectId?: string;
 }
 
-const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
+const CreateTask: React.FC<CreateNewTaskModalProps> = ({
+  onClose,
+  taskListId,
+  projectId,
+}) => {
   const [taskName, setTaskName] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
   const [startTime, setStartTime] = useState<Date | null>(null);
@@ -25,6 +30,7 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
   const [endDatePickerOpen, setEndDatePickerOpen] = useState(false);
   const [isUploadLoading, setIsUploadLoading] = useState(false);
 
+  const success = useNavigate();
   const { onCreate, isError, error } = useCreateTask(); // Sử dụng hook useCreateTask
 
   const handleUploadComplete = (urls: string[]) => {
@@ -61,19 +67,30 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
         notifyError("Vui lòng điền đầy đủ thông tin task.");
         return;
       }
-      
+
       const formData = {
         name: taskName,
         body: taskDescription,
         images: imageUrls,
         startTime: startTime ? startTime.toISOString() : "",
         expirationDate: endTime ? endTime.toISOString() : "",
+        taskListId: taskListId || "",
+        projectId: projectId || "",
       };
+
+      console.log("Create task...", JSON.stringify(formData, null, 2));
 
       const response = await onCreate(formData);
       if (response) {
         notifySuccess(response.message);
         onClose();
+        if (taskListId) {
+          success(`/tasklist/${taskListId}`);
+        } else if (projectId) {
+          success(`/project/${projectId}`);
+        } else {
+          success("/tasks");
+        }
       }
     } catch (err) {
       console.error("Lỗi khi tạo task:", err);
@@ -96,8 +113,8 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
   };
 
   const handleFileLoding = (isLoding: boolean) => {
-    setIsUploadLoading(isLoding)
-  }
+    setIsUploadLoading(isLoding);
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 z-50">
@@ -223,18 +240,32 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
             </label>
             <div className="flex space-x-2">
               <div className="relative flex-1">
-                <input
-                  type="text"
-                  value={project}
-                  onChange={(e) => setProject(e.target.value)}
-                  placeholder="Add Task List"
-                  className="w-full bg-[#2A2F4A] rounded px-2 py-1 text-white"
-                />
+                {taskListId ? (
+                  <input
+                    type="text"
+                    value={taskListId}
+                    onChange={(e) => setProject(e.target.value)}
+                    placeholder="Add Task List"
+                    className="w-full bg-[#2A2F4A] rounded px-2 py-1 text-gray-400 pr-10 cursor-pointer"
+                    disabled
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    value={project}
+                    onChange={(e) => setProject(e.target.value)}
+                    placeholder="Add Task List"
+                    className="w-full bg-[#2A2F4A] rounded px-2 py-1 text-white"
+                  />
+                )}
               </div>
             </div>
           </div>
           <div>
-            <Upload onUploadComplete={handleUploadComplete} uploadLoading={handleFileLoding} />
+            <Upload
+              onUploadComplete={handleUploadComplete}
+              uploadLoading={handleFileLoding}
+            />
           </div>
 
           {isError && <div className="text-red-500">{error?.message}</div>}
@@ -251,7 +282,7 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
             onClick={handleSubmitWrapper}
             className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-500"
           >
-            { isUploadLoading ? "Waiting..." : "Create task" }
+            {isUploadLoading ? "Waiting..." : "Create task"}
           </button>
         </div>
       </div>
