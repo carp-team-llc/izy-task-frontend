@@ -13,6 +13,26 @@ type TaskListProps = {
 const TaskList: React.FC<TaskListProps> = ({ title, showAll = false }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<any>(null);
+  const [isMouseDown, setIsMouseDown] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleMouseDown = () => {
+    setIsMouseDown(true);
+    setIsDragging(false);
+  };
+
+  const handleMouseMove = () => {
+    if (isMouseDown) {
+      setIsDragging(true);
+    }
+  };
+
+  const handleMouseUp = (task: any) => {
+    if (!isDragging) {
+      handleTaskClick(task);
+    }
+    setIsMouseDown(false);
+  };
 
   const handleTaskClick = (task: any) => {
     setSelectedTask(task);
@@ -69,9 +89,14 @@ const TaskList: React.FC<TaskListProps> = ({ title, showAll = false }) => {
             <div className="flex-[25] text-left pb-2 font-normal">Deadline</div>
             <div className="flex-[5]"></div>
           </div>
-          <div>
+          <div onMouseMove={handleMouseMove}>
             {tasks[0]?.tasks?.map((task: any, index: number) => (
-              <div key={index} className="flex text-white text-sm py-2" onClick={() => handleTaskClick(task)}>
+              <div
+                key={index}
+                className="flex text-white text-sm py-2 cursor-pointer hover:bg-gray-700 hover:text-gray-200 transition duration-200"
+                onMouseDown={handleMouseDown}
+                onMouseUp={() => handleMouseUp(task)}
+              >
                 <div className="flex-[30] flex items-center mr-5">
                   <div className="w-8 h-8 bg-gray-700 rounded mr-2 flex items-center justify-center text-lg">
                     <FiFileText size={18} className="text-gray-400" />

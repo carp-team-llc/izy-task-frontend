@@ -30,13 +30,11 @@ const useCreateTask = () => {
         },
         onSuccess: async (e: any) => {
             notifySuccess(e?.data?.message || 'Create Task success ')
-            const refetchBody = {
-                where: {},
-                skip: 0,
-                take: 10,
-            };
             await QueryClient.invalidateQueries({
-                queryKey: [endpoint.personal_tasks, refetchBody],
+                queryKey: [endpoint.personal_tasks],
+            });
+            await QueryClient.invalidateQueries({
+                queryKey: [endpoint.task_list_detail],
             });
             success('/tasks')
         },

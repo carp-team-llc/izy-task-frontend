@@ -25,7 +25,7 @@ const useComments = () => {
             notifySuccess(e?.response?.data?.messge || 'Comment successfully')
             QueryClient.invalidateQueries({
                 queryKey: [endpoint.detailtask],
-              });
+            });
 
         },
         onError: (e: any) => {

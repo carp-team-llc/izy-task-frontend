@@ -8,6 +8,8 @@ import { notifyError, notifySuccess } from "../../component/toastify/Toastify";
 
 interface CreateNewTaskModalProps {
   onClose: () => void;
+  taskListId?: string;
+  projectId?: string
 }
 
 const CreateTask: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {

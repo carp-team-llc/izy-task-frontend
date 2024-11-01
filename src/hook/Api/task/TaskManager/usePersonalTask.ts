@@ -30,7 +30,7 @@ const usePersonalTaskList = (variables: Variables) => {
         refetch,
 
     } = useInfiniteQuery<Response, Error> ({
-        queryKey: [endpoint.tasklist, variables],
+        queryKey: [endpoint.personal_tasks, variables],
         queryFn: async ({pageParam = 0}) => {
             return rootApi.post<Variables, Response>(endpoint.personal_tasks, {
                 where: variables.where,
