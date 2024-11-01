@@ -6,7 +6,7 @@ export const notifySuccess = (message: string, options?: ToastOptions) => {
   toast.success(message, {
     ...options,
     position: "top-right",
-    autoClose: 5000,
+    autoClose: 1000,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,

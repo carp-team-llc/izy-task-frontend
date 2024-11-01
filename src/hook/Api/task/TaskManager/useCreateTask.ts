@@ -17,7 +17,6 @@ type Respsone = {
 
 const useCreateTask = () => {
     const { token } = useAuth();
-    const success = useNavigate();
     const QueryClient = useQueryClient();
     const {isError, data, error, mutateAsync } = useMutation({
         mutationFn: (variables: CreateTaskParams) => {
@@ -36,7 +35,6 @@ const useCreateTask = () => {
             await QueryClient.invalidateQueries({
                 queryKey: [endpoint.task_list_detail],
             });
-            success('/tasks')
         },
         onError: (e: any) => {
             notifyError(e?.data?.message || 'Create Task error ')
