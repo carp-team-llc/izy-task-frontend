@@ -18,6 +18,7 @@ import CommentDetailTask from "../../component/interactions/CommentDetailTask";
 import Helper from "../../constant/Helper";
 import useTaskDetail from "../../hook/Api/task/TaskManager/useTaskDetail";
 import ShowFiles from "../../component/ShowFiles/ShowFiles";
+import DropList from "../../component/DropList/DropList";
 
 interface ActivityItem {
   action: string;
@@ -49,6 +50,23 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
   });
 
   const [description, setDescription] = useState(data?.body || "");
+
+  const statuses = [
+    { status: "1", statusName: "Pending", statusColor: "#FFA500" },
+    { status: "2", statusName: "Doing", statusColor: "#007BFF" },
+    { status: "3", statusName: "Completed", statusColor: "#28A745" },
+  ];
+
+  const defaultStatus = {
+    status: data?.status,
+    statusName: data?.statusName,
+    statusColor: data?.statusColor,
+  }
+
+  const handleStatusChange = (statusKey: string) => {
+    console.log("Status selected:", statusKey);
+    // Gọi API để cập nhật trạng thái tại đây
+  };
 
   return (
     <div className="text-white max-w-5xl max-h-max mx-auto px-2 py-1.5">
@@ -147,9 +165,14 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
                       <ChartLine size={14} className="mr-2" />
                       <span className="w-20 text-sm">Status</span>
                     </div>
-                    <span className="px-2 py-1 bg-green-500 text-white rounded text-sm">
+                    <DropList
+                      defaultStatus={defaultStatus}
+                      statuses={statuses}
+                      onStatusChange={handleStatusChange}
+                    />
+                    {/* <span className="px-2 py-1 bg-green-500 text-white rounded text-sm">
                       Completed
-                    </span>
+                    </span> */}
                   </div>
 
                   {/* Author */}
@@ -269,44 +292,42 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
             </div>
           </div>
         </div>
-        <React.Fragment>
-          <style jsx global>{`
-            * {
-              scrollbar-width: none;
-            }
+        <style jsx global>{`
+          * {
+            scrollbar-width: none;
+          }
 
-            *::-webkit-scrollbar {
-              display: none;
-            }
+          *::-webkit-scrollbar {
+            display: none;
+          }
 
-            *::-webkit-scrollbar-track {
-              background: #2d3748;
-            }
+          *::-webkit-scrollbar-track {
+            background: #2d3748;
+          }
 
-            *::-webkit-scrollbar-thumb {
-              background-color: #4a5568;
-              border-radius: 3px;
-            }
+          *::-webkit-scrollbar-thumb {
+            background-color: #4a5568;
+            border-radius: 3px;
+          }
 
-            .quill {
-              height: 200px;
-              width: 100%;
-            }
-            .ql-container {
-              height: calc(100% - 42px);
-            }
-            .ql-editor {
-              min-height: 150px;
-              overflow-y: visible;
-              overflow-wrap: break-word;
-              word-wrap: break-word;
-              word-break: break-word;
-            }
-            .ql-editor p {
-              white-space: pre-wrap;
-            }
-          `}</style>
-        </React.Fragment>
+          .quill {
+            height: 200px;
+            width: 100%;
+          }
+          .ql-container {
+            height: calc(100% - 42px);
+          }
+          .ql-editor {
+            min-height: 150px;
+            overflow-y: visible;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            word-break: break-word;
+          }
+          .ql-editor p {
+            white-space: pre-wrap;
+          }
+        `}</style>
       </div>
     </div>
   );

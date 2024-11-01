@@ -1,17 +1,26 @@
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import { ArrowLeft, Plus, Upload, Calendar, LayoutGrid, BarChart3, MoreVertical, ChevronUp } from 'lucide-react';
-import CreateTaskList from './CreateTaskList';
-import usePersonalTaskList from '../../hook/Api/task/TaskManager/useTaskListPagination'; // Import the hook
-import Helper from '../../constant/Helper';
+import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
+import {
+  ArrowLeft,
+  Plus,
+  Upload,
+  Calendar,
+  LayoutGrid,
+  BarChart3,
+  MoreVertical,
+  ChevronUp,
+} from "lucide-react";
+import CreateTaskList from "./CreateTaskList";
+import usePersonalTaskList from "../../hook/Api/task/TaskManager/useTaskListPagination"; // Import the hook
+import Helper from "../../constant/Helper";
 
 const TaskListParams: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const variables = {
-    where: {}, 
+    where: {},
     skip: 0,
-    take: 10, 
+    take: 10,
   };
 
   const {
@@ -40,11 +49,17 @@ const TaskListParams: React.FC = () => {
   });
 
   if (isLoading) {
-    return <div className="text-white p-6 min-h-screen mt-24">Loading tasks...</div>;
+    return (
+      <div className="text-white p-6 min-h-screen mt-24">Loading tasks...</div>
+    );
   }
 
   if (isError) {
-    return <div className="text-white p-6 min-h-screen mt-24">Error loading tasks</div>;
+    return (
+      <div className="text-white p-6 min-h-screen mt-24">
+        Error loading tasks
+      </div>
+    );
   }
 
   return (
@@ -55,8 +70,8 @@ const TaskListParams: React.FC = () => {
             <ArrowLeft />
           </NavLink>
           <h1 className="text-xl font-semibold">Task</h1>
-          <button 
-            onClick={handleOpenModal} 
+          <button
+            onClick={handleOpenModal}
             className="bg-indigo-600 text-white rounded-md px-3 py-1.5 text-sm flex items-center space-x-1"
           >
             <Plus size={16} />
@@ -93,20 +108,30 @@ const TaskListParams: React.FC = () => {
           </thead>
           <tbody>
             {dataFlatmap.map((task: any) => (
-              <tr key={task.id} className="border-t border-gray-700 hover:bg-gray-700">
+              <tr
+                key={task.id}
+                className="border-t border-gray-700 hover:bg-gray-700"
+              >
                 <td className="py-3 flex items-center space-x-3">
-                  <NavLink 
+                  <NavLink
                     to={`/tasklist/${task.id}`} // Navigate to DetailTaskList with task ID
                     className="flex items-center space-x-3 hover:bg-gray-700 rounded-lg p-2" // Add hover effect
                   >
-                    <div className="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center text-white font-bold">
-                      T
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold">
+                      <img
+                        src={task?.avatar}
+                        style={{ borderRadius: "50%", width: "32px", height: "32px"  }}
+                      />
                     </div>
                     <span>{task.name}</span>
                   </NavLink>
                 </td>
-                <td className="py-3 text-gray-400">{Helper.formatEngDate(task.updatedAt)}</td>
-                <td className="py-3 text-gray-400">{Helper.formatEngDate(task.createdAt)}</td>
+                <td className="py-3 text-gray-400">
+                  {Helper.formatEngDate(task.updatedAt)}
+                </td>
+                <td className="py-3 text-gray-400">
+                  {Helper.formatEngDate(task.createdAt)}
+                </td>
                 <td className="py-3 text-right">
                   <button className="text-gray-400 ">
                     <MoreVertical size={16} />
@@ -125,7 +150,7 @@ const TaskListParams: React.FC = () => {
               className="bg-indigo-600 text-white rounded-md px-4 py-2 text-sm"
               disabled={isFetchingNextPage}
             >
-              {isFetchingNextPage ? 'Loading more...' : 'Load More'}
+              {isFetchingNextPage ? "Loading more..." : "Load More"}
             </button>
           </div>
         )}
