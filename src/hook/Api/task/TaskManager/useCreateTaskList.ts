@@ -2,11 +2,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import rootApi from "../../../../services/initApi";
 import endpoint from "../../../../services/endpoint";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../../../services/authContext";
 import {
   notifyError,
   notifySuccess,
 } from "../../../../component/toastify/Toastify";
+import useAuth from "../../../../services/authContext";
 
 type CreateTaskParams = {
   name: string;
@@ -34,6 +34,12 @@ const useCreateTaskList = () => {
       notifySuccess(e?.data?.mesage || "Create Task List success");
       QueryClient.invalidateQueries({
         queryKey: [endpoint.personal_tasks],
+      });
+      QueryClient.invalidateQueries({
+        queryKey: [endpoint.tasklist],
+      });
+      QueryClient.invalidateQueries({
+        queryKey: [endpoint.task_list_detail],
       });
       success("/tasklist");
     },

@@ -3,9 +3,9 @@ import { StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import "./index.css";
-import { router } from "./router/index.tsx";
 import { AuthProvider } from "./services/authContext.tsx";
 import { Bounce, ToastContainer } from "react-toastify";
+import router from "./router/index.tsx";
 
 const queryClient = new QueryClient();
 

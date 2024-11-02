@@ -11,7 +11,7 @@ import {
   Users,
   X,
 } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import CommentDetailTask from "../../component/interactions/CommentDetailTask";
@@ -49,7 +49,11 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
     id: task.id,
   });
 
-  const [description, setDescription] = useState(data?.body || "");
+  const [status, setStatus] = useState<string | null>(null);
+  const [statusName, setStatusName] = useState<string | null>(null);
+  const [statusColor, setStatusColor] = useState<string | null>(null);
+
+  const [description, setDescription] = useState<string>(data?.body || "");
 
   const statuses = [
     { status: "1", statusName: "Pending", statusColor: "#FFA500" },
@@ -57,16 +61,20 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
     { status: "3", statusName: "Completed", statusColor: "#28A745" },
   ];
 
-  const defaultStatus = {
-    status: data?.status,
-    statusName: data?.statusName,
-    statusColor: data?.statusColor,
-  }
-
   const handleStatusChange = (statusKey: string) => {
     console.log("Status selected:", statusKey);
     // Gọi API để cập nhật trạng thái tại đây
   };
+
+  // Cập nhật các giá trị status từ data khi data thay đổi
+  useEffect(() => {
+    if (data) {
+      setStatus(data.status);
+      setStatusName(data.statusName);
+      setStatusColor(data.statusColor);
+      setDescription(data.body || "");
+    }
+  }, [data]);
 
   return (
     <div className="text-white max-w-5xl max-h-max mx-auto px-2 py-1.5">
@@ -166,7 +174,11 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
                       <span className="w-20 text-sm">Status</span>
                     </div>
                     <DropList
-                      defaultStatus={defaultStatus}
+                      defaultStatus={{
+                        status: status || "",
+                        statusName: statusName || "",
+                        statusColor: statusColor || "",
+                      }}
                       statuses={statuses}
                       onStatusChange={handleStatusChange}
                     />
