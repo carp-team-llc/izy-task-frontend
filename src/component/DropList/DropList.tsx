@@ -10,12 +10,14 @@ type StatusDroplistProps = {
   defaultStatus: Status;
   statuses: Status[];
   onStatusChange: (statusKey: string) => void;
+  isDisable: boolean;
 };
 
 const DropList: React.FC<StatusDroplistProps> = ({
   defaultStatus,
   statuses,
   onStatusChange,
+  isDisable,
 }) => {
   const [selectedStatus, setSelectedStatus] = useState<Status>(defaultStatus);
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -35,6 +37,7 @@ const DropList: React.FC<StatusDroplistProps> = ({
     <div className="relative inline-block w-48">
       {/* Hiển thị trạng thái hiện tại */}
       <button
+        disabled= {isDisable}
         onClick={() => setIsOpen(!isOpen)}
         className="w-full h-8 py-2 px-4 flex items-center justify-center rounded-lg truncate"
         style={{ backgroundColor: selectedStatus.statusColor }}
