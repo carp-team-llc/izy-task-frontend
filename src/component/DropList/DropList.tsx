@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 type Status = {
   status: string;
@@ -19,6 +19,11 @@ const DropList: React.FC<StatusDroplistProps> = ({
 }) => {
   const [selectedStatus, setSelectedStatus] = useState<Status>(defaultStatus);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  // Cập nhật selectedStatus khi defaultStatus thay đổi
+  useEffect(() => {
+    setSelectedStatus(defaultStatus);
+  }, [defaultStatus]);
 
   const handleStatusSelect = (status: Status) => {
     setSelectedStatus(status);

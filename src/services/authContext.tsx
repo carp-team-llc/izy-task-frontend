@@ -18,7 +18,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [token, setToken] = useState<string | null>(
+  const [token, setUpdateToken] = useState<string | null>(
     localStorage.getItem("AUTH_IZY_TASK")
   );
 
@@ -28,13 +28,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       "Token saved to localStorage: ",
       localStorage.getItem("AUTH_IZY_TASK")
     );
-    setToken(newToken);
+    setUpdateToken(newToken);
     setIsLoggedIn(true); 
   };
 
   const handleRemoveToken = () => {
     localStorage.removeItem("AUTH_IZY_TASK");
-    setToken(null);
+    setUpdateToken(null);
     setIsLoggedIn(false); 
   };
 
@@ -62,10 +62,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   );
 };
 
-export const useAuth = () => {
+const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
+
+export default useAuth;

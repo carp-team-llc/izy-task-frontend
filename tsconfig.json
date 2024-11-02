@@ -8,5 +8,8 @@
     // ...
     "types": [],
     "jsx": "react-jsx",
+    "paths": {
+      "*": ["/src/types/*"]
+    },
   },
 }

@@ -1,6 +1,18 @@
-import React from 'react';
+import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 const AccountVerified = () => {
+
+  const { uuid } = useParams<{ uuid: string }>();
+  const navigateTo = useNavigate();
+
+    useEffect(() => {
+        const storedUUID = sessionStorage.getItem('registrationUUID');
+        if (storedUUID !== uuid) {
+          navigateTo("/")
+        }
+    }, [uuid]);
+
   return (
     <div className="flex flex-col min-h-screen text-white bg-[#05051F]">
       <div className="flex flex-col justify-center items-center flex-1">

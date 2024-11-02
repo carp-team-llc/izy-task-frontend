@@ -26,7 +26,7 @@ const RegisterPage = () => {
     }));
   };
 
-  const { onRegister, data } = UseRegister();
+  const { onRegister, isLoading } = UseRegister();
   const handleVerifyClick = () =>{
     verify("/verify")
   }
@@ -140,7 +140,7 @@ const RegisterPage = () => {
                   htmlFor="phone"
                   className="block text-sm font-medium text-gray-400 mt-[10px]"
                 >
-                   Phone number
+                  Phone number
                 </label>
                 <input
                   id="phone"
@@ -222,7 +222,35 @@ const RegisterPage = () => {
           </div>
         </div>
       </div>
+      {isLoading && <ModalLoading />}
     </div>
   );
 };
+
+const ModalLoading = () => {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-[#05051F] rounded-lg p-6 flex flex-col items-center">
+        <div className="loader"></div>
+        <p className="mt-4 text-gray-700">Loading...</p>
+      </div>
+      <style jsx>{`
+        .loader {
+          border: 4px solid #f3f3f3;
+          border-top: 4px solid #6956E5;
+          border-radius: 50%;
+          width: 30px;
+          height: 30px;
+          animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
+    </div>
+  );
+};
+
 export default RegisterPage;

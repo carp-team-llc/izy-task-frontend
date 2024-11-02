@@ -1,11 +1,9 @@
-import React, {useEffect, useState} from "react";
-import {Bell, ChevronDown, LogIn, LogOut, Search, User,} from "lucide-react";
-import {useAuth} from "../../services/authContext";
-import {faBars} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {NavLink} from "react-router-dom";
-
-
+import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Bell, ChevronDown, LogIn, LogOut, Search, User, } from "lucide-react";
+import { useEffect, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import useAuth from "../../services/authContext";
 
 type headerAppProps = {
   broken: boolean,
@@ -16,15 +14,14 @@ type headerAppProps = {
 const Header = (props: headerAppProps) => {
 
   const {broken, setToggled, toggled} = props;
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const { token } = useAuth();
+  const navigateTo = useNavigate();
+
+  const { isLoggedIn, token, logout } = useAuth();
   useEffect(() => {
     if (token) {
-      setIsLoggedIn(true);
       setIsDropdownOpen(false);
     }
   }, [token]);
@@ -32,8 +29,9 @@ const Header = (props: headerAppProps) => {
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
     setIsDropdownOpen(false);
+    logout();
+    navigateTo("/login");
   };
 
   return (

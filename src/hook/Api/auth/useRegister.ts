@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { notifyError, notifySuccess } from "../../../component/toastify/Toastify";
 import endpoint from "../../../services/endpoint";
 import rootApi from "../../../services/initApi";
+import { v4 as uuidv4 } from 'uuid';
 
 type RegisterParams = {
     username : string;
@@ -16,7 +17,7 @@ type Response = {
 
 const UseRegister = () => {
     const success = useNavigate();
-    const { isError, data, error, mutateAsync } = useMutation({
+    const { isError, data, error, status, mutateAsync } = useMutation({
         mutationFn: (Variable: RegisterParams) => {
             return rootApi.post<RegisterParams, Response>(
                 endpoint.register,
@@ -25,16 +26,22 @@ const UseRegister = () => {
         },
         onSuccess: (e: any) => {
             notifySuccess(e?.response?.data?.message || 'Registered successfully!')
-            success('/verify')
+            const uuid = uuidv4();
+            sessionStorage.setItem('registrationUUID', uuid);
+            success(`/verify/${uuid}`);
         },
         onError: (e: any) => {
             notifyError(e.response?.data?.message || "An error occurred!")
         }
     })
+
+    const isLoading = status === 'pending';
+
     return {
         isError,
         data,
         error,
+        isLoading,
         onRegister: mutateAsync,
     }
 }

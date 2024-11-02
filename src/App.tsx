@@ -1,8 +1,10 @@
-import Layout from "./component/layout/Layout.tsx";
+
+import router from "./router/index.tsx";
+import ProtectedRoute from "./router/ProtectedRoute.tsx";
 
 const App = () => {
   return (
-      <Layout/>
+      <ProtectedRoute router={router} />
   );
 };
 
