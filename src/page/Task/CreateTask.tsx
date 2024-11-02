@@ -1,5 +1,6 @@
 import { Calendar, Clock, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import ReactQuill from "react-quill";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Upload from "../../component/upload/Upload";
@@ -142,17 +143,30 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({
               className="w-full bg-[#2A2F4A] rounded px-2 py-1 text-white placeholder-gray-400"
             />
           </div>
-
           <div>
-            <label className="block text-sm font-medium mb-3 text-white">
-              Task Description:
-            </label>
-            <textarea
-              value={taskDescription}
-              onChange={(e) => setTaskDescription(e.target.value)}
-              placeholder="Task Description:"
-              className="w-full bg-[#2A2F4A] rounded px-2 py-1 text-white placeholder-gray-400 h-12 resize-none"
-            />
+            <h2 className="text-sm font-semibold mb-2">Description</h2>
+            <div className="w-full">
+              <ReactQuill
+                theme="snow"
+                value={taskDescription}
+                onChange={ setTaskDescription}
+                className="bg-[#1a1438] text-white w-full"
+                modules={{
+                  toolbar: [
+                    [{ header: [1, 2, false] }],
+                    ["bold", "italic", "underline", "strike", "blockquote"],
+                    [
+                      { list: "ordered" },
+                      { list: "bullet" },
+                      { indent: "-1" },
+                      { indent: "+1" },
+                    ],
+                    ["link", "image"],
+                    ["clean"],
+                  ],
+                }}
+              />
+            </div>
           </div>
 
           <div className="flex space-x-2">
