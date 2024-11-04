@@ -31,12 +31,12 @@ const LoginPage = () => {
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      await onLogin(input); // Thực hiện gọi API login với thông tin từ form
-      console.log("Login success"); // Xử lý response sau khi đăng nhập thành công
+      await onLogin(input);
+      console.log("Login success");
       notifySuccess("Login success");
       navigateTo("/dashboard")
     } catch (err) {
-      console.error("Login failed"); // Xử lý lỗi nếu có
+      console.error("Login failed");
       notifyError("Login failed");
     }
   };

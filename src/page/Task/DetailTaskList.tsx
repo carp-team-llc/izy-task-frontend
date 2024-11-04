@@ -12,8 +12,10 @@ import { FiFileText } from "react-icons/fi";
 import { NavLink, useParams } from "react-router-dom";
 import Helper from "../../constant/Helper";
 import useTaskListDetail from "../../hook/Api/task/TaskManager/useTaskListDetail";
-import DetailTask from "../../page/Task/DetailTask";
+// import DetailTask from "../../page/Task/DetailTask";
 import CreateTask from "./CreateTask";
+import DetailTask from "./DetailTask/index";
+
 
 const DetailTaskList: React.FC = () => {
   const { id } = useParams<{ id: string }>();
