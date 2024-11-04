@@ -9,6 +9,7 @@ import DetailTaskList from "../page/Task/DetailTaskList";
 import TaskBoard from "../page/Task/TaskBoard";
 import TaskListParams from "../page/Task/TaskListParams";
 import ProtectedRoute from "./ProtectedRoute";
+import KabanBoard from "../page/Task/TaskBoard/components/KabanBoard";
 
 // Lazy load các trang chính
 const HomePage = lazy(() => import("../page/home/HomePage"));
@@ -39,6 +40,7 @@ const router = createBrowserRouter([
       { path: "/tasklist/:id", element: <DetailTaskList /> }, // Add dynamic route for DetailTaskList
       { path: "/taskboard", element: <TaskBoard /> },
       { path: "/projectboard", element: <ProjectDashboard /> },
+      { path: "/kaban", element: <KabanBoard /> },
       { path: "*", element: <Navigate to="/" /> },
     ],
   },
