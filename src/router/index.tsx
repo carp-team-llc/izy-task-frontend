@@ -10,6 +10,8 @@ import TaskBoard from "../page/Task/TaskBoard";
 import TaskListParams from "../page/Task/TaskListParams";
 import ProtectedRoute from "./ProtectedRoute";
 import ProjectDetail from "../page/project/ProjectDetail"
+import KabanBoard from "../page/Task/TaskBoard/components/KabanBoard";
+import RedirectIfLoggedIn from "./RedirectIfLoggedIn";
 
 // Lazy load các trang chính
 const HomePage = lazy(() => import("../page/home/HomePage"));
@@ -17,18 +19,10 @@ const DashBoard = lazy(() => import("../page/dashboard/DashBoard"));
 const Task = lazy(() => import("../page/Task/Task"));
 const TimeLine = lazy(() => import("../page/Task/TimeLine"));
 
-const getAccessToken = () => {
-  return localStorage.getItem("AUTH_IZY_TASK")
-}
-
-const isAuthenticated = () => {
-  return !!getAccessToken();
-}
-
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <ProtectedRoute isAuthenticated={isAuthenticated()} />,
+    element: <ProtectedRoute />,
     children: [
       { path: "/", element: <Navigate to="/dashboard" /> },
       { path: "/home", element: <HomePage /> },
@@ -41,11 +35,26 @@ const router = createBrowserRouter([
       { path: "/taskboard", element: <TaskBoard /> },
       { path: "/projectboard", element: <ProjectDashboard /> },
       { path: "/projecdetail", element: <ProjectDetail /> },
+      { path: "/kaban", element: <KabanBoard /> },
       { path: "*", element: <Navigate to="/" /> },
     ],
   },
-  { path: "/login", element: <LoginPage /> },
-  { path: "/register", element: <RegisterPage /> },
+  {
+    path: "/login",
+    element: (
+      <RedirectIfLoggedIn>
+        <LoginPage />
+      </RedirectIfLoggedIn>
+    ),
+  },
+  {
+    path: "/register",
+    element: (
+      <RedirectIfLoggedIn>
+        <RegisterPage />
+      </RedirectIfLoggedIn>
+    ),
+  },
   { path: "/verify/:uuid", element: <Verify /> },
 ]);
 
