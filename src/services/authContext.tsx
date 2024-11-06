@@ -3,6 +3,7 @@ import {
   useContext,
   useState,
   ReactNode,
+  useEffect,
 } from "react";
 
 interface AuthContextType {
@@ -12,35 +13,38 @@ interface AuthContextType {
   isLoggedIn: boolean;
   login: () => void;
   logout: () => void;
+  isAuthenticated: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setUpdateToken] = useState<string | null>(
-    localStorage.getItem("AUTH_IZY_TASK")
+    localStorage.getItem("AUTH_IZY_TASK") || null
   );
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("AUTH_IZY_TASK") || null;
+    setUpdateToken(storedToken);
+    setIsLoggedIn(!!storedToken);
+  }, []);
 
   const handleSetToken = (newToken: string) => {
     localStorage.setItem("AUTH_IZY_TASK", newToken);
-    console.log(
-      "Token saved to localStorage: ",
-      localStorage.getItem("AUTH_IZY_TASK")
-    );
     setUpdateToken(newToken);
-    setIsLoggedIn(true); 
+    setIsLoggedIn(true);
   };
+
+  const isAuthenticated = !!token;
 
   const handleRemoveToken = () => {
     localStorage.removeItem("AUTH_IZY_TASK");
     setUpdateToken(null);
-    setIsLoggedIn(false); 
+    setIsLoggedIn(false);
   };
 
-  const login = () => {
-    
-  };
+  const login = () => {};
 
   const logout = () => {
     handleRemoveToken();
@@ -49,6 +53,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   return (
     <AuthContext.Provider
       value={{
+        isAuthenticated,
         token,
         setToken: handleSetToken,
         removeToken: handleRemoveToken,
@@ -70,4 +75,4 @@ const useAuth = () => {
   return context;
 };
 
-export default useAuth;
+export { useAuth, AuthProvider };

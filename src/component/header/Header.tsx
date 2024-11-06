@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Bell, ChevronDown, LogIn, LogOut, Search, User, } from "lucide-react";
 import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import useAuth from "../../services/authContext";
+import { useAuth } from "../../services/authContext";
 
 type headerAppProps = {
   broken: boolean,
