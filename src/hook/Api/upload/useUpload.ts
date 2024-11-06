@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import endpoint from "../../../services/endpoint";
 import rootApi from "../../../services/initApi";
 import { notifyError, notifySuccess } from "../../../component/toastify/Toastify";
-import useAuth from "../../../services/authContext";
+import { useAuth } from "../../../services/authContext";
 
 type UploadParams = {
   file: any;
