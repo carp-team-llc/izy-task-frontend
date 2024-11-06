@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { FiFileText, FiMoreVertical } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
 import Helper from "../../constant/Helper";
-import usePersonalTaskList from "../../hook/Api/task/TaskManager/usePersonalTask"; // Import your hook here
-import DetailTask from "../../page/Task/DetailTask";
+import usePersonalTaskList from "../../hook/Api/task/TaskManager/usePersonalTask";
+import DetailTask from "../../page/Task/DetailTask/DetailTask";
 
 type TaskListProps = {
   title: string;
@@ -13,26 +13,8 @@ type TaskListProps = {
 const TaskList: React.FC<TaskListProps> = ({ title, showAll = false }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<any>(null);
-  const [isMouseDown, setIsMouseDown] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
-
-  const handleMouseDown = () => {
-    setIsMouseDown(true);
-    setIsDragging(false);
-  };
-
-  const handleMouseMove = () => {
-    if (isMouseDown) {
-      setIsDragging(true);
-    }
-  };
-
-  const handleMouseUp = (task: any) => {
-    if (!isDragging) {
-      handleTaskClick(task);
-    }
-    setIsMouseDown(false);
-  };
+  const [currentPage, setCurrentPage] = useState(1);
+  const tasksPerPage = 10;
 
   const handleTaskClick = (task: any) => {
     setSelectedTask(task);
@@ -49,22 +31,24 @@ const TaskList: React.FC<TaskListProps> = ({ title, showAll = false }) => {
     isError,
     data: tasks,
     error,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = usePersonalTaskList({ skip: 0, take: 10 });
-  useEffect(() => {
-    if (hasNextPage) {
-      fetchNextPage();
-    }
-  }, [hasNextPage, fetchNextPage]);
+  } = usePersonalTaskList({ skip: 0, take: 100 }); // Adjust to load enough tasks for pagination
 
-  if (isLoading) {
-    return <div>Loading tasks...</div>;
-  }
-  if (isError) {
-    return <div>Error loading tasks: {error?.message}</div>;
-  }
+  const totalTasks = tasks?.[0]?.tasks?.length || 0;
+  const totalPages = Math.ceil(totalTasks / tasksPerPage);
+
+  const handlePageChange = (page: number) => {
+    if (page > 0 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
+  const currentTasks = tasks?.[0]?.tasks?.slice(
+    (currentPage - 1) * tasksPerPage,
+    currentPage * tasksPerPage
+  ) || [];
+
+  if (isLoading) return <div>Loading tasks...</div>;
+  if (isError) return <div>Error loading tasks: {error?.message}</div>;
 
   return (
     <div className="bg-[#1a1f37] rounded-lg p-4 mb-3">
@@ -79,58 +63,62 @@ const TaskList: React.FC<TaskListProps> = ({ title, showAll = false }) => {
       <div className="overflow-x-auto">
         <div className="flex flex-col">
           <div className="flex text-gray-400 text-xs">
-            <div className="flex-[30] text-left pb-2 font-normal mr-5">
-              Name
-            </div>
+            <div className="flex-[30] text-left pb-2 font-normal mr-5">Name</div>
             <div className="flex-[15] text-left pb-2 font-normal">Status</div>
-            <div className="flex-[25] text-left pb-2 font-normal">
-              Last Modified
-            </div>
+            <div className="flex-[25] text-left pb-2 font-normal">Last Modified</div>
             <div className="flex-[25] text-left pb-2 font-normal">Deadline</div>
             <div className="flex-[5]"></div>
           </div>
-          <div onMouseMove={handleMouseMove}>
-            {tasks[0]?.tasks?.map((task: any, index: number) => (
-              <div
-                key={index}
-                className="flex text-white text-sm py-2 cursor-pointer hover:bg-gray-700 hover:text-gray-200 transition duration-200"
-                onMouseDown={handleMouseDown}
-                onMouseUp={() => handleMouseUp(task)}
-              >
-                <div className="flex-[30] flex items-center mr-5">
-                  <div className="w-8 h-8 bg-gray-700 rounded mr-2 flex items-center justify-center text-lg">
-                    <FiFileText size={18} className="text-gray-400" />
-                  </div>
-                  <div className="flex-grow max-w-[70%] overflow-hidden">
-                    <span className="block break-all">{task.name}</span>
-                  </div>
+          {currentTasks.map((task: any, index: number) => (
+            <div
+              key={index}
+              className="flex text-white text-sm py-2 cursor-pointer hover:bg-gray-700 hover:text-gray-200 transition duration-200"
+              onClick={() => handleTaskClick(task)}
+            >
+              <div className="flex-[30] flex items-center mr-5">
+                <div className="w-8 h-8 bg-gray-700 rounded mr-2 flex items-center justify-center text-lg">
+                  <FiFileText size={18} className="text-gray-400" />
                 </div>
-                <div className="flex-[15]">
-                  <p style={{ color: task.statusColor }}>{task.status}</p>
-                </div>
-                <div className="flex-[25] text-gray-400">
-                  {Helper.formatEngDate(task.updatedAt)}
-                </div>
-                <div className="flex-[25] text-gray-400">
-                  {Helper.formatEngDate(task.expirationDate) || ""}
-                </div>
-                <div className="flex-[5] flex justify-center">
-                  <FiMoreVertical size={18} className="text-gray-400" />
+                <div className="flex-grow max-w-[70%] overflow-hidden">
+                  <span className="block break-all">{task.name}</span>
                 </div>
               </div>
-            ))}
-          </div>
+              <div className="flex-[15]">
+                <p style={{ color: task.statusColor }}>{task.status}</p>
+              </div>
+              <div className="flex-[25] text-gray-400">
+                {Helper.formatEngDate(task.updatedAt)}
+              </div>
+              <div className="flex-[25] text-gray-400">
+                {Helper.formatEngDate(task.expirationDate) || ""}
+              </div>
+              <div className="flex-[5] flex justify-center">
+                <FiMoreVertical size={18} className="text-gray-400" />
+              </div>
+            </div>
+          ))}
         </div>
       </div>
-      {isFetchingNextPage && <div>Loading more tasks...</div>}
-      {hasNextPage && (
+
+      <div className="mt-4 bg-[#2a2f47] p-3 rounded-lg flex justify-between items-center">
         <button
-          onClick={() => fetchNextPage()}
-          className="text-purple-500 text-sm mt-4"
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="text-purple-500 text-sm"
         >
-          Load More
+          Previous
         </button>
-      )}
+        <span className="text-gray-400 text-sm">
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="text-purple-500 text-sm"
+        >
+          Next
+        </button>
+      </div>
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center">

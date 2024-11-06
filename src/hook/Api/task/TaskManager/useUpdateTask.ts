@@ -1,49 +1,50 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import rootApi from '../../../../services/initApi'
+import endpoint from '../../../../services/endpoint'
 import { notifyError, notifySuccess } from "../../../../component/toastify/Toastify";
 import useAuth from "../../../../services/authContext";
-import endpoint from '../../../../services/endpoint';
-import rootApi from '../../../../services/initApi';
 
-type CreateTaskParams = {
-    name: string;
-    body: string;
-    images: string[];
-    expirationDate: string;
+type UpdateTaskParams = {
+    id: string;
+    name?: string;
+    body?: string;
+    images?: string[];
+    expirationDate?: string;
 }
 type Respsone = {
     data: any;
 }
 
-const useCreateTask = () => {
+const useUpdateTask = () => {
     const { token } = useAuth();
     const QueryClient = useQueryClient();
     const {isError, data, error, mutateAsync } = useMutation({
-        mutationFn: (variables: CreateTaskParams) => {
+        mutationFn: (variables: UpdateTaskParams) => {
             const headers = token ? { Authorization: `Bearer ${token}` } : {};
-            return rootApi.post<CreateTaskParams, Respsone>(
-                endpoint.createtask,
+            return rootApi.post<UpdateTaskParams, Respsone>(
+                endpoint.updatetask,
                 variables,
                 { headers }
             )
         },
         onSuccess: async (e: any) => {
-            notifySuccess(e?.data?.message || 'Create Task success ')
+            notifySuccess(e?.data?.message || 'Update Task success ')
+            await QueryClient.invalidateQueries({
+                queryKey: [endpoint.tasklist],
+            });
             await QueryClient.invalidateQueries({
                 queryKey: [endpoint.personal_tasks],
             });
-            await QueryClient.invalidateQueries({
-                queryKey: [endpoint.task_list_detail],
-            });
         },
         onError: (e: any) => {
-            notifyError(e?.data?.message || 'Create Task error ')
+            notifyError(e?.data?.message || 'Update Task error ')
         }
     })
     return {
         isError,
         data: data?.data,
         error,
-        onCreate: mutateAsync
+        onUpdate: mutateAsync
     }
 }
-export default useCreateTask
+export default useUpdateTask

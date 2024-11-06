@@ -79,7 +79,7 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({
         projectId: projectId || "",
       };
 
-      console.log("Create task...", JSON.stringify(formData, null, 2));
+      
 
       const response = await onCreate(formData);
       if (response) {

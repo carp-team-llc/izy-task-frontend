@@ -8,19 +8,24 @@ interface DetailTaskProps {
     description?: string;
   };
   isUpdate: boolean;
+  onChangeDescription:(description: string) => void;
 }
 
-const Description: React.FC<DetailTaskProps> = ({ task, isUpdate }) => {
+const Description: React.FC<DetailTaskProps> = ({ task, isUpdate, onChangeDescription }) => {
   const { data } = useTaskDetail({
     id: task.id,
   });
   const [description, setDescription] = useState<string>(data?.body || "");
-
+  
   useEffect(() => {
     if (data) {
       setDescription(data.body || "");
     }
   }, [data]);
+  const handleChangeDescription = (newDescription: string) => {
+    setDescription(newDescription)
+    onChangeDescription(newDescription)
+  }
   return (
     <div>
       <h2 className="text-sm font-semibold mb-2">Description</h2>
@@ -29,7 +34,7 @@ const Description: React.FC<DetailTaskProps> = ({ task, isUpdate }) => {
           readOnly={isUpdate}
           theme="snow"
           value={description}
-          onChange={setDescription}
+          onChange={handleChangeDescription}
           className="bg-[#1a1438] text-white w-full"
           modules={{
             toolbar: [
