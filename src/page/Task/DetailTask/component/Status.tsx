@@ -22,9 +22,10 @@ interface DetailTaskProps {
     description?: string;
   };
   isUpdate: boolean;
+  onChangeStatus: (status: string) => void;
 }
 
-const Status: React.FC<DetailTaskProps> = ({ task, isUpdate }) => {
+const Status: React.FC<DetailTaskProps> = ({ task, isUpdate, onChangeStatus }) => {
   const { data } = useTaskDetail({
     id: task.id,
   });
@@ -36,10 +37,6 @@ const Status: React.FC<DetailTaskProps> = ({ task, isUpdate }) => {
     { status: "2", statusName: "Doing", statusColor: "#007BFF" },
     { status: "3", statusName: "Completed", statusColor: "#28A745" },
   ];
-  const handleStatusChange = (statusKey: string) => {
-    console.log("Status selected:", statusKey);
-    // Gọi API để cập nhật trạng thái tại đây
-  };
   useEffect(() => {
     if (data) {
       setStatus(data.status);
@@ -47,6 +44,10 @@ const Status: React.FC<DetailTaskProps> = ({ task, isUpdate }) => {
       setStatusColor(data.statusColor);
     }
   }, [data]);
+  const handleChangeStatus = (newStatus: string) => {
+    setStatus(newStatus)
+    onChangeStatus(newStatus)
+  }
   return (
     <div className="bg-[#0f0a2a] p-6 space-y-6 text-white">
       <div className="space-y-4">
@@ -64,7 +65,7 @@ const Status: React.FC<DetailTaskProps> = ({ task, isUpdate }) => {
             }}
             isDisable={isUpdate}
             statuses={statuses}
-            onStatusChange={handleStatusChange}
+            onStatusChange={handleChangeStatus}
           />
         </div>
 

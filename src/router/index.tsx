@@ -9,6 +9,7 @@ import DetailTaskList from "../page/Task/DetailTaskList";
 import TaskBoard from "../page/Task/TaskBoard";
 import TaskListParams from "../page/Task/TaskListParams";
 import ProtectedRoute from "./ProtectedRoute";
+import ProjectDetail from "../page/project/ProjectDetail"
 import KabanBoard from "../page/Task/TaskBoard/components/KabanBoard";
 import RedirectIfLoggedIn from "./RedirectIfLoggedIn";
 
@@ -33,6 +34,7 @@ const router = createBrowserRouter([
       { path: "/tasklist/:id", element: <DetailTaskList /> }, // Add dynamic route for DetailTaskList
       { path: "/taskboard", element: <TaskBoard /> },
       { path: "/projectboard", element: <ProjectDashboard /> },
+      { path: "/projecdetail", element: <ProjectDetail /> },
       { path: "/kaban", element: <KabanBoard /> },
       { path: "*", element: <Navigate to="/" /> },
     ],

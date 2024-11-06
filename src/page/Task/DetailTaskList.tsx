@@ -14,7 +14,7 @@ import Helper from "../../constant/Helper";
 import useTaskListDetail from "../../hook/Api/task/TaskManager/useTaskListDetail";
 // import DetailTask from "../../page/Task/DetailTask";
 import CreateTask from "./CreateTask";
-import DetailTask from "./DetailTask/index";
+import DetailTask from "./DetailTask/DetailTask";
 
 
 const DetailTaskList: React.FC = () => {
