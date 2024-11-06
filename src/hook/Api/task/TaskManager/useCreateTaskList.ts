@@ -6,7 +6,7 @@ import {
   notifyError,
   notifySuccess,
 } from "../../../../component/toastify/Toastify";
-import useAuth from "../../../../services/authContext";
+import { useAuth } from "../../../../services/authContext";
 
 type CreateTaskParams = {
   name: string;

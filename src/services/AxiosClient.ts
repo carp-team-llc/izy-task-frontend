@@ -1,5 +1,5 @@
 import axios from "axios";
-import useAuth from "./authContext";
+import { useAuth } from "./authContext";
 
 const AxiosClient = (url: string, headers = {}) => {
   if (!url) {
