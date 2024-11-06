@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import rootApi from '../../../../services/initApi'
 import endpoint from '../../../../services/endpoint'
 import { notifyError, notifySuccess } from "../../../../component/toastify/Toastify";
-import useAuth from "../../../../services/authContext";
+import { useAuth } from "../../../../services/authContext";
 
 type UpdateTaskParams = {
     id: string;
