@@ -1,13 +1,14 @@
 import { Calendar, Clock, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import ReactQuill from "react-quill";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Upload from "../../component/upload/Upload";
-import useCreateTask from "../../hook/Api/task/TaskManager/useCreateTask"; // Import hook useCreateTask
-import { notifyError, notifySuccess } from "../../component/toastify/Toastify";
+import ReactQuill from "react-quill";
 import { useNavigate } from "react-router-dom";
-
+import CustomDropList from "../../component/DropList/CustomDropList";
+import { notifyError, notifySuccess } from "../../component/toastify/Toastify";
+import Upload from "../../component/upload/Upload";
+import useCreateTask from "../../hook/Api/task/TaskManager/useCreateTask";
+import useChooseTaskList from "../../hook/Api/task/TaskManager/useChooseTaskList";
 interface CreateNewTaskModalProps {
   onClose: () => void;
   taskListId?: string;
@@ -24,15 +25,17 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [endTime, setEndTime] = useState<Date | null>(null);
   const [estimate, setEstimate] = useState("");
-  const [project, setProject] = useState("");
   const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [taskList, setTaskList] = useState<string>("");
 
   const [startDatePickerOpen, setStartDatePickerOpen] = useState(false);
   const [endDatePickerOpen, setEndDatePickerOpen] = useState(false);
   const [isUploadLoading, setIsUploadLoading] = useState(false);
 
   const success = useNavigate();
-  const { onCreate, isError, error } = useCreateTask(); // Sử dụng hook useCreateTask
+
+  const { onCreate, isError, error } = useCreateTask();
+  const { data: choose } = useChooseTaskList();
 
   const handleUploadComplete = (urls: string[]) => {
     setImageUrls(urls);
@@ -61,6 +64,10 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({
     setEndDatePickerOpen(false);
   };
 
+  const handleSelect = (id: string | number) => {
+    setTaskList(id.toString());
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
@@ -75,11 +82,9 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({
         images: imageUrls,
         startTime: startTime ? startTime.toISOString() : "",
         expirationDate: endTime ? endTime.toISOString() : "",
-        taskListId: taskListId || "",
+        taskListId: taskListId || taskList || "",
         projectId: projectId || "",
       };
-
-      
 
       const response = await onCreate(formData);
       if (response) {
@@ -94,11 +99,9 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({
         }
       }
     } catch (err) {
-      console.error("Lỗi khi tạo task:", err);
-
       if (err instanceof Error) {
         if ((err as any).response && (err as any).response.data) {
-          notifyError(`Lỗi từ API: ${(err as any).response.data.message}`);
+          notifyError(`${(err as any).response.data.message}`);
         } else {
           notifyError(`Lỗi: ${err.message}`);
         }
@@ -109,13 +112,16 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({
   };
 
   const handleSubmitWrapper = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault(); // Ngăn chặn hành vi mặc định của nút bấm
-    handleSubmit(event as any); // Gọi hàm handleSubmit với đối số kiểu bất kỳ
+    event.preventDefault();
+    handleSubmit(event as any);
   };
 
   const handleFileLoding = (isLoding: boolean) => {
     setIsUploadLoading(isLoding);
   };
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 z-50">
@@ -149,7 +155,7 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({
               <ReactQuill
                 theme="snow"
                 value={taskDescription}
-                onChange={ setTaskDescription}
+                onChange={setTaskDescription}
                 className="bg-[#1a1438] text-white w-full"
                 modules={{
                   toolbar: [
@@ -189,6 +195,7 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({
                 />
                 {startDatePickerOpen && (
                   <DatePicker
+                    minDate={today}
                     selected={startTime}
                     onChange={(date) => {
                       setStartTime(date);
@@ -258,18 +265,15 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({
                   <input
                     type="text"
                     value={taskListId}
-                    onChange={(e) => setProject(e.target.value)}
                     placeholder="Add Task List"
                     className="w-full bg-[#2A2F4A] rounded px-2 py-1 text-gray-400 pr-10 cursor-pointer"
                     disabled
                   />
                 ) : (
-                  <input
-                    type="text"
-                    value={project}
-                    onChange={(e) => setProject(e.target.value)}
-                    placeholder="Add Task List"
-                    className="w-full bg-[#2A2F4A] rounded px-2 py-1 text-white"
+                  <CustomDropList
+                    options={choose}
+                    onSelect={handleSelect}
+                    placeholder="Select a task list"
                   />
                 )}
               </div>

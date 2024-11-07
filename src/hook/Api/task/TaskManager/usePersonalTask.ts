@@ -31,11 +31,11 @@ const usePersonalTaskList = (variables: Variables) => {
 
     } = useInfiniteQuery<Response, Error> ({
         queryKey: [endpoint.personal_tasks, variables],
-        queryFn: async ({pageParam = 0}) => {
+        queryFn: async () => {
             return rootApi.post<Variables, Response>(endpoint.personal_tasks, {
                 where: variables.where,
                 take: variables.take,
-                skip: pageParam,
+                skip: variables.skip,
             });
         },
         initialPageParam: 0,
