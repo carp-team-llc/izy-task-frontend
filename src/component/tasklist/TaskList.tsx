@@ -31,7 +31,7 @@ const TaskList: React.FC<TaskListProps> = ({ title, showAll = false }) => {
     isError,
     data: tasks,
     error,
-  } = usePersonalTaskList({ skip: 0, take: 100 }); // Adjust to load enough tasks for pagination
+  } = usePersonalTaskList({ where: {}, skip: 0, take: 100 });
 
   const totalTasks = tasks?.[0]?.tasks?.length || 0;
   const totalPages = Math.ceil(totalTasks / tasksPerPage);
@@ -42,10 +42,11 @@ const TaskList: React.FC<TaskListProps> = ({ title, showAll = false }) => {
     }
   };
 
-  const currentTasks = tasks?.[0]?.tasks?.slice(
-    (currentPage - 1) * tasksPerPage,
-    currentPage * tasksPerPage
-  ) || [];
+  const currentTasks =
+    tasks?.[0]?.tasks?.slice(
+      (currentPage - 1) * tasksPerPage,
+      currentPage * tasksPerPage
+    ) || [];
 
   if (isLoading) return <div>Loading tasks...</div>;
   if (isError) return <div>Error loading tasks: {error?.message}</div>;
@@ -63,9 +64,13 @@ const TaskList: React.FC<TaskListProps> = ({ title, showAll = false }) => {
       <div className="overflow-x-auto">
         <div className="flex flex-col">
           <div className="flex text-gray-400 text-xs">
-            <div className="flex-[30] text-left pb-2 font-normal mr-5">Name</div>
+            <div className="flex-[30] text-left pb-2 font-normal mr-5">
+              Name
+            </div>
             <div className="flex-[15] text-left pb-2 font-normal">Status</div>
-            <div className="flex-[25] text-left pb-2 font-normal">Last Modified</div>
+            <div className="flex-[25] text-left pb-2 font-normal">
+              Last Modified
+            </div>
             <div className="flex-[25] text-left pb-2 font-normal">Deadline</div>
             <div className="flex-[5]"></div>
           </div>
@@ -100,25 +105,27 @@ const TaskList: React.FC<TaskListProps> = ({ title, showAll = false }) => {
         </div>
       </div>
 
-      <div className="mt-4 bg-[#2a2f47] p-3 rounded-lg flex justify-between items-center">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="text-purple-500 text-sm"
-        >
-          Previous
-        </button>
-        <span className="text-gray-400 text-sm">
-          Page {currentPage} of {totalPages}
-        </span>
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className="text-purple-500 text-sm"
-        >
-          Next
-        </button>
-      </div>
+      {totalTasks > 10 && (
+        <div className="mt-4 bg-[#2a2f47] p-3 rounded-lg flex justify-between items-center">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="text-purple-500 text-sm"
+          >
+            Previous
+          </button>
+          <span className="text-gray-400 text-sm">
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="text-purple-500 text-sm"
+          >
+            Next
+          </button>
+        </div>
+      )}
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center">
