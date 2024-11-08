@@ -48,7 +48,7 @@ export default function Dashboard() {
     "COMPLETED",
     "NEW",
   ];
-  
+
   const loadBarData = data?.taskChart;
   const totalBarData = loadBarData?.map((task: any) => {
     return {
@@ -84,11 +84,19 @@ export default function Dashboard() {
                 Total Task: {data?.totalTask}
               </h2>
             </div>
-            <BarChartComponents
-              data={totalBarData}
-              colors={colorBarData}
-              legends={legendBarData}
-            />
+            {data?.totalTask === 0 ? (
+              <div className="flex items-center justify-center h-[calc(100%-64px)]">
+                <p className="text-lg text-gray-400 text-center">
+                  No task available for this day
+                </p>
+              </div>
+            ) : (
+              <BarChartComponents
+                data={totalBarData}
+                colors={colorBarData}
+                legends={legendBarData}
+              />
+            )}
           </div>
 
           {/* Employees */}
