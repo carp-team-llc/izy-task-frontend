@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Plus, Upload, MoreVertical, Grid } from "lucide-react";
 import Activate from "../project/Component/Board/Activate";
 import Timeline from "../project/Component/Board/Timeline";
 import useProjectList from "../../hook/Api/project/useProjectList";
 import Helper from "../../constant/Helper";
+import CreateProject from "../../page/project/Component/Board/CreateProject";
 
 interface Project {
   id: number;
@@ -39,7 +40,10 @@ const projects: Project[] = [
   },
 ];
 
-const ProjectList: React.FC<{ projects: Project[] }> = ({ projects }) => {
+const ProjectList: React.FC<{
+  projects: Project[];
+  onProjectClick: (project: Project) => void;
+}> = ({ projects, onProjectClick }) => {
   const {
     isLoading,
     isError,
@@ -48,7 +52,7 @@ const ProjectList: React.FC<{ projects: Project[] }> = ({ projects }) => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useProjectList({where: {}, skip: 0, take: 10 });
+  } = useProjectList({ where: {}, skip: 0, take: 10 });
 
   useEffect(() => {
     if (hasNextPage) {
@@ -62,19 +66,14 @@ const ProjectList: React.FC<{ projects: Project[] }> = ({ projects }) => {
   if (isError) {
     return <div>Error loading tasks: {error?.message}</div>;
   }
-console.log("=====>", JSON.stringify(data, null,2))
+
   return (
     <div className="space-y-2">
-      <div className="flex items-center text-gray-400 text-sm mb-2 px-4">
-        <span className="flex-grow">Name</span>
-        <span className="w-32 text-right">Last Modified</span>
-        <span className="w-32 text-right">Deadline</span>
-        <span className="w-8"></span>
-      </div>
       {data[0]?.project?.map((project: any) => (
         <div
           key={project.id}
-          className="flex items-center py-2 px-4 rounded-lg bg-indigo-900/30"
+          className="flex items-center py-2 px-4 rounded-lg bg-indigo-900/30 cursor-pointer"
+          onClick={() => onProjectClick(project)}
         >
           <div className="flex items-center space-x-3 flex-grow">
             <div className="bg-yellow-500/20 p-2 rounded">
@@ -98,7 +97,7 @@ console.log("=====>", JSON.stringify(data, null,2))
             {Helper.formatEngDate(project.createdAt)}
           </span>
           <span className="w-32 text-right text-gray-400 text-sm">
-          {Helper.formatEngDate(project.updatedAt)}
+            {Helper.formatEngDate(project.updatedAt)}
           </span>
           <MoreVertical size={16} className="w-8 text-gray-400" />
         </div>
@@ -108,12 +107,28 @@ console.log("=====>", JSON.stringify(data, null,2))
 };
 
 export default function ProjectDashboard() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
+  const handleProjectClick = (project: Project) => {
+    setSelectedProject(project);
+  };
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="min-h-screen text-white">
       <div className="flex items-center p-2">
         <div className="flex items-center space-x-4 flex-grow">
           <h1 className="text-2xl font-bold text-indigo-400 ml-5">Project</h1>
-          <button className="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg flex items-center text-sm">
+          <button 
+          onClick = {handleOpenModal}
+          className="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg flex items-center text-sm">
             <Plus size={16} className="mr-2" />
             Create New Project
           </button>
@@ -132,7 +147,10 @@ export default function ProjectDashboard() {
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">All projects</h2>
           </div>
-          <ProjectList projects={projects} />
+          <ProjectList
+            projects={projects}
+            onProjectClick={handleProjectClick}
+          />
         </main>
 
         <aside className="w-80 space-y-6">
@@ -142,6 +160,9 @@ export default function ProjectDashboard() {
           </div>
         </aside>
       </div>
+
+      {/* Modal for Selected Project */}
+      {isModalOpen && <CreateProject onClose={handleCloseModal} />}
     </div>
   );
 }

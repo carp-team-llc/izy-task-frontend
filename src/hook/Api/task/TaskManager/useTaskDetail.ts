@@ -27,6 +27,7 @@ const useTaskDetail = (variables: Variables) => {
             const response = await rootApi.post<Response>(endpoint.detailtask, variables);
             return response.data.detail
         },
+        
     });
     return {
         isLoading,

@@ -14,6 +14,7 @@ export default {
   task_list_detail: "api/v1/task/task_list_detail",
   choose_task_list: "api/v1/task/choose_task_list",
   createtasklist: "api/v1/task/create_task_list",
+  recenttask: "api/v1/task/recent_task",
   // #endregion
 
   // #region personal tasks

@@ -2,6 +2,7 @@ import ActivityChart from "../../component/chart/ActivityChart";
 import Header2 from "../../component/header/Header2";
 import TaskList from "../../component/tasklist/TaskList";
 import WeeklyTaskProgress from "../../component/tasklist/WeeklyTaskProgress";
+import RecentTask from "../../component/tasklist/RecentTask";
 
 export default function Task() {
   return (
@@ -11,7 +12,7 @@ export default function Task() {
         <div className="flex space-x-4">
           <div className="flex-1">
             <TaskList title="Personal Task" showAll />
-            <TaskList title="Recent Task" />
+            <RecentTask title="Recent Task" />
           </div>
           <div className="w-72">
             <WeeklyTaskProgress />
