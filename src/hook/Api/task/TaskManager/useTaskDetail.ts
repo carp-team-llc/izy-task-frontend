@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import endpoint from "../../../../services/endpoint";
 import rootApi from "../../../../services/initApi";
 
@@ -13,6 +13,10 @@ type Response = {
 
 
 const useTaskDetail = (variables: Variables) => {
+    const queryClient = useQueryClient()
+    queryClient.invalidateQueries({
+        queryKey: [endpoint.recenttask],
+    });
     const {
         data,
         error,
