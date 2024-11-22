@@ -15,7 +15,7 @@ const CreateProfileForm: React.FC = () => {
     avatar: "",
     socials: [],
   });
-
+  const { onCreateProfile, isError, error } = useCreateProfile ();
   const [socialInputs, setSocialInputs] = useState<{
     platform: string;
     url: string;
@@ -49,6 +49,7 @@ const CreateProfileForm: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Profile Data:", formData);
+    onCreateProfile(formData);
   };
 
   return (
@@ -186,7 +187,9 @@ const CreateProfileForm: React.FC = () => {
 
         <div className="flex justify-center mt-4">
           <button
+          
             type="submit"
+            onClick={handleSubmit}
             className="bg-indigo-600 text-white rounded-md px-6 py-2 hover:bg-indigo-700 transition-colors text-sm"
           >
             Create
