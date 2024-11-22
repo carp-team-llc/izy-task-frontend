@@ -12,6 +12,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import ProjectDetail from "../page/project/ProjectDetail"
 import KabanBoard from "../page/Task/TaskBoard/components/KabanBoard";
 import RedirectIfLoggedIn from "./RedirectIfLoggedIn";
+import ShowProfile from "../page/profile/ShowProfile";
 
 // Lazy load các trang chính
 const HomePage = lazy(() => import("../page/home/HomePage"));
@@ -30,11 +31,12 @@ const router = createBrowserRouter([
       { path: "/tasks", element: <Task /> },
       { path: "/timeline", element: <TimeLine /> },
       { path: "/profile", element: <CreateProfile /> },
+      { path: "/showprofile", element: <ShowProfile /> },
       { path: "/tasklist", element: <TaskListParams /> },
       { path: "/tasklist/:id", element: <DetailTaskList /> }, // Add dynamic route for DetailTaskList
       { path: "/taskboard", element: <TaskBoard /> },
       { path: "/projectboard", element: <ProjectDashboard /> },
-      { path: "/projecdetail", element: <ProjectDetail /> },
+      { path: "/projectdetail", element: <ProjectDetail /> },
       { path: "/kaban", element: <KabanBoard /> },
       { path: "*", element: <Navigate to="/" /> },
     ],
