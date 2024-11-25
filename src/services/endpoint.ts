@@ -32,6 +32,7 @@ export default {
   // #region project
   project_list: "api/v1/project/project_list",
   create_project: "api/v1/project/create_project",
+  metric: "api/v1/project/top_insight",
 
   // #region profile
   create_profile: "api/v1/user/profile/create_profile",

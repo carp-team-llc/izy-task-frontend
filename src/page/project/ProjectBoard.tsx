@@ -5,6 +5,7 @@ import Timeline from "../project/Component/Board/Timeline";
 import useProjectList from "../../hook/Api/project/useProjectList";
 import Helper from "../../constant/Helper";
 import CreateProject from "../../page/project/Component/Board/CreateProject";
+import { useNavigate } from "react-router-dom";
 
 interface Project {
   id: number;
@@ -107,11 +108,12 @@ const ProjectList: React.FC<{
 };
 
 export default function ProjectDashboard() {
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-  const handleProjectClick = (project: Project) => {
-    setSelectedProject(project);
+  const handleProjectClick = (project: any) => {
+    navigate(`/projectdetail/${project.id}`); 
   };
   const handleOpenModal = () => {
     setIsModalOpen(true);

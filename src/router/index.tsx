@@ -36,7 +36,7 @@ const router = createBrowserRouter([
       { path: "/tasklist/:id", element: <DetailTaskList /> }, // Add dynamic route for DetailTaskList
       { path: "/taskboard", element: <TaskBoard /> },
       { path: "/projectboard", element: <ProjectDashboard /> },
-      { path: "/projectdetail", element: <ProjectDetail /> },
+      { path: "/projectdetail/:id", element: <ProjectDetail /> },
       { path: "/kaban", element: <KabanBoard /> },
       { path: "*", element: <Navigate to="/" /> },
     ],
