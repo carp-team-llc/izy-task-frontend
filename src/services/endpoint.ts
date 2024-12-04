@@ -1,6 +1,7 @@
 export default {
   login: "/api/v1/auth/login",
   register: "/api/v1/auth/register",
+  resend_verification: "/api/v1/auth/authentication/resend_verify_email",
 
   // #region Chart
   daily_chart: "api/v1/task/daily_chart",

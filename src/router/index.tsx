@@ -13,6 +13,7 @@ import ProjectDetail from "../page/project/ProjectDetail"
 import KabanBoard from "../page/Task/TaskBoard/components/KabanBoard";
 import RedirectIfLoggedIn from "./RedirectIfLoggedIn";
 import ShowProfile from "../page/profile/ShowProfile";
+import ResendVerification from "../page/404/ResendVerification";
 
 // Lazy load các trang chính
 const HomePage = lazy(() => import("../page/home/HomePage"));
@@ -55,6 +56,12 @@ const router = createBrowserRouter([
       <RedirectIfLoggedIn>
         <RegisterPage />
       </RedirectIfLoggedIn>
+    ),
+  },
+  {
+    path: "/resend-verification",
+    element: (
+      <ResendVerification />
     ),
   },
   { path: "/verify/:uuid", element: <Verify /> },
