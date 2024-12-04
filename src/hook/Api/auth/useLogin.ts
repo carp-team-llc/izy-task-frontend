@@ -26,8 +26,30 @@ const useLogin = () => {
       setToken(e?.data?.accessToken);
       success("/dashboard");
     },
-    onError: () => {
-      notifyError("Login failed");
+    onError: (e: any) => {
+
+      const errorCode = e?.response?.data?.errorCode;
+
+      if (errorCode === "PASSWORD_INCORRECT") {
+        notifyError("Wrong password, please re-enter password!");
+        success("/login");
+        return;
+      }
+
+      if (errorCode === "NOT_FOUND") {
+        notifyError("No account found with this email!");
+        success("/login");
+        return;
+      }
+
+      if (errorCode === "NONVERIFY") {
+        notifyError("Please verify your account!");
+        success(`/resend-verification?email=${e?.response?.data?.email}`);
+        return;
+      }
+
+      success("/login");
+      notifyError("Login Failed");
     },
   });
 

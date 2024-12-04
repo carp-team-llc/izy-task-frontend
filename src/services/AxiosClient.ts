@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useAuth } from "./authContext";
 
 const AxiosClient = (url: string, headers = {}) => {
   if (!url) {
@@ -41,8 +40,8 @@ const AxiosClient = (url: string, headers = {}) => {
     },
     (error) => {
       if (error.response && error.response.status === 401) {
-        const { removeToken } = useAuth();
-        removeToken();
+        // const { removeToken } = useAuth();
+        // removeToken();
         // window.location.href = '/login';
       }
 

@@ -5,6 +5,7 @@ import {
   ReactNode,
   useEffect,
 } from "react";
+import { notifySuccess } from "../component/toastify/Toastify";
 
 interface AuthContextType {
   token: string | null;
@@ -47,6 +48,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const login = () => {};
 
   const logout = () => {
+    notifySuccess("Logout success!")
     handleRemoveToken();
   };
 
