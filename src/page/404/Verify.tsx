@@ -1,59 +1,100 @@
-import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { ChevronLeft, Cog, Mail } from "lucide-react";
+import { useLocation } from 'react-router-dom';
+import useResendVerification from "../../hook/Api/auth/useResendVerification";
 
-const AccountVerified = () => {
+export default function Verify() {
+  
+  const location = useLocation();
+  const getEmail = new URLSearchParams(location.search).get("email");
 
-  const { uuid } = useParams<{ uuid: string }>();
-  const navigateTo = useNavigate();
+  const { onResendVerify } = useResendVerification();
 
-    useEffect(() => {
-        const storedUUID = sessionStorage.getItem('registrationUUID');
-        if (storedUUID !== uuid) {
-          navigateTo("/")
-        }
-    }, [uuid]);
+  const onSubmit = async () => {
+    await onResendVerify({ email: getEmail || "" })
+  }
 
   return (
-    <div className="flex flex-col min-h-screen text-white bg-[#05051F]">
-      <div className="flex flex-col justify-center items-center flex-1">
-        <div className="bg-[#14142b] rounded-lg p-10 shadow-lg text-center">
-          <div className="text-6xl text-[#43E97B] mb-5">✔️</div>
-          <h1 className="text-3xl font-semibold text-[#7260E6] mb-5">Welcome to Izy Task</h1>
-          <p className="text-lg mb-5">Hello</p>
-          <p className="text-lg mb-5">You have registered an account at Izy Task, please check your email to verify your account!</p>
-          <p className="text-lg mb-8">Have a great experience on our website.</p>
-          <a
-            href="/login"
-            className="bg-[#7260E6] text-white py-2 px-6 rounded-lg transition duration-300 hover:bg-[#5b48c4]"
-          >
-            Go to Login
-          </a>
+    <div className="min-h-screen flex flex-col bg-[#0A012E]">
+      <header className="p-6">
+        <div className="flex items-center space-x-2 text-xl font-semibold">
+          <span className="text-[#7260E6]">Izy Task</span>
         </div>
-      </div>
+      </header>
 
-      <footer className="bg-[#14142b] py-4 text-center shadow-md">
-        <p className="text-sm">
-          <a
-            href="https://github.com/carp-calangthang"
-            target="_blank"
-            className="text-[#7260E6] hover:text-[#5b48c4] mx-2"
-            rel="noreferrer"
-          >
-            @carpthecalangthang
-          </a>
-          |
-          <a
-            href="https://github.com/hxann"
-            target="_blank"
-            className="text-[#7260E6] hover:text-[#5b48c4] mx-2"
-            rel="noreferrer"
-          >
-            @Hxann
-          </a>
-        </p>
+      <main className="flex-1 flex flex-col items-center justify-center px-6 bg-[#05051F]">
+        <div className="w-full max-w-md space-y-8">
+          {/* Illustration */}
+          <div className="relative w-64 h-64 mx-auto">
+            <div className="absolute inset-0 bg-[#6956E5] rounded-full" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+              <div className="relative">
+                {/* Browser Window */}
+                <div className="absolute -top-12 -left-20 w-16 h-12 bg-white rounded-lg shadow-md border border-gray-200" />
+                {/* Gears */}
+                <div className="absolute -top-16 right-0">
+                  <Cog className="w-8 h-8 text-gray-300" />
+                </div>
+                <div className="absolute -top-8 -right-8">
+                  <Cog className="w-6 h-6 text-gray-300" />
+                </div>
+                {/* Email Icon */}
+                <div className="bg-white p-4 rounded-lg shadow-lg border border-gray-200">
+                  <Mail className="w-12 h-12 text-blue-500" />
+                </div>
+                {/* Check Mark */}
+                <div className="absolute -bottom-2 -right-2 bg-green-500 rounded-full p-1">
+                  <svg
+                    className="w-4 h-4 text-white"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={3}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="text-center space-y-4">
+            <h1 className="text-2x1 font-semibold text-[#6956E5]">
+              Welcome to izytask ╰(°▽°)╯
+            </h1>
+            <p className="text-gray-600">
+              Please check your email inbox and click on the provided link to
+              verify your account. If you don&apos;t receive email,{" "}
+            </p>
+            <button onClick={onSubmit} className="text-blue-600 hover:text-blue-700">
+              click here to resend
+            </button>
+          </div>
+
+          {/* Back to Login */}
+          <div className="text-center">
+            <a
+              href="/login"
+              className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
+            >
+              <ChevronLeft className="w-4 h-4 mr-1" />
+              Back to Login
+            </a>
+          </div>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="py-6 text-center text-sm text-gray-600">
+        <div>
+          <a className="hover:text-[#6956E5]" href="https://github.com/carp-calangthang">Carpthecalangthang</a> |{" "}
+          <a className="hover:text-[#6956E5]" href="https://github.com/hxann">xann</a>
+        </div>
       </footer>
     </div>
   );
-};
-
-export default AccountVerified;
+}
