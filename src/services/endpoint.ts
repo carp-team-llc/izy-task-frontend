@@ -35,6 +35,9 @@ export default {
   project_list: "api/v1/project/project_list",
   create_project: "api/v1/project/create_project",
   metric: "api/v1/project/top_insight",
+  todaytask: "api/v1/project/today_tasks",
+  total_task_chart: "api/v1/project/total_tasks_chart",
+  project_workload: "api/v1/project/project_workload",
 
   // #region profile
   create_profile: "api/v1/user/profile/create_profile",

@@ -4,6 +4,7 @@ import rootApi from "../../../services/initApi";
 
 type Variables = {
     projectId?: string;
+    today?: string; 
 }
 
 type Response = {
@@ -11,7 +12,8 @@ type Response = {
 }
 
 
-const useMetric = (variables: Variables) => {
+const useTodayTask = (variables: Variables) => {
+    
     const {
         data,
         error,
@@ -21,14 +23,13 @@ const useMetric = (variables: Variables) => {
         isLoading,
         refetch,
     } = useQuery({
-        queryKey: [endpoint.metric, variables ],
+        queryKey: [],
         queryFn: async () => {
-            const response = await rootApi.post<Response>(endpoint.metric, variables);
-      
-            return response.data.data
+            const response = await rootApi.post<Response>(endpoint.todaytask, variables);
+            return response.data?.data
         },
+        
     });
-
     return {
         isLoading,
         isError,
@@ -40,4 +41,4 @@ const useMetric = (variables: Variables) => {
     };
 
 };
-export default useMetric;
+export default useTodayTask;

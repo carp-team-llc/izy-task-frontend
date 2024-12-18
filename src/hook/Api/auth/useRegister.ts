@@ -28,7 +28,7 @@ const UseRegister = () => {
             notifySuccess(e?.response?.data?.message || 'Registered successfully!')
             const uuid = uuidv4();
             sessionStorage.setItem('registrationUUID', uuid);
-            success(`/verify/${uuid}`);
+            success(`/verify/${uuid}?email=${e?.response?.data?.email}`);
         },
         onError: (e: any) => {
             notifyError(e.response?.data?.message || "An error occurred!")
