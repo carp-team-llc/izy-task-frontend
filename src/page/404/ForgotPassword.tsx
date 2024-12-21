@@ -1,20 +1,18 @@
-import { Eye, EyeOff } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import useLogin from "../../../hook/Api/auth/useLogin";
+import useForgotPassword from "../../hook/Api/auth/useForgotPassword";
+import { notifyError } from "../../component/toastify/Toastify";
+
 interface InputValue {
   email: string;
-  password: string;
 }
 
-const LoginPage = () => {
-  const [showPassword, setShowPassword] = useState(false);
+const ForgotPasswordPage = () => {
   const [input, setInput] = useState<InputValue>({
     email: "",
-    password: "",
   });
 
-  const navigateTo = useNavigate();
+  const { onForgot } = useForgotPassword();
 
   const handleChangeInput = (value: string, keyInput: string) => {
     setInput((prev) => ({
@@ -23,16 +21,15 @@ const LoginPage = () => {
     }));
   };
 
-  const { onLogin } = useLogin();
-  const handleRegisterClick = () => {
-    navigateTo("/register");
-  };
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      await onLogin(input);
-    } catch (err) {}
-  };
+      await onForgot(input);
+    } catch (error) {
+      notifyError("Đã xảy ra lỗi, vui lòng thử lại sau （＞人＜；）");
+    }
+  }
+
   return (
     <div className="flex h-screen">
       {/* Left side - Image */}
@@ -48,23 +45,39 @@ const LoginPage = () => {
 
       <div className="w-full md:w-1/2 bg-[#0f172a] p-8 flex flex-col justify-center">
         <div className="max-w-md w-full mx-auto space-y-8">
+          <a href="/login" className="flex items-center group cursor-pointer">
+            <ArrowLeft
+              color="#ffffff"
+              className="group-hover:fill-purple-500 transition duration-300"
+            />
+            <span className="ml-2 text-white group-hover:text-purple-500 transition duration-300">
+              Back to login
+            </span>
+          </a>
           {/* Logo and welcome message */}
           <div className="text-center">
             <div className="flex justify-center mb-4">
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500"></div>
             </div>
             <h2 className="text-2xl font-bold text-white">Izy Task</h2>
-            <p className="mt-2 text-gray-400">Nice to see you again</p>
           </div>
 
           {/* Login form */}
           <form className="space-y-6" onSubmit={onSubmit}>
             <div>
+              <div>
+                <h2 className="text-lg font-bold text-white mb-2">
+                  Forgot Password?
+                </h2>
+                <p className="text-sm text-gray-400 mb-6">
+                  We will send you a verification email to reset your password.
+                </p>
+              </div>
               <label
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-400"
               >
-                Email or phone number
+                Email
               </label>
               <input
                 id="email"
@@ -72,7 +85,7 @@ const LoginPage = () => {
                 type="text"
                 required
                 className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                placeholder="Enter your email or phone number"
+                placeholder="Enter your email"
                 onChange={(event) =>
                   handleChangeInput(event.target.value, "email")
                 }
@@ -80,69 +93,11 @@ const LoginPage = () => {
             </div>
 
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-400"
-              >
-                Password
-              </label>
-              <div className="mt-1 relative">
-                <input
-                  id="password"
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                  required
-                  className="block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  placeholder="Enter your password"
-                  onChange={(event) =>
-                    handleChangeInput(event.target.value, "password")
-                  }
-                />
-                <button
-                  type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-gray-400" />
-                  ) : (
-                    <Eye className="h-5 w-5 text-gray-400" />
-                  )}
-                </button>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
-                />
-                <label
-                  htmlFor="remember-me"
-                  className="ml-2 block text-sm text-gray-400"
-                >
-                  Remember me
-                </label>
-              </div>
-              <div className="text-sm">
-                <a
-                  href="/forgot-password"
-                  className="font-medium text-purple-500 hover:text-purple-400"
-                >
-                  Forgot password?
-                </a>
-              </div>
-            </div>
-
-            <div>
               <button
                 type="submit"
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
               >
-                Sign in
+                Send verification email
               </button>
             </div>
           </form>
@@ -207,21 +162,21 @@ const LoginPage = () => {
           </div>
 
           {/* Sign up link */}
-          <div className="text-center">
+          {/* <div className="text-center">
             <p className="text-sm text-gray-400">
-              Don't have an account?{" "}
+              Back to{" "}
               <a
                 href="#"
                 className="font-medium text-purple-500 hover:text-purple-400"
-                onClick={handleRegisterClick}
               >
-                Sign up now
+                sign in.
               </a>
             </p>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
   );
 };
-export default LoginPage;
+
+export default ForgotPasswordPage;

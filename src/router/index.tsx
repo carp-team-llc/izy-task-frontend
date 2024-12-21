@@ -9,11 +9,14 @@ import DetailTaskList from "../page/Task/DetailTaskList";
 import TaskBoard from "../page/Task/TaskBoard";
 import TaskListParams from "../page/Task/TaskListParams";
 import ProtectedRoute from "./ProtectedRoute";
-import ProjectDetail from "../page/project/ProjectDetail"
+import ProjectDetail from "../page/project/ProjectDetail";
 import KabanBoard from "../page/Task/TaskBoard/components/KabanBoard";
 import RedirectIfLoggedIn from "./RedirectIfLoggedIn";
 import ShowProfile from "../page/profile/ShowProfile";
 import ResendVerification from "../page/404/ResendVerification";
+import ForgotPasswordPage from "../page/404/ForgotPassword";
+import NewPasswordPage from "../page/404/NewPassword";
+import CheckInfomation from "../page/404/CheckInfomation";
 
 // Lazy load các trang chính
 const HomePage = lazy(() => import("../page/home/HomePage"));
@@ -59,10 +62,32 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/resend-verification",
+    path: "/forgot-password",
     element: (
-      <ResendVerification />
+      <RedirectIfLoggedIn>
+        <ForgotPasswordPage />
+      </RedirectIfLoggedIn>
     ),
+  },
+  {
+    path: "/reset-password",
+    element: (
+      <RedirectIfLoggedIn>
+        <CheckInfomation />
+      </RedirectIfLoggedIn>
+    ),
+  },
+  {
+    path: "/new-password",
+    element: (
+      <RedirectIfLoggedIn>
+        <NewPasswordPage />
+      </RedirectIfLoggedIn>
+    ),
+  },
+  {
+    path: "/resend-verification",
+    element: <ResendVerification />,
   },
   { path: "/verify/:uuid", element: <Verify /> },
 ]);

@@ -1,7 +1,10 @@
 export default {
-  login: "/api/v1/auth/login",
-  register: "/api/v1/auth/register",
-  resend_verification: "/api/v1/auth/authentication/resend_verify_email",
+  login: "api/v1/auth/login",
+  register: "api/v1/auth/register",
+  resend_verification: "api/v1/auth/authentication/resend_verify_email",
+  forgot_password: "api/v1/auth/authentication/forgot_password",
+  check_valid_information: "api/v1/auth/authentication/handle_infomation",
+  change_password: "api/v1/auth/authentication/new_password",
 
   // #region Chart
   daily_chart: "api/v1/task/daily_chart",
