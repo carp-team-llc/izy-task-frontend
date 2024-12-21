@@ -129,7 +129,7 @@ const LoginPage = () => {
               </div>
               <div className="text-sm">
                 <a
-                  href="#"
+                  href="/forgot-password"
                   className="font-medium text-purple-500 hover:text-purple-400"
                 >
                   Forgot password?
@@ -149,6 +149,11 @@ const LoginPage = () => {
 
           {/* Social login options */}
           <div className="space-y-4">
+            <div className="flex items-center justify-center space-x-4">
+              <div className="flex-1 border-t border-gray-300"></div>
+              <span className="text-gray-500 text-md">Or login with</span>
+              <div className="flex-1 border-t border-gray-300"></div>
+            </div>
             <button className="w-full flex items-center justify-center px-4 py-2 border border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-300 bg-gray-700 hover:bg-gray-600">
               <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
                 <path
@@ -169,7 +174,7 @@ const LoginPage = () => {
                 />
                 <path fill="none" d="M1 1h22v22H1z" />
               </svg>
-              Or sign in with Google
+              Google
             </button>
             <button className="w-full flex items-center justify-center px-4 py-2 border border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-300 bg-gray-700 hover:bg-gray-600">
               <svg
@@ -183,7 +188,7 @@ const LoginPage = () => {
                   clipRule="evenodd"
                 />
               </svg>
-              Or sign in with GitHub
+              GitHub
             </button>
             <button className="w-full flex items-center justify-center px-4 py-2 border border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-300 bg-gray-700 hover:bg-gray-600">
               <svg
@@ -197,7 +202,7 @@ const LoginPage = () => {
                   clipRule="evenodd"
                 />
               </svg>
-              Or sign in with Facebook
+              Facebook
             </button>
           </div>
 
