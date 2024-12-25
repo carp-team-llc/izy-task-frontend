@@ -34,7 +34,7 @@ const AxiosClient = (url: string, headers = {}) => {
 
   api.interceptors.response.use(
     (response) => {
-      console.log("Response:", response);
+      console.log("Response:", response); // nhớ xoá cái này nha đmmm
 
       return response;
     },

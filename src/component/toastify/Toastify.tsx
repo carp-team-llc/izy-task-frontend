@@ -1,12 +1,12 @@
 import { Bounce, toast, ToastOptions } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
-export const notifySuccess = (message: string, options?: ToastOptions) => {
+export const notifySuccess = (message: string, options?: ToastOptions, time?: number) => {
   console.log("Success toast triggered");
   toast.success(message, {
     ...options,
     position: "top-right",
-    autoClose: 1000,
+    autoClose: time || 1000,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
