@@ -1,7 +1,5 @@
-import React from "react";
-import useTodayTask from "../../../../../hook/Api/project/useTodayTask";
-import { useParams } from "react-router-dom";
 import Helper from "../../../../../constant/Helper";
+import useTodayTask from "../../../../../hook/Api/project/useTodayTask";
 
 interface Task {
   id: string;
@@ -12,53 +10,11 @@ interface Task {
   statusColor: string;
   employee: any;
 }
-const tasks: Task[] = [
-  // {
-  //   name: "Làm minh hình chi tiết khi nhấn vào xem task",
-  //   startTime: "2024-11-05 | 14:30",
-  //   priority: "High",
-  //   statusName: "Doing",
-  // },
-  // {
-  //   name: "Làm minh hình chi tiết khi nhấn vào xem task",
-  //   startTime: "2024-11-05 | 14:30",
-  //   priority: "High",
-  //   statusName: "Doing",
-  // },
-  // {
-  //   title: "Làm minh hình chi tiết khi nhấn vào xem task",
-  //   time: "2024-11-05 | 14:30",
-  //   priority: "High",
-  //   status: "Doing",
-  // },
-  // {
-  //   title: "Làm minh hình chi tiết khi nhấn vào xem task",
-  //   time: "2024-11-05 | 14:30",
-  //   priority: "High",
-  //   status: "Doing",
-  // },
-  // {
-  //   title: "Làm minh hình chi tiết khi nhấn vào xem task",
-  //   time: "2024-11-05 | 14:30",
-  //   priority: "High",
-  //   status: "Doing",
-  // },
-  // {
-  //   title: "Làm minh hình chi tiết khi nhấn vào xem task",
-  //   time: "2024-11-05 | 14:30",
-  //   priority: "High",
-  //   status: "Doing",
-  // },
-];
-
 export default function Component() {
-  // const { projectId } = useParams<{ projectId: string }>();
+  // nhớ sửa nghe cu
   const projectId = "67448f2abee60d40683d398b";
   const today = "2024-11-03T08:05:05.000Z";
   const { data: todayTask, isLoading, isError, } = useTodayTask({projectId, today });
-
-  console.log("====>", todayTask);
-
   return (
     <div className="col-span-2 bg-[#130b3b] rounded-lg p-4">
       <h2 className="text-lg font-bold mb-4">Today Task</h2>

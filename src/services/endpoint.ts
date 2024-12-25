@@ -37,6 +37,7 @@ export default {
   todaytask: "api/v1/project/today_tasks",
   total_task_chart: "api/v1/project/total_tasks_chart",
   project_workload: "api/v1/project/project_workload",
+  activities: "api/v1/project/project_activity",
 
   // #region profile
   create_profile: "api/v1/user/profile/create_profile",

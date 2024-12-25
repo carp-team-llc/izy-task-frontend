@@ -21,7 +21,6 @@ interface CreateNewTaskModalProps {
 const CreateProject: React.FC<CreateNewTaskModalProps> = ({
   onClose,
   taskListId,
-  projectId,
 }) => {
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
@@ -91,7 +90,6 @@ const CreateProject: React.FC<CreateNewTaskModalProps> = ({
         tasks: null,
         timeworking: Number(timeWorking),
       };
-      console.log("====>", JSON.stringify(formData, null, 2))
       const response = await onCreate(formData);
       if (response) {
         notifySuccess(response.message);
