@@ -18,11 +18,11 @@ import ForgotPasswordPage from "../page/404/ForgotPassword";
 import NewPasswordPage from "../page/404/NewPassword";
 import CheckInfomation from "../page/404/CheckInfomation";
 
-// Lazy load các trang chính
-const HomePage = lazy(() => import("../page/home/HomePage"));
-const DashBoard = lazy(() => import("../page/dashboard/DashBoard"));
-const Task = lazy(() => import("../page/Task/Task"));
-const TimeLine = lazy(() => import("../page/Task/TimeLine"));
+  // Lazy load các trang chính
+  const HomePage = lazy(() => import("../page/home/HomePage"));
+  const DashBoard = lazy(() => import("../page/dashboard/DashBoard"));
+  const Task = lazy(() => import("../page/Task/Task"));
+  const TimeLine = lazy(() => import("../page/Task/TimeLine"));
 
 const router = createBrowserRouter([
   {
@@ -92,4 +92,4 @@ const router = createBrowserRouter([
   { path: "/verify/:uuid", element: <Verify /> },
 ]);
 
-export default router;
+  export default router;

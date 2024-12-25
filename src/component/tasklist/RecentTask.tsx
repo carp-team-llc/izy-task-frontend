@@ -48,7 +48,7 @@ const TaskList: React.FC<TaskListProps> = ({ title, showAll = false }) => {
       currentPage * tasksPerPage
     ) || [];
 
-    console.log("=====>", JSON.stringify(tasks, null, 2))
+    
 
   if (isLoading) return <div>Loading tasks...</div>;
   if (isError) return <div>Error loading tasks: {error?.message}</div>;

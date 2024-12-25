@@ -113,8 +113,9 @@ export default function ProjectDashboard() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const handleProjectClick = (project: any) => {
-    navigate(`/projectdetail/${project.id}`); 
+    navigate(`/projectdetail/${project.id}`);
   };
+
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -124,13 +125,15 @@ export default function ProjectDashboard() {
   };
 
   return (
-    <div className="min-h-screen text-white">
-      <div className="flex items-center p-2">
-        <div className="flex items-center space-x-4 flex-grow">
-          <h1 className="text-2xl font-bold text-indigo-400 ml-5">Project</h1>
-          <button 
-          onClick = {handleOpenModal}
-          className="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg flex items-center text-sm">
+    <div className="min-h-screen  text-white">
+      {/* Navbar */}
+      <div className="flex items-center p-4 flex-wrap space-y-2 md:space-y-0">
+        <h1 className="text-3xl font-bold text-indigo-400 flex-grow">Project</h1>
+        <div className="flex space-x-2">
+          <button
+            onClick={handleOpenModal}
+            className="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg flex items-center text-sm"
+          >
             <Plus size={16} className="mr-2" />
             Create New Project
           </button>
@@ -144,20 +147,20 @@ export default function ProjectDashboard() {
         </div>
       </div>
 
-      <div className="p-8 flex space-x-8">
+      {/* Main content */}
+      <div className="flex flex-col md:flex-row p-4 md:space-x-8 space-y-4 md:space-y-0">
+        {/* Project list */}
         <main className="flex-grow bg-[#05051F] p-6 rounded-lg">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">All projects</h2>
           </div>
-          <ProjectList
-            projects={projects}
-            onProjectClick={handleProjectClick}
-          />
+          <ProjectList projects={projects} onProjectClick={handleProjectClick} />
         </main>
 
-        <aside className="w-80 space-y-6">
+        {/* Sidebar */}
+        <aside className="md:w-80 w-full space-y-6">
           <Activate />
-          <div className="w-full max-w-md mx-auto bg-[#0a0721] text-white p-6 rounded-xl">
+          <div className="w-full bg-[#0a0721] text-white p-6 rounded-xl">
             <Timeline />
           </div>
         </aside>
