@@ -15,6 +15,7 @@ import {
   notifyError,
   notifySuccess,
 } from "../../../component/toastify/Toastify";
+import useDeleteTask from "../../../hook/Api/task/TaskManager/useDeleteTask";
 
 interface DetailTaskProps {
   onClose: () => void;
@@ -32,21 +33,16 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
   const { data } = useTaskDetail({
     id: task.id,
   });
+  const { onUpdate } = useUpdateTask();
+  const { onDelete } = useDeleteTask();
 
   const [status, setStatus] = useState<string | null>(null);
   const [statusName, setStatusName] = useState<string | null>(null);
   const [statusColor, setStatusColor] = useState<string | null>(null);
   const [isUpdate, setIsUpdate] = useState<boolean>(true);
-  const [isEditing, setIsEditing] = useState<boolean>(false); // New state for edit mode
+  const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const [description, setDescription] = useState<string>(data?.body || "");
-
-  const statuses = [
-    { status: "1", statusName: "Pending", statusColor: "#FFA500" },
-    { status: "2", statusName: "Doing", statusColor: "#007BFF" },
-    { status: "3", statusName: "Completed", statusColor: "#28A745" },
-  ];
-  const { onUpdate } = useUpdateTask();
 
   const handleUpdate = (isUpdate: boolean) => {
     setIsUpdate(isUpdate);
@@ -57,6 +53,16 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
   };
   const handleChangeStatus = (newStatus: string) => {
     setStatus(newStatus);
+  };
+  const handleDelete = async () => {
+    try {
+      const response = await onDelete({ id: task.id });
+      if (response) {
+        onClose(); // Đóng modal sau khi xóa
+      }
+    } catch (err) {
+      notifyError("Failed to delete task. Please try again.");
+    }
   };
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -162,7 +168,10 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
               </div>
 
               <div className="border-t border-gray-700 p-3 bg-[#0f0a2a] flex justify-end space-x-2">
-                <Editt onHandleUpdate={handleUpdate} />
+                <Editt
+                  onHandleUpdate={handleUpdate}
+                  onHandleDelete={handleDelete}
+                />
                 {isEditing && ( // Show Save button only if editing
                   <button
                     className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
