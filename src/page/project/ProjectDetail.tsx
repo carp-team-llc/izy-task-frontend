@@ -4,10 +4,11 @@ import { useParams } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import OverviewTab from "./Component/Detail/Overview";
 import ProjectTaskList from "./Component/Detail/ProjectTask/ProjectTaskList";
-
+import KanBan from "./Component/Kanban/Kanban";
 const Tabs = {
   Overview: OverviewTab,
   List: ProjectTaskList,
+  KanBan: KanBan,
 };
 
 const ProjectDetail = () => {

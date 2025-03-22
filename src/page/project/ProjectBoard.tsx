@@ -6,6 +6,7 @@ import useProjectList from "../../hook/Api/project/useProjectList";
 import Helper from "../../constant/Helper";
 import CreateProject from "../../page/project/Component/Board/CreateProject";
 import { useNavigate } from "react-router-dom";
+import SimpleForm from "./Component/Board/SimpleForm";
 
 interface Project {
   id: number;
@@ -14,32 +15,7 @@ interface Project {
   deadline: string;
 }
 
-const projects: Project[] = [
-  {
-    id: 1,
-    name: "Project 1",
-    lastModified: "Feb 25, 2022",
-    deadline: "Feb 25, 2022",
-  },
-  {
-    id: 2,
-    name: "Project 2",
-    lastModified: "Feb 25, 2022",
-    deadline: "Feb 25, 2022",
-  },
-  {
-    id: 3,
-    name: "Project 3",
-    lastModified: "Feb 25, 2022",
-    deadline: "Feb 25, 2022",
-  },
-  {
-    id: 4,
-    name: "Project 4",
-    lastModified: "Feb 25, 2022",
-    deadline: "Feb 25, 2022",
-  },
-];
+const projects: Project[] = [];
 
 const ProjectList: React.FC<{
   projects: Project[];
@@ -54,7 +30,7 @@ const ProjectList: React.FC<{
     hasNextPage,
     isFetchingNextPage,
   } = useProjectList({ where: {}, skip: 0, take: 10 });
-
+  const [activeProject, setActiveProject] = useState<number | null>(null);
   useEffect(() => {
     if (hasNextPage) {
       fetchNextPage();
@@ -100,7 +76,23 @@ const ProjectList: React.FC<{
           <span className="w-32 text-right text-gray-400 text-sm">
             {Helper.formatEngDate(project.updatedAt)}
           </span>
-          <MoreVertical size={16} className="w-8 text-gray-400" />
+          <div
+            className="w-8 text-gray-400 cursor-pointer relative"
+            onClick={(e) => {
+              e.stopPropagation();
+              setActiveProject(
+                activeProject === project.id ? null : project.id
+              );
+            }}
+          >
+            <MoreVertical size={16} />
+          </div>
+
+          {activeProject === project.id && (
+            <div className="absolute top-10 right-0 bg-white p-4 rounded-lg shadow-lg z-10">
+              <SimpleForm />
+            </div>
+          )}
         </div>
       ))}
     </div>
@@ -128,7 +120,9 @@ export default function ProjectDashboard() {
     <div className="min-h-screen  text-white">
       {/* Navbar */}
       <div className="flex items-center p-4 flex-wrap space-y-2 md:space-y-0">
-        <h1 className="text-3xl font-bold text-indigo-400 flex-grow">Project</h1>
+        <h1 className="text-3xl font-bold text-indigo-400 flex-grow">
+          Project
+        </h1>
         <div className="flex space-x-2">
           <button
             onClick={handleOpenModal}
@@ -154,7 +148,10 @@ export default function ProjectDashboard() {
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">All projects</h2>
           </div>
-          <ProjectList projects={projects} onProjectClick={handleProjectClick} />
+          <ProjectList
+            projects={projects}
+            onProjectClick={handleProjectClick}
+          />
         </main>
 
         {/* Sidebar */}

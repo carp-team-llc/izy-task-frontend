@@ -48,8 +48,6 @@ const TaskList: React.FC<TaskListProps> = ({ title, showAll = false }) => {
       currentPage * tasksPerPage
     ) || [];
 
-    
-
   if (isLoading) return <div>Loading tasks...</div>;
   if (isError) return <div>Error loading tasks: {error?.message}</div>;
 
@@ -65,41 +63,53 @@ const TaskList: React.FC<TaskListProps> = ({ title, showAll = false }) => {
       </div>
       <div className="overflow-x-auto">
         <div className="flex flex-col">
+          {/* Header */}
           <div className="flex text-gray-400 text-xs">
-            <div className="flex-[30] text-left pb-2 font-normal mr-5">
-              Name
-            </div>
-            <div className="flex-[15] text-left pb-2 font-normal">Status</div>
-            <div className="flex-[25] text-left pb-2 font-normal">
+            <div className="flex-[2] text-left pb-2 font-normal mr-5">Name</div>
+            <div className="flex-[1] text-left pb-2 font-normal">Status</div>
+            <div className="flex-[1] text-left pb-2 font-normal">
               Last Modified
             </div>
-            <div className="flex-[25] text-left pb-2 font-normal">Deadline</div>
-            <div className="flex-[5]"></div>
+            <div className="flex-[1] text-left pb-2 font-normal">Deadline</div>
+            <div className="flex-[1]"></div>
           </div>
+
+          {/* Rows */}
           {recentTasks.map((task: any, index: number) => (
             <div
               key={index}
               className="flex text-white text-sm py-2 cursor-pointer hover:bg-gray-700 hover:text-gray-200 transition duration-200"
               onClick={() => handleTaskClick(task)}
             >
-              <div className="flex-[30] flex items-center mr-5">
+              {/* Name */}
+              <div className="flex-[2] flex items-center mr-5">
                 <div className="w-8 h-8 bg-gray-700 rounded mr-2 flex items-center justify-center text-lg">
                   <FiFileText size={18} className="text-gray-400" />
                 </div>
-                <div className="flex-grow max-w-[70%] overflow-hidden">
+                <div className="flex-grow overflow-hidden">
                   <span className="block break-all">{task?.task?.name}</span>
                 </div>
               </div>
-              <div className="flex-[15]">
-                <p style={{ color: task?.task?.statusColor }}>{task?.task?.status}</p>
+
+              {/* Status */}
+              <div className="flex-[1]">
+                <p style={{ color: task?.task?.statusColor }}>
+                  {task?.task?.status}
+                </p>
               </div>
-              <div className="flex-[25] text-gray-400">
+
+              {/* Last Modified */}
+              <div className="flex-[1] text-gray-400">
                 {Helper.formatEngDate(task?.task?.updatedAt)}
               </div>
-              <div className="flex-[25] text-gray-400">
+
+              {/* Deadline */}
+              <div className="flex-[1] text-gray-400">
                 {Helper.formatEngDate(task?.task?.expirationDate) || ""}
               </div>
-              <div className="flex-[5] flex justify-center">
+
+              {/* Actions */}
+              <div className="flex-[1] flex justify-end">
                 <FiMoreVertical size={18} className="text-gray-400" />
               </div>
             </div>

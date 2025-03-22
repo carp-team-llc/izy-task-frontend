@@ -1,33 +1,13 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import BarChartComponents from "../../component/chart/BarChartComponent";
-import SimpleLineChart from "../../component/chart/SimpleLineChart";
 import UseDailyChart from "../../hook/Api/task/Chart/useDailyChart";
 import UsingNotification from "./component/UsingNotifications";
 import UsingRoundChart from "./component/UsingRoundChart";
 
-interface TopStatProps {
-  title: string;
-  subtitle: string;
-  value: string;
-  bgColor: string;
-}
 interface BarVariables {
   status: any;
   createdAt: string;
 }
-
-const TopStat: React.FC<TopStatProps> = ({
-  title,
-  subtitle,
-  value,
-  bgColor,
-}) => (
-  <div className={`p-4 rounded-lg ${bgColor}`}>
-    <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
-    <p className="text-sm text-gray-600">{subtitle}</p>
-    <p className="text-xs mt-2 text-gray-500">{value}</p>
-  </div>
-);
 
 export default function Dashboard() {
   const [BarChartData, setBarChartData] = useState<string[]>([]);
@@ -104,33 +84,7 @@ export default function Dashboard() {
             <h2 className="text-lg font-semibold mb-4">Weekly Task</h2>
             <UsingRoundChart />
           </div>
-
-          {/* Project Deliveries */}
-          <div className="col-span-2 bg-[#1a1f37] rounded-lg p-4">
-            <h2 className="text-lg font-semibold mb-4">Project Deliveries</h2>
-            <SimpleLineChart />
-          </div>
-
-          {/* Top 10 and Notifications */}
-          <div className="space-y-6">
-            <TopStat
-              title="Top 10"
-              subtitle="Position in Dribble"
-              value="24% increase from last week"
-              bgColor="bg-orange-100"
-            />
-            <TopStat
-              title="26"
-              subtitle="New Employees Onboarded"
-              value="15% increase from last month"
-              bgColor="bg-blue-100"
-            />
-            <TopStat
-              title="500"
-              subtitle="New Clients Approached"
-              value="5% increase from last week"
-              bgColor="bg-blue-100"
-            />
+          <div className="col-span-3 flex justify-end">
             <UsingNotification />
           </div>
         </div>
