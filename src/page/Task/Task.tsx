@@ -1,8 +1,6 @@
-import ActivityChart from "../../component/chart/ActivityChart";
 import Header2 from "../../component/header/Header2";
-import TaskList from "../../component/tasklist/TaskList";
-import WeeklyTaskProgress from "../../component/tasklist/WeeklyTaskProgress";
 import RecentTask from "../../component/tasklist/RecentTask";
+import TaskList from "../../component/tasklist/TaskList";
 
 export default function Task() {
   return (
@@ -10,13 +8,9 @@ export default function Task() {
       <div className="flex-1 p-6">
         <Header2></Header2>
         <div className="flex space-x-4">
-          <div className="flex-1">
+          <div className="w-full flex flex-col space-y-4">
             <TaskList title="Personal Task" showAll />
             <RecentTask title="Recent Task" />
-          </div>
-          <div className="w-72">
-            <WeeklyTaskProgress />
-            <ActivityChart />
           </div>
         </div>
       </div>
