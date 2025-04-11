@@ -20,7 +20,7 @@ const projects: Project[] = [];
 const ProjectList: React.FC<{
   projects: Project[];
   onProjectClick: (project: Project) => void;
-}> = ({ projects, onProjectClick }) => {
+}> = ({ onProjectClick }) => {
   const {
     isLoading,
     isError,
@@ -28,7 +28,6 @@ const ProjectList: React.FC<{
     error,
     fetchNextPage,
     hasNextPage,
-    isFetchingNextPage,
   } = useProjectList({ where: {}, skip: 0, take: 10 });
   const [activeProject, setActiveProject] = useState<number | null>(null);
   useEffect(() => {
@@ -90,7 +89,7 @@ const ProjectList: React.FC<{
 
           {activeProject === project.id && (
             <div className="absolute top-10 right-0 bg-white p-4 rounded-lg shadow-lg z-10">
-              <SimpleForm />
+              <SimpleForm onHandleUpdate={() => {}} onHandleDelete={() => {}} />
             </div>
           )}
         </div>
@@ -102,7 +101,6 @@ const ProjectList: React.FC<{
 export default function ProjectDashboard() {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const handleProjectClick = (project: any) => {
     navigate(`/projectdetail/${project.id}`);

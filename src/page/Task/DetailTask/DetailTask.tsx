@@ -31,18 +31,18 @@ interface DetailTaskProps {
 
 const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
   const { data } = useTaskDetail({
-    id: task.id,
+    id: task?.id,
   });
   const { onUpdate } = useUpdateTask();
   const { onDelete } = useDeleteTask();
 
   const [status, setStatus] = useState<string | null>(null);
-  const [statusName, setStatusName] = useState<string | null>(null);
-  const [statusColor, setStatusColor] = useState<string | null>(null);
   const [isUpdate, setIsUpdate] = useState<boolean>(true);
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const [description, setDescription] = useState<string>(data?.body || "");
+
+  console.log("data ===> ", data);
 
   const handleUpdate = (isUpdate: boolean) => {
     setIsUpdate(isUpdate);
@@ -103,8 +103,6 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
   useEffect(() => {
     if (data) {
       setStatus(data.status);
-      setStatusName(data.statusName);
-      setStatusColor(data.statusColor);
       setDescription(data.body || "");
     }
   }, [data]);

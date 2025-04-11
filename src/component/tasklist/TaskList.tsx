@@ -1,151 +1,218 @@
-import React, { useEffect, useState } from "react";
-import { FiFileText, FiMoreVertical } from "react-icons/fi";
-import { NavLink } from "react-router-dom";
-import Helper from "../../constant/Helper";
-import usePersonalTaskList from "../../hook/Api/task/TaskManager/usePersonalTask";
-import DetailTask from "../../page/Task/DetailTask/DetailTask";
+"use client"
+
+import type React from "react"
+import { useState } from "react"
+import { FiFileText, FiMoreVertical, FiChevronLeft, FiChevronRight } from "react-icons/fi"
+import { NavLink } from "react-router-dom"
+import { motion, AnimatePresence } from "framer-motion"
+
+import Helper from "../../constant/Helper"
+import usePersonalTaskList from "../../hook/Api/task/TaskManager/usePersonalTask"
+import DetailTask from "../../page/Task/DetailTask/DetailTask"
+
 
 type TaskListProps = {
-  title: string;
-  showAll?: boolean;
-};
+  title: string
+  showAll?: boolean
+}
 
 const TaskList: React.FC<TaskListProps> = ({ title, showAll = false }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedTask, setSelectedTask] = useState<any>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const tasksPerPage = 10;
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedTask, setSelectedTask] = useState<any>(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const tasksPerPage = 10
 
   const handleTaskClick = (task: any) => {
-    setSelectedTask(task);
-    setIsModalOpen(true);
-  };
+    setSelectedTask(task)
+    setIsModalOpen(true)
+  }
 
   const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedTask(null);
-  };
+    setIsModalOpen(false)
+    setSelectedTask(null)
+  }
 
-  const {
-    isLoading,
-    isError,
-    data: tasks,
-    error,
-  } = usePersonalTaskList({ where: {}, skip: 0, take: 100 });
+  const { isLoading, isError, data: tasks, error } = usePersonalTaskList({ where: {}, skip: 0, take: 100 })
 
-  const totalTasks = tasks?.[0]?.tasks?.length || 0;
-  const totalPages = Math.ceil(totalTasks / tasksPerPage);
+  const totalTasks = tasks?.[0]?.tasks?.length || 0
+  const totalPages = Math.ceil(totalTasks / tasksPerPage)
 
   const handlePageChange = (page: number) => {
     if (page > 0 && page <= totalPages) {
-      setCurrentPage(page);
+      setCurrentPage(page)
     }
-  };
+  }
 
-  const currentTasks =
-    tasks?.[0]?.tasks?.slice(
-      (currentPage - 1) * tasksPerPage,
-      currentPage * tasksPerPage
-    ) || [];
+  const currentTasks = tasks?.[0]?.tasks?.slice((currentPage - 1) * tasksPerPage, currentPage * tasksPerPage) || []
 
-  if (isLoading) return <div>Loading tasks...</div>;
-  if (isError) return <div>Error loading tasks: {error?.message}</div>;
+  if (isLoading)
+    return (
+      <div className="bg-[#1a1f37] rounded-lg p-4 mb-3 min-h-[200px] flex items-center justify-center">
+        <div className="animate-pulse text-white">Loading tasks...</div>
+      </div>
+    )
+
+  if (isError)
+    return (
+      <div className="bg-[#1a1f37] rounded-lg p-4 mb-3 min-h-[200px] flex items-center justify-center">
+        <div className="text-red-400">Error loading tasks: {error?.message}</div>
+      </div>
+    )
 
   return (
-    <div className="bg-[#1a1f37] rounded-lg p-4 mb-3">
-      <div className="flex justify-between items-center mb-3">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="bg-[#1a1f37] rounded-lg p-4 mb-3 shadow-lg"
+    >
+      <div className="flex justify-between items-center mb-4">
         <h3 className="text-white text-lg font-semibold">{title}</h3>
         {showAll && (
           <NavLink to="/tasklist">
-            <button className="text-purple-500 text-sm">Show All</button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="text-purple-500 text-sm hover:text-purple-400 transition-colors duration-200"
+            >
+              Show All
+            </motion.button>
           </NavLink>
         )}
       </div>
-      <div className="overflow-x-auto">
-        <div className="flex flex-col">
+
+      <div className="overflow-x-auto rounded-lg">
+        <div className="min-w-full">
           {/* Header */}
-          <div className="flex text-gray-400 text-xs">
-            <div className="flex-[2] text-left pb-2 font-normal">Name</div>
-            <div className="flex-[1] text-left pb-2 font-normal">Status</div>
-            <div className="flex-[1] text-left pb-2 font-normal">
-              Last Modified
-            </div>
-            <div className="flex-[1] text-left pb-2 font-normal">Deadline</div>
-            <div className="flex-[1] text-left pb-2 font-normal">Actions</div>
+          <div className="grid grid-cols-12 text-gray-400 text-xs border-b border-gray-700 pb-2">
+            <div className="col-span-5 text-left font-medium px-2">Name</div>
+            <div className="col-span-2 text-left font-medium px-2">Status</div>
+            <div className="col-span-2 text-left font-medium px-2">Last Modified</div>
+            <div className="col-span-2 text-left font-medium px-2">Deadline</div>
+            <div className="col-span-1 text-right font-medium px-2">Actions</div>
           </div>
 
           {/* Rows */}
-          {currentTasks.map((task: any, index: number) => (
-            <div
-              key={index}
-              className="flex text-white text-sm py-2 cursor-pointer hover:bg-gray-700 hover:text-gray-200 transition duration-200"
-              onClick={() => handleTaskClick(task)}
-            >
-              {/* Name */}
-              <div className="flex-[2] flex items-center min-w-0">
-                <div className="w-8 h-8 bg-gray-700 rounded mr-2 flex items-center justify-center text-lg">
-                  <FiFileText size={18} className="text-gray-400" />
-                </div>
-                <div className="flex-grow overflow-hidden">
-                  <span className="block truncate">{task.name}</span>
-                </div>
-              </div>
+          <div className="divide-y divide-gray-800">
+            {currentTasks.length > 0 ? (
+              currentTasks.map((task: any, index: number) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.2, delay: index * 0.05 }}
+                  className="grid grid-cols-12 text-white text-sm py-3 cursor-pointer hover:bg-[#252a45] rounded-md transition-all duration-200"
+                  onClick={() => handleTaskClick(task)}
+                >
+                  {/* Name */}
+                  <div className="col-span-5 flex items-center px-2">
+                    <div className="w-8 h-8 bg-gray-700 rounded-md mr-3 flex items-center justify-center text-lg flex-shrink-0">
+                      <FiFileText size={16} className="text-gray-400" />
+                    </div>
+                    <div className="truncate">
+                      <span className="block truncate">{task.name}</span>
+                    </div>
+                  </div>
 
-              {/* Status */}
-              <div className="flex-[1] min-w-0">
-                <p style={{ color: task.statusColor }}>{task.status}</p>
-              </div>
+                  {/* Status */}
+                  <div className="col-span-2 flex items-center px-2">
+                    <div
+                      className="px-2 py-1 rounded-full text-xs font-medium"
+                      style={{
+                        backgroundColor: `${task.statusColor}20`,
+                        color: task.statusColor,
+                      }}
+                    >
+                      {task.status}
+                    </div>
+                  </div>
 
-              {/* Last Modified */}
-              <div className="flex-[1] text-gray-400 min-w-0">
-                {Helper.formatEngDate(task.updatedAt)}
-              </div>
+                  {/* Last Modified */}
+                  <div className="col-span-2 flex items-center text-gray-400 px-2 truncate">
+                    {Helper.formatEngDate(task.updatedAt)}
+                  </div>
 
-              {/* Deadline */}
-              <div className="flex-[1] text-gray-400 min-w-0">
-                {Helper.formatEngDate(task.expirationDate) || ""}
-              </div>
+                  {/* Deadline */}
+                  <div className="col-span-2 flex items-center text-gray-400 px-2 truncate">
+                    {Helper.formatEngDate(task.expirationDate) || "—"}
+                  </div>
 
-              {/* Actions */}
-              <div className="flex-[1] flex justify-end">
-                <FiMoreVertical size={18} className="text-gray-400" />
-              </div>
-            </div>
-          ))}
+                  {/* Actions */}
+                  <div className="col-span-1 flex justify-end items-center px-2">
+                    <motion.div
+                      whileHover={{ scale: 1.2 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="p-1 rounded-full hover:bg-gray-700"
+                    >
+                      <FiMoreVertical size={16} className="text-gray-400" />
+                    </motion.div>
+                  </div>
+                </motion.div>
+              ))
+            ) : (
+              <div className="py-8 text-center text-gray-500">No tasks available</div>
+            )}
+          </div>
         </div>
       </div>
 
-      {totalTasks > 10 && (
+      {totalTasks > tasksPerPage && (
         <div className="mt-4 bg-[#2a2f47] p-3 rounded-lg flex justify-between items-center">
-          <button
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="text-purple-500 text-sm"
+            className={`flex items-center gap-1 text-sm ${
+              currentPage === 1 ? "text-gray-600 cursor-not-allowed" : "text-purple-500 hover:text-purple-400"
+            } transition-colors duration-200`}
           >
-            Previous
-          </button>
+            <FiChevronLeft size={16} />
+            <span>Previous</span>
+          </motion.button>
+
           <span className="text-gray-400 text-sm">
             Page {currentPage} of {totalPages}
           </span>
-          <button
+
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="text-purple-500 text-sm"
+            className={`flex items-center gap-1 text-sm ${
+              currentPage === totalPages ? "text-gray-600 cursor-not-allowed" : "text-purple-500 hover:text-purple-400"
+            } transition-colors duration-200`}
           >
-            Next
-          </button>
+            <span>Next</span>
+            <FiChevronRight size={16} />
+          </motion.button>
         </div>
       )}
 
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center">
-          <div className="bg-[#0f0a2a] rounded-lg max-w-5xl p-4 w-full transition-transform transform scale-100 duration-300 ease-in-out">
-            <DetailTask task={selectedTask} onClose={closeModal} />
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
+      <AnimatePresence>
+        {isModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="bg-[#0f0a2a] rounded-lg max-w-5xl p-4 w-full max-h-[90vh] overflow-auto"
+            >
+              <DetailTask task={selectedTask} onClose={closeModal} />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  )
+}
 
-export default TaskList;
+export default TaskList
