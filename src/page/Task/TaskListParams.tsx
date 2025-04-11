@@ -1,5 +1,8 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+"use client"
+
+import type React from "react"
+import { useState } from "react"
+import { NavLink } from "react-router-dom"
 import {
   ArrowLeft,
   Plus,
@@ -9,19 +12,22 @@ import {
   BarChart3,
   MoreVertical,
   ChevronUp,
-} from "lucide-react";
-import CreateTaskList from "./CreateTaskList";
-import usePersonalTaskList from "../../hook/Api/task/TaskManager/useTaskListPagination"; // Import the hook
-import Helper from "../../constant/Helper";
+  Loader2,
+} from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
+import CreateTaskList from "./CreateTaskList"
+import usePersonalTaskList from "../../hook/Api/task/TaskManager/useTaskListPagination"
+import Helper from "../../constant/Helper"
 
 const TaskListParams: React.FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [hoveredRow, setHoveredRow] = useState<string | null>(null)
 
   const variables = {
     where: {},
     skip: 0,
     take: 10,
-  };
+  }
 
   const {
     data: tasks,
@@ -30,135 +36,290 @@ const TaskListParams: React.FC = () => {
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-  } = usePersonalTaskList(variables);
+  } = usePersonalTaskList(variables)
 
   const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
+    setIsModalOpen(true)
+  }
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+    setIsModalOpen(false)
+  }
 
   const mapDataToTasks = tasks.map((task) => {
-    return task.data;
-  });
+    return task.data
+  })
 
   const dataFlatmap = mapDataToTasks.flatMap((task) => {
-    return task.taskList;
-  });
+    return task.taskList
+  })
+
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { type: "spring", stiffness: 300, damping: 24 },
+    },
+  }
+
+  const tableRowVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.05,
+        duration: 0.3,
+        ease: "easeOut",
+      },
+    }),
+  }
 
   if (isLoading) {
     return (
-      <div className="text-white p-6 min-h-screen mt-24">Loading tasks...</div>
-    );
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="text-white p-6 min-h-screen flex items-center justify-center"
+      >
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 size={40} className="text-indigo-500 animate-spin" />
+          <p className="text-lg text-gray-300">Loading tasks...</p>
+        </div>
+      </motion.div>
+    )
   }
 
   if (isError) {
     return (
-      <div className="text-white p-6 min-h-screen mt-24">
-        Error loading tasks
-      </div>
-    );
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="text-white p-6 min-h-screen flex items-center justify-center"
+      >
+        <div className="bg-red-900/20 border border-red-800 rounded-lg p-6 max-w-md">
+          <p className="text-red-400 text-lg font-medium">Error loading tasks</p>
+          <p className="text-gray-400 mt-2">Please try again later or contact support if the problem persists.</p>
+        </div>
+      </motion.div>
+    )
   }
 
   return (
-    <div className="text-white p-6 min-h-screen">
-      <header className="flex items-center justify-between mb-6">
-        <div className="flex items-center space-x-4">
-          <NavLink to="/tasks" className="text-indigo-500 flex items-center">
-            <ArrowLeft />
-          </NavLink>
-          <h1 className="text-xl font-semibold">Task</h1>
-          <button
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+      className="text-white p-4 md:p-6 min-h-screen"
+    >
+      <motion.header
+        variants={itemVariants}
+        className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6"
+      >
+        <div className="flex flex-wrap items-center gap-4">
+          <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="relative">
+            <NavLink
+              to="/tasks"
+              className="text-indigo-500 flex items-center justify-center w-8 h-8 rounded-full bg-indigo-500/10 hover:bg-indigo-500/20 transition-colors duration-200"
+            >
+              <ArrowLeft size={18} />
+              <span className="sr-only">Back to Tasks</span>
+            </NavLink>
+            <motion.div
+              className="absolute inset-0 rounded-full bg-indigo-500/10"
+              initial={{ scale: 0 }}
+              whileHover={{ scale: 1.5, opacity: 0 }}
+              transition={{ duration: 0.5, repeat: Number.POSITIVE_INFINITY }}
+            />
+          </motion.div>
+
+          <h1 className="text-xl font-semibold">Task Lists</h1>
+
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
             onClick={handleOpenModal}
-            className="bg-indigo-600 text-white rounded-md px-3 py-1.5 text-sm flex items-center space-x-1"
+            className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-md px-3 py-1.5 text-sm flex items-center gap-2 transition-colors duration-200 shadow-lg shadow-indigo-900/20"
           >
             <Plus size={16} />
             <span>Create New Task List</span>
-          </button>
-          <button className="bg-[#2D2D3D] text-white rounded-md px-3 py-1.5 text-sm flex items-center space-x-1">
+          </motion.button>
+
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            className="bg-[#2D2D3D] hover:bg-[#3D3D4D] text-white rounded-md px-3 py-1.5 text-sm flex items-center gap-2 transition-colors duration-200"
+          >
             <Upload size={16} />
             <span>Import</span>
-          </button>
+          </motion.button>
         </div>
-        <div className="flex items-center space-x-4">
-          <Calendar size={20} className="text-gray-400" />
-          <LayoutGrid size={20} className="text-gray-400" />
-          <BarChart3 size={20} className="text-gray-400" />
-        </div>
-      </header>
 
-      <div className="bg-[#1E1E2D] rounded-lg p-4">
+        <div className="flex items-center gap-3">
+          {[
+            { icon: Calendar, tooltip: "Calendar View" },
+            { icon: LayoutGrid, tooltip: "Grid View" },
+            { icon: BarChart3, tooltip: "Analytics" },
+          ].map((item, index) => (
+            <motion.button
+              key={index}
+              whileHover={{ scale: 1.15, y: -2 }}
+              whileTap={{ scale: 0.9 }}
+              className="relative w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-700/50 transition-colors duration-200 group"
+            >
+              <item.icon size={20} className="text-gray-400 group-hover:text-white transition-colors duration-200" />
+              <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                {item.tooltip}
+              </span>
+            </motion.button>
+          ))}
+        </div>
+      </motion.header>
+
+      <motion.div variants={itemVariants} className="bg-[#1E1E2D] rounded-lg p-4 shadow-xl border border-gray-800/50">
         <h2 className="text-xl font-semibold mb-4">Task List</h2>
-        <table className="w-full">
-          <thead>
-            <tr className="text-left text-gray-400 text-sm">
-              <th className="pb-3 font-medium">
-                Name <ChevronUp size={14} className="inline ml-1" />
-              </th>
-              <th className="pb-3 font-medium">
-                Last Modified <ChevronUp size={14} className="inline ml-1" />
-              </th>
-              <th className="pb-3 font-medium">
-                Deadline <ChevronUp size={14} className="inline ml-1" />
-              </th>
-              <th className="pb-3"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {dataFlatmap.map((task: any) => (
-              <tr
-                key={task.id}
-                className="border-t border-gray-700 hover:bg-gray-700"
-              >
-                <td className="py-3 flex items-center space-x-3">
-                  <NavLink
-                    to={`/tasklist/${task.id}`} // Navigate to DetailTaskList with task ID
-                    className="flex items-center space-x-3 hover:bg-gray-700 rounded-lg p-2" // Add hover effect
-                  >
-                    <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold">
-                      <img
-                        src={task?.avatar}
-                        style={{ borderRadius: "50%", width: "32px", height: "32px"  }}
-                      />
-                    </div>
-                    <span>{task.name}</span>
-                  </NavLink>
-                </td>
-                <td className="py-3 text-gray-400">
-                  {Helper.formatEngDate(task.updatedAt)}
-                </td>
-                <td className="py-3 text-gray-400">
-                  {Helper.formatEngDate(task.createdAt)}
-                </td>
-                <td className="py-3 text-right">
-                  <button className="text-gray-400 ">
-                    <MoreVertical size={16} />
-                  </button>
-                </td>
+
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[600px]">
+            <thead>
+              <tr className="text-left text-gray-400 text-sm">
+                <th className="pb-3 w-[45%] font-medium">
+                  <div className="flex items-center gap-1 cursor-pointer hover:text-white transition-colors duration-200">
+                    Name <ChevronUp size={14} className="inline" />
+                  </div>
+                </th>
+                <th className="pb-3 w-[25%] font-medium">
+                  <div className="flex items-center gap-1 cursor-pointer hover:text-white transition-colors duration-200">
+                    Last Modified <ChevronUp size={14} className="inline" />
+                  </div>
+                </th>
+                <th className="pb-3 w-[25%] font-medium">
+                  <div className="flex items-center gap-1 cursor-pointer hover:text-white transition-colors duration-200">
+                    Deadline <ChevronUp size={14} className="inline" />
+                  </div>
+                </th>
+                <th className="pb-3 w-[5%]"></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              <AnimatePresence>
+                {dataFlatmap.map((task: any, index: number) => (
+                  <motion.tr
+                    key={task.id}
+                    custom={index}
+                    variants={tableRowVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit={{ opacity: 0, y: -10 }}
+                    onMouseEnter={() => setHoveredRow(task.id)}
+                    onMouseLeave={() => setHoveredRow(null)}
+                    className={`border-t border-gray-700/50 transition-colors duration-200 ${
+                      hoveredRow === task.id ? "bg-gray-700/30" : ""
+                    }`}
+                  >
+                    <td className="py-3">
+                      <NavLink
+                        to={`/tasklist/${task.id}`}
+                        className="flex items-center gap-3 p-2 rounded-lg transition-all duration-200 hover:bg-gray-600/30"
+                      >
+                        <motion.div
+                          whileHover={{ scale: 1.1 }}
+                          className="w-8 h-8 rounded-full flex items-center justify-center overflow-hidden border-2 border-transparent hover:border-indigo-500 transition-all duration-200"
+                        >
+                          <img
+                            src={task?.avatar || "/placeholder.svg"}
+                            alt={task.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </motion.div>
+                        <span className="font-medium">{task.name}</span>
+                      </NavLink>
+                    </td>
+                    <td className="py-3 text-gray-400">{Helper.formatEngDate(task.updatedAt)}</td>
+                    <td className="py-3 text-gray-400">{Helper.formatEngDate(task.createdAt)}</td>
+                    <td className="py-3 text-right">
+                      <motion.button
+                        whileHover={{ scale: 1.2, rotate: 15 }}
+                        whileTap={{ scale: 0.9 }}
+                        className="text-gray-400 hover:text-white p-1 rounded-full hover:bg-gray-700/50 transition-colors duration-200"
+                      >
+                        <MoreVertical size={16} />
+                      </motion.button>
+                    </td>
+                  </motion.tr>
+                ))}
+              </AnimatePresence>
+            </tbody>
+          </table>
+        </div>
 
         {/* Load more button */}
         {hasNextPage && (
-          <div className="flex justify-center mt-4">
-            <button
+          <motion.div variants={itemVariants} className="flex justify-center mt-6">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => fetchNextPage()}
-              className="bg-indigo-600 text-white rounded-md px-4 py-2 text-sm"
               disabled={isFetchingNextPage}
+              className={`relative overflow-hidden ${
+                isFetchingNextPage ? "bg-gray-700 text-gray-300" : "bg-indigo-600 hover:bg-indigo-700 text-white"
+              } rounded-md px-6 py-2 text-sm font-medium transition-colors duration-200 shadow-lg shadow-indigo-900/20`}
             >
-              {isFetchingNextPage ? "Loading more..." : "Load More"}
-            </button>
-          </div>
+              {isFetchingNextPage ? (
+                <span className="flex items-center gap-2">
+                  <Loader2 size={16} className="animate-spin" />
+                  Loading more...
+                </span>
+              ) : (
+                "Load More"
+              )}
+              <motion.div
+                className="absolute inset-0 bg-white"
+                initial={{ x: "-100%", opacity: 0.3 }}
+                animate={!isFetchingNextPage ? { x: ["100%", "-100%"] } : {}}
+                transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY, repeatDelay: 1 }}
+              />
+            </motion.button>
+          </motion.div>
         )}
-      </div>
+      </motion.div>
 
-      {isModalOpen && <CreateTaskList onClose={handleCloseModal} />}
-    </div>
-  );
-};
+      <AnimatePresence>
+        {isModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="w-full max-w-lg"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <CreateTaskList onClose={handleCloseModal} />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  )
+}
 
-export default TaskListParams;
+export default TaskListParams

@@ -37,6 +37,7 @@ export default {
   // #region project
   project_list: "api/v1/project/project_list",
   create_project: "api/v1/project/create_project",
+  project_detail: "api/v1/project/project_detail",
   metric: "api/v1/project/top_insight",
   todaytask: "api/v1/project/today_tasks",
   total_task_chart: "api/v1/project/total_tasks_chart",

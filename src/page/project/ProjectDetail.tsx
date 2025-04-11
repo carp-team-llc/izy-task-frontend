@@ -1,7 +1,9 @@
 "use client";
 
-import { useParams } from "react-router-dom";
-import { useState, useRef, useEffect } from "react";
+import { ArrowLeft } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { NavLink, useParams } from "react-router-dom";
+import UseProjectDetail from "../../hook/Api/project/useProjectDetail";
 import OverviewTab from "./Component/Detail/Overview";
 import ProjectTaskList from "./Component/Detail/ProjectTask/ProjectTaskList";
 import KanBan from "./Component/Kanban/Kanban";
@@ -14,9 +16,14 @@ const Tabs = {
 const ProjectDetail = () => {
   const [activeTab, setActiveTab] = useState("Overview");
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [direction, setDirection] = useState<'left' | 'right'>('right');
+  const [direction, setDirection] = useState<"left" | "right">("right");
   const { id } = useParams();
   const contentRef = useRef<HTMLDivElement>(null);
+  const { detailProject } = UseProjectDetail({ id: id as string });
+
+  console.log("detailProject ====> ", detailProject);
+
+  console.log("id ====> ", id);
 
   useEffect(() => {
     if (contentRef.current) {
@@ -31,11 +38,11 @@ const ProjectDetail = () => {
   const handleTabChange = (newTab: string) => {
     const currentIndex = Object.keys(Tabs).indexOf(activeTab);
     const newIndex = Object.keys(Tabs).indexOf(newTab);
-    setDirection(newIndex > currentIndex ? 'right' : 'left');
+    setDirection(newIndex > currentIndex ? "right" : "left");
     setActiveTab(newTab);
   };
 
-  const TabContent = Tabs[activeTab];
+  const TabContent = Tabs[activeTab as keyof typeof Tabs];
 
   return (
     <div className="min-h-screen bg-[#0a061f] text-white p-4">
@@ -43,7 +50,12 @@ const ProjectDetail = () => {
         {/* Header */}
         <div className="flex flex-wrap justify-between items-center gap-4">
           <div className="flex items-center gap-4">
-            <h1 className="text-xl md:text-2xl font-bold">{id}</h1>
+            <NavLink to="/projectboard" className="text-gray-400 hover:text-white transition-colors duration-200">
+              <ArrowLeft size={18} />
+            </NavLink>
+            <h1 className="text-xl md:text-2xl font-bold">
+              {detailProject?.name}
+            </h1>
             <div className="flex gap-2">
               <button className="bg-gray-700/50 rounded-full p-2">
                 <svg
@@ -115,10 +127,10 @@ const ProjectDetail = () => {
             ref={contentRef}
             className={`w-full transition-all duration-300 ease-in-out ${
               isTransitioning
-                ? direction === 'right'
-                  ? 'opacity-0 translate-x-full'
-                  : 'opacity-0 -translate-x-full'
-                : 'opacity-100 translate-x-0'
+                ? direction === "right"
+                  ? "opacity-0 translate-x-full"
+                  : "opacity-0 -translate-x-full"
+                : "opacity-100 translate-x-0"
             }`}
           >
             <TabContent />

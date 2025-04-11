@@ -11,9 +11,7 @@ type Response = {
     data: any;
 }
 
-
 const useTodayTask = (variables: Variables) => {
-    
     const {
         data,
         error,
@@ -23,22 +21,21 @@ const useTodayTask = (variables: Variables) => {
         isLoading,
         refetch,
     } = useQuery({
-        queryKey: [],
+        queryKey: ['todayTask', variables.projectId, variables.today],
         queryFn: async () => {
             const response = await rootApi.post<Response>(endpoint.todaytask, variables);
-            return response.data?.data
+            return response.data?.data || []
         },
-        
     });
     return {
         isLoading,
         isError,
-        data: data,
+        data: data || [],
         error,
         refetch,
         isFetching,
         isRefetching
     };
-
 };
+
 export default useTodayTask;
