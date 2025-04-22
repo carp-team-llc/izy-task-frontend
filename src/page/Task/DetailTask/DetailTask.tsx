@@ -1,7 +1,7 @@
 import { X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
-import "react-quill/dist/quill.snow.css";
+
 import CommentDetailTask from "../../../component/interactions/CommentDetailTask";
 import ShowFiles from "../../../component/ShowFiles/ShowFiles";
 import Helper from "../../../constant/Helper";
