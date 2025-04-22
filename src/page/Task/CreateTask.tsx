@@ -1,8 +1,9 @@
 import { Calendar, Clock, X } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect,useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import ReactQuill from "react-quill";
+import Quill from "quill";
+import "quill/dist/quill.snow.css";
 import { useNavigate } from "react-router-dom";
 import CustomDropList from "../../component/DropList/CustomDropList";
 import { notifyError, notifySuccess } from "../../component/toastify/Toastify";
@@ -33,10 +34,35 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({
   const [isUploadLoading, setIsUploadLoading] = useState(false);
 
   const success = useNavigate();
-
+  const quillRef = useRef<HTMLDivElement | null>(null);
+  const quillInstanceRef = useRef<Quill | null>(null);
   const { onCreate, isError, error } = useCreateTask();
   const { data: choose } = useChooseTaskList();
+  useEffect(() => {
+    if (quillRef.current && !quillInstanceRef.current) {
+      quillInstanceRef.current = new Quill(quillRef.current, {
+        theme: "snow",
+        modules: {
+          toolbar: [
+            [{ header: [1, 2, false] }],
+            ["bold", "italic", "underline", "strike", "blockquote"],
+            [
+              { list: "ordered" },
+              { list: "bullet" },
+              { indent: "-1" },
+              { indent: "+1" },
+            ],
+            ["link", "image"],
+            ["clean"],
+          ],
+        },
+      });
 
+      quillInstanceRef.current.on("text-change", () => {
+        setTaskDescription(quillInstanceRef.current!.root.innerHTML);
+      });
+    }
+  }, []);
   const handleUploadComplete = (urls: string[]) => {
     setImageUrls(urls);
   };
@@ -152,26 +178,10 @@ const CreateTask: React.FC<CreateNewTaskModalProps> = ({
           <div>
             <h2 className="text-sm font-semibold mb-2">Description</h2>
             <div className="w-full">
-              <ReactQuill
-                theme="snow"
-                value={taskDescription}
-                onChange={setTaskDescription}
-                className="bg-[#1a1438] text-white w-full"
-                modules={{
-                  toolbar: [
-                    [{ header: [1, 2, false] }],
-                    ["bold", "italic", "underline", "strike", "blockquote"],
-                    [
-                      { list: "ordered" },
-                      { list: "bullet" },
-                      { indent: "-1" },
-                      { indent: "+1" },
-                    ],
-                    ["link", "image"],
-                    ["clean"],
-                  ],
-                }}
-              />
+            <div
+                ref={quillRef}
+                className="w-full bg-[#1a1438] text-white"
+              ></div>
             </div>
           </div>
 
