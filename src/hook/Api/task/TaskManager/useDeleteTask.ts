@@ -2,7 +2,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import rootApi from '../../../../services/initApi'
 import endpoint from '../../../../services/endpoint'
 import { notifyError, notifySuccess } from "../../../../component/toastify/Toastify";
-import { useAuth } from "../../../../services/authContext";
 
 type DeleteTaskParams = {
     id?: string;
@@ -13,15 +12,13 @@ type Respsone = {
 }
 
 const useDeleteTask = () => {
-    const { token } = useAuth();
     const QueryClient = useQueryClient();
     const {isError, data, error, mutateAsync } = useMutation({
         mutationFn: (variables: DeleteTaskParams) => {
-            const headers = token ? { Authorization: `Bearer ${token}` } : {};
             return rootApi.post<DeleteTaskParams, Respsone>(
                 endpoint.deletetask,
                 variables,
-                { headers }
+                {  withCredentials: true }
             )
         },
         onSuccess: async (e: any) => {

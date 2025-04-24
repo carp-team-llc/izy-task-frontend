@@ -45,6 +45,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     setIsLoggedIn(false);
   };
 
+
   const login = () => {};
 
   const logout = () => {

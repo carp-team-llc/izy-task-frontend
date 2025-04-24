@@ -2,7 +2,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { notifyError, notifySuccess } from "../../../../component/toastify/Toastify";
 import endpoint from '../../../../services/endpoint';
 import rootApi from '../../../../services/initApi';
-import { useAuth } from "../../../../services/authContext";
 
 type CreateTaskParams = {
     name: string;
@@ -15,15 +14,13 @@ type Respsone = {
 }
 
 const useCreateTask = () => {
-    const { token } = useAuth();
     const QueryClient = useQueryClient();
     const {isError, data, error, mutateAsync } = useMutation({
         mutationFn: (variables: CreateTaskParams) => {
-            const headers = token ? { Authorization: `Bearer ${token}` } : {};
             return rootApi.post<CreateTaskParams, Respsone>(
                 endpoint.createtask,
                 variables,
-                { headers }
+                {  withCredentials: true }
             )
         },
         onSuccess: async (e: any) => {

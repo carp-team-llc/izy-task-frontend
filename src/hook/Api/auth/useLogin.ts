@@ -3,7 +3,10 @@ import endpoint from "../../../services/endpoint";
 import useApi from "../../../services/initApi";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../services/authContext";
-import { notifyError, notifySuccess } from "../../../component/toastify/Toastify";
+import {
+  notifyError,
+  notifySuccess,
+} from "../../../component/toastify/Toastify";
 
 type LoginParams = {
   email: string;
@@ -19,7 +22,9 @@ const useLogin = () => {
   const success = useNavigate();
   const { isError, data, error, mutateAsync } = useMutation({
     mutationFn: (variables: LoginParams) => {
-      return useApi.post<LoginParams, Response>(endpoint.login, variables);
+      return useApi.post<LoginParams, Response>(endpoint.login, variables, {
+        withCredentials: true,
+      });
     },
     onSuccess: (e: any) => {
       notifySuccess("Login success");
@@ -27,7 +32,6 @@ const useLogin = () => {
       success("/dashboard");
     },
     onError: (e: any) => {
-
       const errorCode = e?.response?.data?.errorCode;
 
       if (errorCode === "PASSWORD_INCORRECT") {
