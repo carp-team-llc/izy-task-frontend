@@ -1,5 +1,3 @@
-"use client";
-
 import { ArrowLeft } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
@@ -20,10 +18,6 @@ const ProjectDetail = () => {
   const { id } = useParams();
   const contentRef = useRef<HTMLDivElement>(null);
   const { detailProject } = UseProjectDetail({ id: id as string });
-
-  console.log("detailProject ====> ", detailProject);
-
-  console.log("id ====> ", id);
 
   useEffect(() => {
     if (contentRef.current) {
