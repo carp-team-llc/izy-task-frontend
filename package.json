@@ -31,7 +31,7 @@
     "@types/styled-jsx": "^3.4.4",
     "@typescript-eslint/eslint-plugin": "^8.10.0",
     "@typescript-eslint/parser": "^8.10.0",
-    "axios": "^1.7.7",
+    "axios": "^1.8.2",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "express": "^5.1.0",
