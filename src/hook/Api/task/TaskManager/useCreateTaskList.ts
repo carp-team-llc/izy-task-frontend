@@ -6,7 +6,6 @@ import {
   notifyError,
   notifySuccess,
 } from "../../../../component/toastify/Toastify";
-import { useAuth } from "../../../../services/authContext";
 
 type CreateTaskParams = {
   name: string;
@@ -18,16 +17,14 @@ type Respsone = {
 };
 
 const useCreateTaskList = () => {
-  const { token } = useAuth();
   const success = useNavigate();
   const QueryClient = useQueryClient();
   const { isError, data, error, mutateAsync } = useMutation({
     mutationFn: (variables: CreateTaskParams) => {
-      const headers = token ? { Authorization: `Bearer ${token}` } : {};
       return rootApi.post<CreateTaskParams, Respsone>(
         endpoint.createtasklist,
         variables,
-        { headers }
+        {  withCredentials: true }
       );
     },
     onSuccess: (e: any) => {

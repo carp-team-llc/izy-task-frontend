@@ -5,7 +5,6 @@ import {
 } from "../../../component/toastify/Toastify";
 import endpoint from "../../../services/endpoint";
 import rootApi from "../../../services/initApi";
-import { useAuth } from "../../../services/authContext";
 
 type CreateProjectParams = {
   name: string;
@@ -13,7 +12,7 @@ type CreateProjectParams = {
   avatar: string;
   deadline: string;
   permission: string;
-  timeworking: number   ;
+  timeworking: number;
   member: string[];
   tasks: any;
   startTime: string;
@@ -23,15 +22,13 @@ type Respsone = {
 };
 
 const useCreateProject = () => {
-  const { token } = useAuth();
   const QueryClient = useQueryClient();
   const { isError, data, error, mutateAsync } = useMutation({
     mutationFn: (variables: CreateProjectParams) => {
-      const headers = token ? { Authorization: `Bearer ${token}` } : {};
       return rootApi.post<CreateProjectParams, Respsone>(
         endpoint.create_project,
         variables,
-        { headers }
+        { withCredentials: true }
       );
     },
     onSuccess: async (e: any) => {
