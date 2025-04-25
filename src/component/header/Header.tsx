@@ -19,12 +19,12 @@ const Header = (props: headerAppProps) => {
 
   const navigateTo = useNavigate();
 
-  const { isLoggedIn, token, logout } = useAuth();
+  const { isLoggedIn, logout } = useAuth();
   useEffect(() => {
-    if (token) {
+    if (isLoggedIn) {
       setIsDropdownOpen(false);
     }
-  }, [token]);
+  }, [isLoggedIn]);
 
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 

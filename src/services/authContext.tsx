@@ -5,12 +5,11 @@ import {
   ReactNode,
   useEffect,
 } from "react";
-import { notifySuccess } from "../component/toastify/Toastify";
+import { notifyError, notifySuccess } from "../component/toastify/Toastify";
+import UseLogOut from "../hook/Api/auth/useLogout";
+import UseCheckLogin from "../hook/Api/auth/useCheckLogin";
 
 interface AuthContextType {
-  token: string | null;
-  setToken: (token: string) => void;
-  removeToken: () => void;
   isLoggedIn: boolean;
   login: () => void;
   logout: () => void;
@@ -21,45 +20,48 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [token, setUpdateToken] = useState<string | null>(
-    localStorage.getItem("AUTH_IZY_TASK") || null
-  );
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { onLogout } = UseLogOut();
+  const { me } = UseCheckLogin();
+
+  const isUserLoggedIn = async () => {
+    try {
+      const res = await me();
+      if (res?.isLogin) {
+        setIsLoggedIn(true);
+        setIsAuthenticated(true);
+      } else {
+        setIsLoggedIn(false);
+        setIsAuthenticated(false);
+      }
+    } catch (error) {
+      console.error("User not logged in!");
+      setIsAuthenticated(false);
+      setIsLoggedIn(false);
+    }
+  };
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("AUTH_IZY_TASK") || null;
-    setUpdateToken(storedToken);
-    setIsLoggedIn(!!storedToken);
+    isUserLoggedIn();
   }, []);
-
-  const handleSetToken = (newToken: string) => {
-    localStorage.setItem("AUTH_IZY_TASK", newToken);
-    setUpdateToken(newToken);
-    setIsLoggedIn(true);
-  };
-
-  const isAuthenticated = !!token;
-
-  const handleRemoveToken = () => {
-    localStorage.removeItem("AUTH_IZY_TASK");
-    setUpdateToken(null);
-    setIsLoggedIn(false);
-  };
-
 
   const login = () => {};
 
   const logout = () => {
-    notifySuccess("Logout success!")
-    handleRemoveToken();
+    try {
+      onLogout();
+      notifySuccess("Logout success!");
+      setIsAuthenticated(false);
+      setIsLoggedIn(false);
+    } catch (err) {
+      notifyError("Error!");
+    }
   };
 
   return (
     <AuthContext.Provider
       value={{
         isAuthenticated,
-        token,
-        setToken: handleSetToken,
-        removeToken: handleRemoveToken,
         isLoggedIn,
         login,
         logout,
