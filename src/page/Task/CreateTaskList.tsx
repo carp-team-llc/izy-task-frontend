@@ -78,9 +78,9 @@ const CreateTaskList: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
           </button>
         </div>
 
-        <div className="p-3 space-y-3">
+        <div className="p-3 text-start space-y-3">
           <div className="mb-5">
-            <label className="block text-sm font-medium mb-3 text-white">
+            <label className=" block text-start text-sm font-medium mb-3 text-white ">
               Name Task List
             </label>
             <input
@@ -93,7 +93,7 @@ const CreateTaskList: React.FC<CreateNewTaskModalProps> = ({ onClose }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-3 text-white">
+            <label className="block text-sm text-start font-medium mb-3 text-white">
               Description:
             </label>
             <textarea
