@@ -108,7 +108,7 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
   }, [data]);
 
   return (
-    <div className="text-white max-w-5xl max-h-max mx-auto px-2 py-1.5">
+    <div className="text-white  text-start max-w-5xl max-h-max mx-auto px-2 py-1.5">
       <div className="bg-[#0f0a2a] rounded-lg overflow-hidden flex flex-col h-[700px]">
         <div className="flex flex-row justify-between">
           <div className="flex flex-row px-1 pb-1">
