@@ -14,6 +14,7 @@ interface AuthContextType {
   login: () => void;
   logout: () => void;
   isAuthenticated: boolean;
+  refetchAuth: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -65,6 +66,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         isLoggedIn,
         login,
         logout,
+        refetchAuth: isUserLoggedIn,
       }}
     >
       {children}
