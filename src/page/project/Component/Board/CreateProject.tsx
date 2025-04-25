@@ -151,7 +151,7 @@ const CreateProject: React.FC<CreateNewTaskModalProps> = ({
   today.setHours(0, 0, 0, 0);
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 z-50">
+    <div className="fixed inset-0 text-start bg-black bg-opacity-50 flex items-center justify-center p-2 z-50">
       <div
         className="bg-[#1E2139] rounded-lg w-full scrollbar-hide p-3"
         style={{ maxWidth: "800px", maxHeight: "90vh", overflowY: "auto" }}
