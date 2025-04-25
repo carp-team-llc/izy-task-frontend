@@ -1,5 +1,7 @@
 export default {
   login: "api/v1/auth/login",
+  logout: "api/v1/auth/logout",
+  checkLogin: "api/v1/auth/me",
   register: "api/v1/auth/register",
   resend_verification: "api/v1/auth/authentication/resend_verify_email",
   forgot_password: "api/v1/auth/authentication/forgot_password",

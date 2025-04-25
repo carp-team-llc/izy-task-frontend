@@ -12,21 +12,11 @@ const AxiosClient = (url: string, headers = {}) => {
       accept: "*/*",
       ...headers,
     },
+    withCredentials: true,
   });
 
   api.interceptors.request.use(
     async (config) => {
-      const token = await localStorage.getItem("AUTH_IZY_TASK")
-      if (!token) {
-        console.log("Need login!")
-      }
-      try {
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`;
-        }
-      } catch (err) {
-        console.error("Error in handle auth: ", err)
-      }
       return config;
     },
     (error) => Promise.reject(error)
@@ -34,16 +24,10 @@ const AxiosClient = (url: string, headers = {}) => {
 
   api.interceptors.response.use(
     (response) => {
-      console.log("Response:", response); // nhớ xoá cái này nha đmmm
-
       return response;
     },
     (error) => {
-      if (error.response && error.response.status === 401) {
-        // const { removeToken } = useAuth();
-        // removeToken();
-        // window.location.href = '/login';
-      }
+      if (error.response && error.response.status === 401) {}
 
       return Promise.reject(error);
     }
