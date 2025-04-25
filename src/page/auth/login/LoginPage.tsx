@@ -31,6 +31,7 @@ const LoginPage = () => {
     event.preventDefault();
     try {
       await onLogin(input);
+      navigateTo("/dashboard");
     } catch (err) {}
   };
   return (

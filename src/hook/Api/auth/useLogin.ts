@@ -1,12 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
-import endpoint from "../../../services/endpoint";
-import useApi from "../../../services/initApi";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../../services/authContext";
 import {
   notifyError,
   notifySuccess,
 } from "../../../component/toastify/Toastify";
+import endpoint from "../../../services/endpoint";
+import useApi from "../../../services/initApi";
+import { useAuth } from "../../../services/authContext";
 
 type LoginParams = {
   email: string;
@@ -18,17 +18,17 @@ type Response = {
 };
 
 const useLogin = () => {
-  const { setToken } = useAuth();
   const success = useNavigate();
+  const { refetchAuth } = useAuth(); 
   const { isError, data, error, mutateAsync } = useMutation({
     mutationFn: (variables: LoginParams) => {
       return useApi.post<LoginParams, Response>(endpoint.login, variables, {
         withCredentials: true,
       });
     },
-    onSuccess: (e: any) => {
+    onSuccess: async  () => {
       notifySuccess("Login success");
-      setToken(e?.data?.accessToken);
+      await refetchAuth();
       success("/dashboard");
     },
     onError: (e: any) => {
