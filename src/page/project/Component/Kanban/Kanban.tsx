@@ -76,15 +76,20 @@ const KanBan: React.FC = () => {
       const taskId = e.dataTransfer.getData("taskId");
       if (!taskId || taskId !== draggedTask) return;
 
-      setTasks((prevTasks) =>
-        prevTasks.map((task) =>
-          task.id === taskId ? { ...task, status: targetStatus } : task
+      const task = tasks.find((t) => t.id === taskId);
+      if (!task || task.status === targetStatus) return;
+
+      setTasks((prev) =>
+        prev.map((t) =>
+          t.id === taskId ? { ...t, status: targetStatus } : t
         )
       );
       // Reset drag state after successful drop
       setDraggedTask(null);
       setDraggedTaskData(null);
       setPreviewPosition(null);
+
+      try {} catch (error) {}
     },
     [draggedTask]
   );
