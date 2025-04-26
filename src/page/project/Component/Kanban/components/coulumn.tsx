@@ -1,11 +1,11 @@
 // src/components/Kanban/component/Column.tsx
 import React, { useState } from "react";
-import { Task, Column as ColumnType, StatusId } from "./data";
+import { Column as ColumnType, StatusId, type TaskResponse } from "./data";
 import TaskCard from "./TaskCard";
 
 interface ColumnProps {
   column: ColumnType;
-  tasks: Task[];
+  tasks: TaskResponse[];
   draggedTask: string | null;
   handleDragStart: (e: React.DragEvent<HTMLDivElement>, taskId: string) => void;
   handleDrop: (

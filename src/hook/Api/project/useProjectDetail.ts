@@ -15,7 +15,6 @@ const UseProjectDetail = (variables: Variables) => {
     queryKey: ['projectDetail', variables.id],
     queryFn: async () => {
       const response = await rootApi.post<Variables, Response>(endpoint.project_detail, variables);
-      console.log("response ====> ", response.data);
       return response.data;
     },
   });

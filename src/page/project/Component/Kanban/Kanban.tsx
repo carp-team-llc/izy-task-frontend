@@ -1,28 +1,14 @@
 import React, {
-  useState,
   useCallback,
-  useRef,
   useEffect,
   useMemo,
+  useRef,
+  useState,
 } from "react";
-import Column from "./components/coulumn";
-import TaskCard from "./components/TaskCard";
-import { Task, Column as ColumnType, StatusId } from "./components/data";
 import useGetProjectTasks from "../../../../hook/Api/project/useGetProjectTasks";
-
-// const initialTasks: Task[] = [
-//   // ... (same task data as before)
-//   { id: "task-1", title: "Task 1", status: "new", number: 21 },
-//   { id: "task-3", title: "Task 3", status: "new", number: 18 },
-//   { id: "task-4", title: "Task 4", status: "new", number: 17 },
-//   { id: "task-8", title: "Task 8", status: "doing", number: 11 },
-//   { id: "task-7", title: "Task 7", status: "doing", number: 12 },
-//   { id: "task-2", title: "Task 2", status: "review", number: 20 },
-//   { id: "task-6", title: "Task 6", status: "review", number: 13 },
-//   { id: "task-5", title: "Task 5", status: "pending", number: 14 },
-//   { id: "task-9", title: "Task 9", status: "pending", number: 10 },
-//   { id: "task-10", title: "Task 10", status: "completed", number: 9 },
-// ];
+import Column from "./components/coulumn";
+import { Column as ColumnType, StatusId, type TaskResponse } from "./components/data";
+import TaskCard from "./components/TaskCard";
 
 const columnsData: ColumnType[] = [
   // ... (same column data as before)
@@ -40,9 +26,9 @@ type KanbanProps = {
 };
 
 const KanBan = ({ projectId }: KanbanProps) => {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<TaskResponse[]>([]);
   const [draggedTask, setDraggedTask] = useState<string | null>(null);
-  const [draggedTaskData, setDraggedTaskData] = useState<Task | null>(null);
+  const [draggedTaskData, setDraggedTaskData] = useState<TaskResponse | null>(null);
   const [previewPosition, setPreviewPosition] = useState<{
     x: number;
     y: number;
@@ -115,7 +101,7 @@ const KanBan = ({ projectId }: KanbanProps) => {
 
   const tasksByStatus = useMemo(() => {
     // record Utility Type
-    const result: Record<StatusId, Task[]> = {
+    const result: Record<StatusId, TaskResponse[]> = {
       new: [],
       doing: [],
       pending: [],
@@ -127,8 +113,8 @@ const KanBan = ({ projectId }: KanbanProps) => {
 
     // lặp lấy task và phân loại task theo status
     tasks.forEach((task) => {
-      if (result[task.status]) {
-        result[task.status].push(task);
+      if (result[task.status as StatusId]) {
+        result[task.status as StatusId].push(task);
       }
     });
 
@@ -141,7 +127,6 @@ const KanBan = ({ projectId }: KanbanProps) => {
         ...task,
         status: task.status.toLowerCase() as StatusId,
       }));
-      console.log("Normalized tasks:", normalizedData); 
       setTasks(normalizedData);
     }
   }, [data]);
