@@ -1,21 +1,28 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, {
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+  useMemo,
+} from "react";
 import Column from "./components/coulumn";
 import TaskCard from "./components/TaskCard";
 import { Task, Column as ColumnType, StatusId } from "./components/data";
+import useGetProjectTasks from "../../../../hook/Api/project/useGetProjectTasks";
 
-const initialTasks: Task[] = [
-  // ... (same task data as before)
-  { id: "task-1", title: "Task 1", status: "new", number: 21 },
-  { id: "task-3", title: "Task 3", status: "new", number: 18 },
-  { id: "task-4", title: "Task 4", status: "new", number: 17 },
-  { id: "task-8", title: "Task 8", status: "doing", number: 11 },
-  { id: "task-7", title: "Task 7", status: "doing", number: 12 },
-  { id: "task-2", title: "Task 2", status: "review", number: 20 },
-  { id: "task-6", title: "Task 6", status: "review", number: 13 },
-  { id: "task-5", title: "Task 5", status: "pending", number: 14 },
-  { id: "task-9", title: "Task 9", status: "pending", number: 10 },
-  { id: "task-10", title: "Task 10", status: "completed", number: 9 },
-];
+// const initialTasks: Task[] = [
+//   // ... (same task data as before)
+//   { id: "task-1", title: "Task 1", status: "new", number: 21 },
+//   { id: "task-3", title: "Task 3", status: "new", number: 18 },
+//   { id: "task-4", title: "Task 4", status: "new", number: 17 },
+//   { id: "task-8", title: "Task 8", status: "doing", number: 11 },
+//   { id: "task-7", title: "Task 7", status: "doing", number: 12 },
+//   { id: "task-2", title: "Task 2", status: "review", number: 20 },
+//   { id: "task-6", title: "Task 6", status: "review", number: 13 },
+//   { id: "task-5", title: "Task 5", status: "pending", number: 14 },
+//   { id: "task-9", title: "Task 9", status: "pending", number: 10 },
+//   { id: "task-10", title: "Task 10", status: "completed", number: 9 },
+// ];
 
 const columnsData: ColumnType[] = [
   // ... (same column data as before)
@@ -28,8 +35,12 @@ const columnsData: ColumnType[] = [
   { id: "cancel", title: "Cancelled", color: "bg-[#7d7d7d]" },
 ];
 
-const KanBan: React.FC = () => {
-  const [tasks, setTasks] = useState<Task[]>(initialTasks);
+type KanbanProps = {
+  projectId: string;
+};
+
+const KanBan = ({ projectId }: KanbanProps) => {
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [draggedTask, setDraggedTask] = useState<string | null>(null);
   const [draggedTaskData, setDraggedTaskData] = useState<Task | null>(null);
   const [previewPosition, setPreviewPosition] = useState<{
@@ -37,6 +48,8 @@ const KanBan: React.FC = () => {
     y: number;
   } | null>(null);
   const kanbanRef = useRef<HTMLDivElement>(null);
+
+  const { data } = useGetProjectTasks({ projectId });
 
   const handleDragStart = useCallback(
     (e: React.DragEvent<HTMLDivElement>, taskId: string) => {
@@ -76,15 +89,19 @@ const KanBan: React.FC = () => {
       const taskId = e.dataTransfer.getData("taskId");
       if (!taskId || taskId !== draggedTask) return;
 
-      setTasks((prevTasks) =>
-        prevTasks.map((task) =>
-          task.id === taskId ? { ...task, status: targetStatus } : task
-        )
+      const task = tasks.find((t) => t.id === taskId);
+      if (!task || task.status === targetStatus) return;
+
+      setTasks((prev) =>
+        prev.map((t) => (t.id === taskId ? { ...t, status: targetStatus } : t))
       );
       // Reset drag state after successful drop
       setDraggedTask(null);
       setDraggedTaskData(null);
       setPreviewPosition(null);
+
+      try {
+      } catch (error) {}
     },
     [draggedTask]
   );
@@ -96,9 +113,38 @@ const KanBan: React.FC = () => {
     setPreviewPosition(null);
   }, []);
 
-  const getTasksByStatus = (status: StatusId): Task[] => {
-    return tasks.filter((task) => task.status === status);
-  };
+  const tasksByStatus = useMemo(() => {
+    // record Utility Type
+    const result: Record<StatusId, Task[]> = {
+      new: [],
+      doing: [],
+      pending: [],
+      late: [],
+      review: [],
+      completed: [],
+      cancel: [],
+    };
+
+    // lặp lấy task và phân loại task theo status
+    tasks.forEach((task) => {
+      if (result[task.status]) {
+        result[task.status].push(task);
+      }
+    });
+
+    return result;
+  }, [tasks]);
+
+  useEffect(() => {
+    if (data) {
+      const normalizedData = data.map((task: any) => ({
+        ...task,
+        status: task.status.toLowerCase() as StatusId,
+      }));
+      console.log("Normalized tasks:", normalizedData); 
+      setTasks(normalizedData);
+    }
+  }, [data]);
 
   return (
     <div
@@ -107,12 +153,12 @@ const KanBan: React.FC = () => {
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
     >
-      {columnsData.map((column, index) => (
+      {columnsData?.map((column, index) => (
         <>
           <Column
             key={column.id}
             column={column}
-            tasks={getTasksByStatus(column.id)}
+            tasks={tasksByStatus[column.id] || []} // 👈 lấy task theo id
             draggedTask={draggedTask}
             handleDragStart={handleDragStart}
             handleDrop={handleDrop}

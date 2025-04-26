@@ -3,8 +3,34 @@ export interface Task {
   id: string;
   title: string;
   status: StatusId;
-  number: number; // The # number shown in the UI
-  // Add other relevant task properties if needed
+  number: number;
+}
+
+export interface TaskResponse {
+  id: string;
+  name: string;
+  body: string;
+  status: string;
+  statusColor: string;
+  statusName: string;
+  createdAt: string;
+  estimatetime: string;
+  updatedAt: string;
+  isExpiration: string;
+  startTime: string;
+  expirationDate: string;
+  images: string;
+  tags: string;
+  projectId: string;
+  team: string;
+  type: string;
+  priority: string;
+  priorityName: string;
+  progress: string;
+  employeeId: string;
+  authorId: string;
+  sprintId: string;
+  taskListId: string;
 }
 
 export type StatusId =

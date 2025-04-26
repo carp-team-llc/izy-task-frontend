@@ -61,9 +61,15 @@ const TaskCard: React.FC<TaskCardProps> = ({
         !isPreview ? "cursor-grab active:cursor-grabbing" : ""
       }`}
     >
-      <div className="flex justify-between items-start">
-        <span className="text-sm font-medium text-gray-200">{task.title}</span>
-        <span className="text-xs text-gray-400 ml-2">#{task.number}</span>
+      <div className="flex flex-col space-y-2">
+        {/* Title nằm trên */}
+        <span className="text-md font-medium text-gray-200">{task.title}</span>
+
+        {/* Deadline + number nằm dưới cùng hàng */}
+        <div className="flex justify-between items-center text-gray-400 text-xs">
+          <span className="font-semibold text-gray-300">Deadline:</span>
+          <span className="ml-2">#{task.number}</span>
+        </div>
       </div>
     </div>
   );
