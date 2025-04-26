@@ -47,6 +47,10 @@ export default {
   activities: "api/v1/project/project_activity",
   change_status_project: "api/v1/project/change_status",
 
+  // #region project task list
+  project_task_list: "api/v1/project/project_task_list",
+  // #endregion
+
   // #region profile
   create_profile: "api/v1/user/profile/create_profile",
   // #endergion

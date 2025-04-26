@@ -1,15 +1,15 @@
 import { ArrowLeft } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState, type JSX } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import UseProjectDetail from "../../hook/Api/project/useProjectDetail";
 import OverviewTab from "./Component/Detail/Overview";
 import ProjectTaskList from "./Component/Detail/ProjectTask/ProjectTaskList";
 import KanBan from "./Component/Kanban/Kanban";
 
-const TABS = {
-  Overview: OverviewTab,
-  List: ProjectTaskList,
-  KanBan: KanBan,
+const TABS: Record<string, (props: { id: string }) => JSX.Element> = {
+  Overview: () => <OverviewTab />,
+  List: () => <ProjectTaskList />,
+  KanBan: ({ id }) => <KanBan projectId={id} />,
 };
 
 const ProjectDetail = () => {
@@ -27,7 +27,7 @@ const ProjectDetail = () => {
     }
   };
 
-  const ActiveComponent = TABS[activeTab as keyof typeof TABS];
+  const renderActiveTab = TABS[activeTab as keyof typeof TABS];
 
   return (
     <div className="min-h-screen bg-[#0a061f] text-white p-4 text-start">
@@ -38,7 +38,7 @@ const ProjectDetail = () => {
 
         <div className="mt-4 relative overflow-hidden">
           <TabTransition key={activeTab} direction={direction}>
-            <ActiveComponent />
+            {renderActiveTab({ id: id as string })}
           </TabTransition>
         </div>
       </div>
@@ -52,7 +52,10 @@ export default ProjectDetail;
 const Header = ({ projectName }: { projectName?: string }) => (
   <div className="flex flex-wrap text-start justify-between items-center gap-4">
     <div className="flex items-center gap-4">
-      <NavLink to="/projectboard" className="text-gray-400 hover:text-white transition-colors duration-200">
+      <NavLink
+        to="/projectboard"
+        className="text-gray-400 hover:text-white transition-colors duration-200"
+      >
         <ArrowLeft size={18} />
       </NavLink>
       <h1 className="text-xl md:text-2xl font-bold">{projectName}</h1>
@@ -62,10 +65,15 @@ const Header = ({ projectName }: { projectName?: string }) => (
       </div>
     </div>
     <div className="flex items-center gap-2">
-      <button className="bg-indigo-600 text-sm px-3 py-1 rounded-full flex items-center gap-1">+ Invite</button>
+      <button className="bg-indigo-600 text-sm px-3 py-1 rounded-full flex items-center gap-1">
+        + Invite
+      </button>
       <div className="flex -space-x-2">
         {[1, 2, 3, 4, 5].map((i) => (
-          <div key={i} className="w-8 h-8 rounded-full bg-gray-400 border-2 border-[#0a061f]" />
+          <div
+            key={i}
+            className="w-8 h-8 rounded-full bg-gray-400 border-2 border-[#0a061f]"
+          />
         ))}
       </div>
     </div>
@@ -74,12 +82,20 @@ const Header = ({ projectName }: { projectName?: string }) => (
 
 const IconButton = ({ icon }: { icon: "search" | "bell" }) => {
   const paths: Record<string, string> = {
-    search: "M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z",
+    search:
+      "M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z",
     bell: "M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0",
   };
   return (
     <button className="bg-gray-700/50 rounded-full p-2">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth="1.5"
+        stroke="currentColor"
+        className="w-5 h-5"
+      >
         <path strokeLinecap="round" strokeLinejoin="round" d={paths[icon]} />
       </svg>
     </button>
@@ -92,7 +108,7 @@ const TabNav = ({
   activeTab,
   onChange,
 }: {
-  tabs: Record<string, React.ComponentType>;
+  tabs: Record<string, (props: { id: string }) => JSX.Element>;
   activeTab: string;
   onChange: (tab: string) => void;
 }) => (
@@ -131,7 +147,9 @@ const TabTransition = ({
       <div
         className={`transition-all duration-300 ease-in-out w-full ${
           isAnimating
-            ? `opacity-0 transform ${direction === "right" ? "translate-x-10" : "-translate-x-10"}`
+            ? `opacity-0 transform ${
+                direction === "right" ? "translate-x-10" : "-translate-x-10"
+              }`
             : "opacity-100 transform translate-x-0"
         }`}
       >
