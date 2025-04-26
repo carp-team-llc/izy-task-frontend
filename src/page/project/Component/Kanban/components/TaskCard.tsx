@@ -1,9 +1,10 @@
 // src/components/Kanban/component/TaskCard.tsx
 import React from "react";
-import { Task } from "./data";
+import type { TaskResponse } from "./data";
+import Helper from "../../../../../constant/Helper";
 
 interface TaskCardProps {
-  task: Task;
+  task: TaskResponse;
   isDragging: boolean;
   isPreview?: boolean;
   handleDragStart?: (
@@ -63,12 +64,18 @@ const TaskCard: React.FC<TaskCardProps> = ({
     >
       <div className="flex flex-col space-y-2">
         {/* Title nằm trên */}
-        <span className="text-md font-medium text-gray-200">{task.title}</span>
+        <span className="text-md font-medium text-gray-200">{task.name}</span>
 
         {/* Deadline + number nằm dưới cùng hàng */}
         <div className="flex justify-between items-center text-gray-400 text-xs">
-          <span className="font-semibold text-gray-300">Deadline:</span>
-          <span className="ml-2">#{task.number}</span>
+          <span className="flex font-semibold text-gray-300">
+            Deadline: 
+            <div className="w-1" />{" "}
+            <p className="italic">{Helper.formatDateTime(task?.expirationDate)}</p>
+          </span>
+          <span className={`ml-2 text-gray-500`}>
+            {Helper.capitalize(task?.priority)}
+          </span>
         </div>
       </div>
     </div>
