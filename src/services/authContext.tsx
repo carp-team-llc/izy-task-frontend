@@ -15,6 +15,7 @@ interface AuthContextType {
   logout: () => void;
   isAuthenticated: boolean;
   refetchAuth: () => Promise<void>;
+  isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -22,6 +23,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { onLogout } = UseLogOut();
   const { me } = UseCheckLogin();
 
@@ -39,6 +41,8 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       console.error("User not logged in!");
       setIsAuthenticated(false);
       setIsLoggedIn(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -67,6 +71,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         login,
         logout,
         refetchAuth: isUserLoggedIn,
+        isLoading,
       }}
     >
       {children}

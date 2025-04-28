@@ -4,18 +4,18 @@ import React, { useEffect, useState } from "react";
 
 import CommentDetailTask from "../../../component/interactions/CommentDetailTask";
 import ShowFiles from "../../../component/ShowFiles/ShowFiles";
-import Helper from "../../../constant/Helper";
-import useTaskDetail from "../../../hook/Api/task/TaskManager/useTaskDetail";
-import Activities from "./component/Activities";
-import Description from "./component/Description";
-import Editt from "./component/Edit";
-import Status from "./component/Status";
-import useUpdateTask from "../../../hook/Api/task/TaskManager/useUpdateTask";
 import {
   notifyError,
   notifySuccess,
 } from "../../../component/toastify/Toastify";
+import Helper from "../../../constant/Helper";
 import useDeleteTask from "../../../hook/Api/task/TaskManager/useDeleteTask";
+import useTaskDetail from "../../../hook/Api/task/TaskManager/useTaskDetail";
+import useUpdateTask from "../../../hook/Api/task/TaskManager/useUpdateTask";
+import Activities from "./component/Activities";
+import Description from "./component/Description";
+import Editt from "./component/Edit";
+import Status from "./component/Status";
 
 interface DetailTaskProps {
   onClose: () => void;
@@ -42,8 +42,6 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
 
   const [description, setDescription] = useState<string>(data?.body || "");
 
-  console.log("data ===> ", data);
-
   const handleUpdate = (isUpdate: boolean) => {
     setIsUpdate(isUpdate);
     setIsEditing(true);
@@ -56,7 +54,7 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
   };
   const handleDelete = async () => {
     try {
-      const response = await onDelete({ id: task.id });
+      const response = await onDelete({ id: task?.id });
       if (response) {
         onClose(); // Đóng modal sau khi xóa
       }
@@ -81,16 +79,15 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
         setIsEditing(false);
       }
     } catch (err) {
-      console.error("Lỗi khi Update task:", err);
 
       if (err instanceof Error) {
-        if ((err as any).response && (err as any).response.data) {
-          notifyError(`Lỗi từ API: ${(err as any).response.data.message}`);
+        if ((err as any)?.response && (err as any)?.response?.data) {
+          notifyError(`${(err as any)?.response?.data?.message}`);
         } else {
-          notifyError(`Lỗi: ${err.message}`);
+          notifyError(`${err?.message}`);
         }
       } else {
-        notifyError("Có lỗi xảy ra. Vui lòng thử lại.");
+        notifyError("Something is wrong!");
       }
     }
   };
@@ -102,8 +99,8 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
 
   useEffect(() => {
     if (data) {
-      setStatus(data.status);
-      setDescription(data.body || "");
+      setStatus(data?.status);
+      setDescription(data?.body || "");
     }
   }, [data]);
 
@@ -129,7 +126,7 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
                 {data?.name}
               </h1>
             </div>
-            <p className="text-sm text-gray-400">calangtrang</p>
+            <p className="text-sm text-gray-400">{data?.employee?.username}</p>
           </div>
           <p className="text-sm text-gray-400 ml-auto">
             Created at: {Helper.formatEngDate(data?.createdAt)}

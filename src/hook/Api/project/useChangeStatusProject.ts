@@ -14,7 +14,7 @@ type ChangeStatusProjectResponse = {
 }
 
 const UseChangeStatusProject = () => {
-  const { isError, data, error, mutateAsync } = useMutation({
+  const { isError, data, error, isPending, mutateAsync } = useMutation({
     mutationFn: (variables: ChangeStatusProjectParams) => {
       return rootApi.post<ChangeStatusProjectParams, ChangeStatusProjectResponse>(endpoint.change_status_project, variables, {
         withCredentials: true,
@@ -28,6 +28,7 @@ const UseChangeStatusProject = () => {
     isError,
     data: data?.data,
     error,
+    isPending,
     onChangeStatus: mutateAsync,
   };
 }

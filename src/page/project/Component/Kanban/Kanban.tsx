@@ -7,8 +7,18 @@ import React, {
 } from "react";
 import useGetProjectTasks from "../../../../hook/Api/project/useGetProjectTasks";
 import Column from "./components/coulumn";
-import { Column as ColumnType, StatusId, type TaskResponse } from "./components/data";
+import {
+  Column as ColumnType,
+  StatusId,
+  type TaskResponse,
+} from "./components/data";
 import TaskCard from "./components/TaskCard";
+import UseChangeStatusProject from "../../../../hook/Api/project/useChangeStatusProject";
+import {
+  notifyError,
+  notifySuccess,
+} from "../../../../component/toastify/Toastify";
+import Helper from "../../../../constant/Helper";
 
 const columnsData: ColumnType[] = [
   // ... (same column data as before)
@@ -28,7 +38,9 @@ type KanbanProps = {
 const KanBan = ({ projectId }: KanbanProps) => {
   const [tasks, setTasks] = useState<TaskResponse[]>([]);
   const [draggedTask, setDraggedTask] = useState<string | null>(null);
-  const [draggedTaskData, setDraggedTaskData] = useState<TaskResponse | null>(null);
+  const [draggedTaskData, setDraggedTaskData] = useState<TaskResponse | null>(
+    null
+  );
   const [previewPosition, setPreviewPosition] = useState<{
     x: number;
     y: number;
@@ -36,6 +48,7 @@ const KanBan = ({ projectId }: KanbanProps) => {
   const kanbanRef = useRef<HTMLDivElement>(null);
 
   const { data } = useGetProjectTasks({ projectId });
+  const { onChangeStatus } = UseChangeStatusProject();
 
   const handleDragStart = useCallback(
     (e: React.DragEvent<HTMLDivElement>, taskId: string) => {
@@ -81,6 +94,24 @@ const KanBan = ({ projectId }: KanbanProps) => {
       setTasks((prev) =>
         prev.map((t) => (t.id === taskId ? { ...t, status: targetStatus } : t))
       );
+
+      try {
+        onChangeStatus({
+          id: taskId,
+          projectId: projectId,
+          statusKey: Helper.capitalize(targetStatus),
+        });
+        notifySuccess(
+          `Move task from status: ${task.status} to status: ${targetStatus}`
+        );
+      } catch (err) {
+        notifyError("Something went wrong!");
+        setTasks((prev) =>
+          prev.map((t) =>
+            t.id === taskId ? { ...t, status: task!.status } : t
+          )
+        );
+      }
       // Reset drag state after successful drop
       setDraggedTask(null);
       setDraggedTaskData(null);
@@ -132,25 +163,27 @@ const KanBan = ({ projectId }: KanbanProps) => {
   }, [data]);
 
   return (
-    <div
-      ref={kanbanRef}
-      className="flex space-x-6 overflow-x-auto p-4 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800/50 h-[calc(100vh-200px)] relative"
-      onDragOver={handleDragOver}
-      onDragEnd={handleDragEnd}
-    >
-      {columnsData?.map((column, index) => (
-        <>
-          <Column
-            key={column.id}
-            column={column}
-            tasks={tasksByStatus[column.id] || []} // 👈 lấy task theo id
-            draggedTask={draggedTask}
-            handleDragStart={handleDragStart}
-            handleDrop={handleDrop}
-          />
-          {index < columnsData.length - 1 && <div className="border-2" />}
-        </>
-      ))}
+    <>
+      <div
+        ref={kanbanRef}
+        className="flex space-x-6 overflow-x-auto p-4 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800/50 h-[calc(100vh-200px)] relative"
+        onDragOver={handleDragOver}
+        onDragEnd={handleDragEnd}
+      >
+        {columnsData?.map((column, index) => (
+          <>
+            <Column
+              key={column.id}
+              column={column}
+              tasks={tasksByStatus[column.id] || []} // 👈 lấy task theo id
+              draggedTask={draggedTask}
+              handleDragStart={handleDragStart}
+              handleDrop={handleDrop}
+            />
+            {index < columnsData.length - 1 && <div className="border-2" />}
+          </>
+        ))}
+      </div>
       {draggedTaskData && previewPosition && (
         <div
           style={{
@@ -173,7 +206,7 @@ const KanBan = ({ projectId }: KanbanProps) => {
           />
         </div>
       )}
-    </div>
+    </>
   );
 };
 
