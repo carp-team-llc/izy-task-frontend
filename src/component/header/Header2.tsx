@@ -3,7 +3,7 @@ import { Plus, Upload } from "lucide-react";
 import CreateTask from "../../page/Task/CreateTask"; // Updated import
 import { NavLink } from "react-router-dom";
 
-const Header2 = () => {
+const TaskHeader = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
@@ -43,4 +43,4 @@ const Header2 = () => {
   );
 };
 
-export default Header2;
+export default TaskHeader;

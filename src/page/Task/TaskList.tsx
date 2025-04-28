@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState } from "react"
-import { NavLink } from "react-router-dom"
+import type React from "react";
+import { useState } from "react";
+import { NavLink } from "react-router-dom";
 import {
   ArrowLeft,
   Plus,
@@ -13,21 +13,21 @@ import {
   MoreVertical,
   ChevronUp,
   Loader2,
-} from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
-import CreateTaskList from "./CreateTaskList"
-import usePersonalTaskList from "../../hook/Api/task/TaskManager/useTaskListPagination"
-import Helper from "../../constant/Helper"
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import CreateTaskList from "./CreateTaskList";
+import usePersonalTaskList from "../../hook/Api/task/TaskManager/useTaskListPagination";
+import Helper from "../../constant/Helper";
 
-const TaskListParams: React.FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [hoveredRow, setHoveredRow] = useState<string | null>(null)
+const TaskList: React.FC = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [hoveredRow, setHoveredRow] = useState<string | null>(null);
 
   const variables = {
     where: {},
     skip: 0,
     take: 10,
-  }
+  };
 
   const {
     data: tasks,
@@ -36,23 +36,23 @@ const TaskListParams: React.FC = () => {
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-  } = usePersonalTaskList(variables)
+  } = usePersonalTaskList(variables);
 
   const handleOpenModal = () => {
-    setIsModalOpen(true)
-  }
+    setIsModalOpen(true);
+  };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false)
-  }
+    setIsModalOpen(false);
+  };
 
   const mapDataToTasks = tasks.map((task) => {
-    return task.data
-  })
+    return task.data;
+  });
 
   const dataFlatmap = mapDataToTasks.flatMap((task) => {
-    return task.taskList
-  })
+    return task.taskList;
+  });
 
   // Animation variants
   const containerVariants = {
@@ -63,7 +63,7 @@ const TaskListParams: React.FC = () => {
         staggerChildren: 0.1,
       },
     },
-  }
+  };
 
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
@@ -72,7 +72,7 @@ const TaskListParams: React.FC = () => {
       opacity: 1,
       transition: { type: "spring", stiffness: 300, damping: 24 },
     },
-  }
+  };
 
   const tableRowVariants = {
     hidden: { opacity: 0, y: 10 },
@@ -85,7 +85,7 @@ const TaskListParams: React.FC = () => {
         ease: "easeOut",
       },
     }),
-  }
+  };
 
   if (isLoading) {
     return (
@@ -99,7 +99,7 @@ const TaskListParams: React.FC = () => {
           <p className="text-lg text-gray-300">Loading tasks...</p>
         </div>
       </motion.div>
-    )
+    );
   }
 
   if (isError) {
@@ -110,11 +110,15 @@ const TaskListParams: React.FC = () => {
         className="text-white p-6 min-h-screen flex items-center justify-center"
       >
         <div className="bg-red-900/20 border border-red-800 rounded-lg p-6 max-w-md">
-          <p className="text-red-400 text-lg font-medium">Error loading tasks</p>
-          <p className="text-gray-400 mt-2">Please try again later or contact support if the problem persists.</p>
+          <p className="text-red-400 text-lg font-medium">
+            Error loading tasks
+          </p>
+          <p className="text-gray-400 mt-2">
+            Please try again later or contact support if the problem persists.
+          </p>
         </div>
       </motion.div>
-    )
+    );
   }
 
   return (
@@ -125,11 +129,17 @@ const TaskListParams: React.FC = () => {
       className="text-white p-4 md:p-6 min-h-screen"
     >
       <motion.header
+        initial="hidden"
+        animate="visible"
         variants={itemVariants}
         className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6"
       >
         <div className="flex flex-wrap items-center gap-4">
-          <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="relative">
+          <motion.div
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            className="relative"
+          >
             <NavLink
               to="/tasks"
               className="text-indigo-500 flex items-center justify-center w-8 h-8 rounded-full bg-indigo-500/10 hover:bg-indigo-500/20 transition-colors duration-200"
@@ -179,7 +189,10 @@ const TaskListParams: React.FC = () => {
               whileTap={{ scale: 0.9 }}
               className="relative w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-700/50 transition-colors duration-200 group"
             >
-              <item.icon size={20} className="text-gray-400 group-hover:text-white transition-colors duration-200" />
+              <item.icon
+                size={20}
+                className="text-gray-400 group-hover:text-white transition-colors duration-200"
+              />
               <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
                 {item.tooltip}
               </span>
@@ -188,93 +201,105 @@ const TaskListParams: React.FC = () => {
         </div>
       </motion.header>
 
-      <motion.div variants={itemVariants} className="bg-[#1E1E2D] rounded-lg p-4 shadow-xl border border-gray-800/50">
-        <h2 className="text-xl font-semibold mb-4">Task List</h2>
-
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[600px]">
-            <thead>
-              <tr className="text-left text-gray-400 text-sm">
-                <th className="pb-3 w-[45%] font-medium">
-                  <div className="flex items-center gap-1 cursor-pointer hover:text-white transition-colors duration-200">
-                    Name <ChevronUp size={14} className="inline" />
-                  </div>
-                </th>
-                <th className="pb-3 w-[25%] font-medium">
-                  <div className="flex items-center gap-1 cursor-pointer hover:text-white transition-colors duration-200">
-                    Last Modified <ChevronUp size={14} className="inline" />
-                  </div>
-                </th>
-                <th className="pb-3 w-[25%] font-medium">
-                  <div className="flex items-center gap-1 cursor-pointer hover:text-white transition-colors duration-200">
-                    Deadline <ChevronUp size={14} className="inline" />
-                  </div>
-                </th>
-                <th className="pb-3 w-[5%]"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <AnimatePresence>
-                {dataFlatmap.map((task: any, index: number) => (
-                  <motion.tr
-                    key={task.id}
-                    custom={index}
-                    variants={tableRowVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit={{ opacity: 0, y: -10 }}
-                    onMouseEnter={() => setHoveredRow(task.id)}
-                    onMouseLeave={() => setHoveredRow(null)}
-                    className={`border-t border-gray-700/50 transition-colors duration-200 ${
-                      hoveredRow === task.id ? "bg-gray-700/30" : ""
-                    }`}
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={itemVariants}
+        className="relative overflow-x-auto shadow-md sm:rounded-lg"
+      >
+        <table className="w-full text-sm text-left text-gray-400">
+          <thead className="text-xs uppercase bg-[#05051F] text-gray-400">
+            <tr>
+              <th scope="col" className="px-6 py-3">
+                <div className="flex items-center gap-1 cursor-pointer hover:text-white transition-colors duration-200">
+                  Name <ChevronUp size={14} className="inline" />
+                </div>
+              </th>
+              <th scope="col" className="px-6 py-3">
+                <div className="flex items-center gap-1 cursor-pointer hover:text-white transition-colors duration-200">
+                  Last Modified <ChevronUp size={14} className="inline" />
+                </div>
+              </th>
+              <th scope="col" className="px-6 py-3">
+                <div className="flex items-center gap-1 cursor-pointer hover:text-white transition-colors duration-200">
+                  Deadline <ChevronUp size={14} className="inline" />
+                </div>
+              </th>
+              <th scope="col" className="px-6 py-3"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <AnimatePresence>
+              {dataFlatmap.map((task, index) => (
+                <motion.tr
+                  key={task.id}
+                  custom={index}
+                  variants={tableRowVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit={{ opacity: 0, y: -10 }}
+                  onMouseEnter={() => setHoveredRow(task.id)}
+                  onMouseLeave={() => setHoveredRow(null)}
+                  className={`border-b border-gray-700 transition-colors duration-200 ${
+                    hoveredRow === task.id ? "bg-gray-800" : "bg-[#13172B]"
+                  }`}
+                >
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-white whitespace-nowrap"
                   >
-                    <td className="py-3">
-                      <NavLink
-                        to={`/tasklist/${task.id}`}
-                        className="flex items-center gap-3 p-2 rounded-lg transition-all duration-200 hover:bg-gray-600/30"
+                    <NavLink
+                      to={`/tasklist/${task.id}`}
+                      className="flex items-center gap-3 transition-all duration-200 hover:bg-gray-600/30 rounded-lg"
+                    >
+                      <motion.div
+                        whileHover={{ scale: 1.1 }}
+                        className="w-8 h-8 rounded-full flex items-center justify-center overflow-hidden border-2 border-transparent hover:border-indigo-500 transition-all duration-200"
                       >
-                        <motion.div
-                          whileHover={{ scale: 1.1 }}
-                          className="w-8 h-8 rounded-full flex items-center justify-center overflow-hidden border-2 border-transparent hover:border-indigo-500 transition-all duration-200"
-                        >
-                          <img
-                            src={task?.avatar || "/placeholder.svg"}
-                            alt={task.name}
-                            className="w-full h-full object-cover"
-                          />
-                        </motion.div>
-                        <span className="font-medium">{task.name}</span>
-                      </NavLink>
-                    </td>
-                    <td className="py-3 text-gray-400">{Helper.formatEngDate(task.updatedAt)}</td>
-                    <td className="py-3 text-gray-400">{Helper.formatEngDate(task.createdAt)}</td>
-                    <td className="py-3 text-right">
-                      <motion.button
-                        whileHover={{ scale: 1.2, rotate: 15 }}
-                        whileTap={{ scale: 0.9 }}
-                        className="text-gray-400 hover:text-white p-1 rounded-full hover:bg-gray-700/50 transition-colors duration-200"
-                      >
-                        <MoreVertical size={16} />
-                      </motion.button>
-                    </td>
-                  </motion.tr>
-                ))}
-              </AnimatePresence>
-            </tbody>
-          </table>
-        </div>
+                        <img
+                          src={task?.avatar || "/placeholder.svg"}
+                          alt={task.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </motion.div>
+                      <span>{task.name}</span>
+                    </NavLink>
+                  </th>
+                  <td className="px-6 py-4">
+                    {Helper.formatEngDate(task.updatedAt)}
+                  </td>
+                  <td className="px-6 py-4">
+                    {Helper.formatEngDate(task.createdAt)}
+                  </td>
+                  <td className="px-6 py-4 text-right">
+                    <motion.button
+                      whileHover={{ scale: 1.2, rotate: 15 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="text-gray-400 hover:text-white p-1 rounded-full hover:bg-gray-700/50 transition-colors duration-200"
+                    >
+                      <MoreVertical size={16} />
+                    </motion.button>
+                  </td>
+                </motion.tr>
+              ))}
+            </AnimatePresence>
+          </tbody>
+        </table>
 
-        {/* Load more button */}
         {hasNextPage && (
-          <motion.div variants={itemVariants} className="flex justify-center mt-6">
+          <motion.div
+            variants={itemVariants}
+            className="flex justify-center mt-6"
+          >
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => fetchNextPage()}
               disabled={isFetchingNextPage}
               className={`relative overflow-hidden ${
-                isFetchingNextPage ? "bg-gray-700 text-gray-300" : "bg-indigo-600 hover:bg-indigo-700 text-white"
+                isFetchingNextPage
+                  ? "bg-gray-700 text-gray-300"
+                  : "bg-indigo-600 hover:bg-indigo-700 text-white"
               } rounded-md px-6 py-2 text-sm font-medium transition-colors duration-200 shadow-lg shadow-indigo-900/20`}
             >
               {isFetchingNextPage ? (
@@ -289,7 +314,11 @@ const TaskListParams: React.FC = () => {
                 className="absolute inset-0 bg-white"
                 initial={{ x: "-100%", opacity: 0.3 }}
                 animate={!isFetchingNextPage ? { x: ["100%", "-100%"] } : {}}
-                transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY, repeatDelay: 1 }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Number.POSITIVE_INFINITY,
+                  repeatDelay: 1,
+                }}
               />
             </motion.button>
           </motion.div>
@@ -319,7 +348,7 @@ const TaskListParams: React.FC = () => {
         )}
       </AnimatePresence>
     </motion.div>
-  )
-}
+  );
+};
 
-export default TaskListParams
+export default TaskList;

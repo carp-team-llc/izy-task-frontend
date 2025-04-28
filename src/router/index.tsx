@@ -7,7 +7,7 @@ import CreateProfile from "../page/profile/CreateProfile";
 import ProjectDashboard from "../page/project/ProjectBoard";
 import DetailTaskList from "../page/Task/DetailTaskList";
 import TaskBoard from "../page/Task/TaskBoard";
-import TaskListParams from "../page/Task/TaskListParams";
+import TaskList from "../page/Task/TaskList";
 import ProtectedRoute from "./ProtectedRoute";
 import ProjectDetail from "../page/project/ProjectDetail";
 import KabanBoard from "../page/Task/TaskBoard/components/KabanBoard";
@@ -36,7 +36,7 @@ const router = createBrowserRouter([
       { path: "timeline", element: <TimeLine /> },
       { path: "profile", element: <CreateProfile /> },
       { path: "showprofile", element: <ShowProfile /> },
-      { path: "tasklist", element: <TaskListParams /> },
+      { path: "tasklist", element: <TaskList /> },
       { path: "tasklist/:id", element: <DetailTaskList /> }, // Add dynamic route for DetailTaskList
       { path: "taskboard", element: <TaskBoard /> },
       { path: "projectboard", element: <ProjectDashboard /> },
