@@ -25,29 +25,34 @@ interface DetailTaskProps {
   onChangeStatus: (status: string) => void;
 }
 
-const Status: React.FC<DetailTaskProps> = ({ task, isUpdate, onChangeStatus }) => {
+const Status: React.FC<DetailTaskProps> = ({
+  task,
+  isUpdate,
+  onChangeStatus,
+}) => {
   const { data } = useTaskDetail({
     id: task.id,
   });
   const [status, setStatus] = useState<string | null>(null);
-  const [statusName, setStatusName] = useState<string | null>(null);
-  const [statusColor, setStatusColor] = useState<string | null>(null);
   const statuses = [
-    { status: "1", statusName: "Pending", statusColor: "#FFA500" },
-    { status: "2", statusName: "Doing", statusColor: "#007BFF" },
-    { status: "3", statusName: "Completed", statusColor: "#28A745" },
+    { status: "NEW", statusName: "New", statusColor: "#06a2c9" },
+    { status: "DOING", statusName: "Doing", statusColor: "#ff5482" },
+    { status: "COMPLETED", statusName: "Completed", statusColor: "#0eb53b" },
+    { status: "PENDING", statusName: "Pending", statusColor: "#c99506" },
+    { status: "LATE", statusName: "Late", statusColor: "#d92a02" },
+    { status: "REVIEW", statusName: "Review", statusColor: "#FF6900" },
+    { status: "CANCEL", statusName: "Cancel", statusColor: "#7d7d7d" },
   ];
   useEffect(() => {
     if (data) {
       setStatus(data.status);
-      setStatusName(data.statusName);
-      setStatusColor(data.statusColor);
     }
   }, [data]);
   const handleChangeStatus = (newStatus: string) => {
-    setStatus(newStatus)
-    onChangeStatus(newStatus)
-  }
+    setStatus(newStatus);
+    onChangeStatus(newStatus);
+  };
+
   return (
     <div className="bg-[#0f0a2a] p-6 space-y-6 text-white">
       <div className="space-y-4">
@@ -60,8 +65,10 @@ const Status: React.FC<DetailTaskProps> = ({ task, isUpdate, onChangeStatus }) =
           <DropList
             defaultStatus={{
               status: status || "",
-              statusName: statusName || "",
-              statusColor: statusColor || "",
+              statusName: Helper.capitalize(status || "") || "",
+              statusColor:
+                statuses.find((s) => s.status === (status || "").toUpperCase())
+                  ?.statusColor || "",
             }}
             isDisable={isUpdate}
             statuses={statuses}
@@ -135,7 +142,7 @@ const Status: React.FC<DetailTaskProps> = ({ task, isUpdate, onChangeStatus }) =
             <span className="w-20 text-sm">Project</span>
           </div>
           <span className="text-xs text-gray-400">
-            {data?.project || "None"}
+            {data?.project ? data?.project?.name : "None"}
           </span>
         </div>
 
