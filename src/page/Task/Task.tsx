@@ -1,6 +1,6 @@
 "use client"
 import { motion } from "framer-motion"
-import Header2 from "../../component/header/Header2"
+import TaskHeader from "../../component/header/Header2"
 import RecentTask from "../../component/tasklist/RecentTask"
 import TaskList from "../../component/tasklist/TaskList"
 
@@ -34,7 +34,7 @@ export default function Task() {
     >
       <div className="flex-1 p-4 md:p-6 max-w-full">
         <motion.div variants={itemVariants}>
-          <Header2 />
+          <TaskHeader />
         </motion.div>
 
         <motion.div variants={itemVariants} className="mt-6 grid grid-cols-1 gap-6">
