@@ -1,4 +1,3 @@
-"use client"
 import { motion } from "framer-motion"
 import TaskHeader from "../../component/header/Header2"
 import RecentTask from "../../component/tasklist/RecentTask"
