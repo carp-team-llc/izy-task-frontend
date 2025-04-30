@@ -5,6 +5,7 @@ import endpoint from "../../../services/endpoint"
 interface MeResponse {
   message: string;
   isLogin: boolean;
+  userId: string;
 }
 
 const UseCheckLogin = () => {
