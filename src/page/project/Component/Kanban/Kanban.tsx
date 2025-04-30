@@ -19,6 +19,7 @@ import {
   notifySuccess,
 } from "../../../../component/toastify/Toastify";
 import Helper from "../../../../constant/Helper";
+import KanbanHeader from "./components/kanbanHeader";
 
 const columnsData: ColumnType[] = [
   // ... (same column data as before)
@@ -164,6 +165,7 @@ const KanBan = ({ projectId }: KanbanProps) => {
 
   return (
     <>
+      <KanbanHeader />
       <div
         ref={kanbanRef}
         className="flex space-x-6 overflow-x-auto p-4 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800/50 h-[calc(100vh-200px)] relative"

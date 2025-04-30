@@ -1,5 +1,3 @@
-"use client";
-
 import { Filter, Plus, RefreshCcw, Search, Settings } from "lucide-react";
 import { useParams } from "react-router-dom";
 
