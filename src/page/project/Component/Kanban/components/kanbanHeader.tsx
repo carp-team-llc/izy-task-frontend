@@ -106,21 +106,17 @@ const KanbanHeader = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Effect để log state khi thay đổi (cho mục đích debug)
   useEffect(() => {
     console.log("Filters updated:", filters);
-    // Ở đây bạn sẽ gọi API hoặc cập nhật state global để thực hiện filter data
   }, [filters]);
 
   useEffect(() => {
     console.log("Sort updated:", sortKey);
-    // Ở đây bạn sẽ gọi API hoặc cập nhật state global để thực hiện sort data
   }, [sortKey]);
 
   useEffect(() => {
     console.log("Search term:", searchTerm);
-    // Gọi API search hoặc filter local data
-  }, [searchTerm]); // Có thể thêm debounce ở đây
+  }, [searchTerm]);
 
   // --- Toggle Dropdown Functions ---
   const toggleFilter = (e: React.MouseEvent) => {
@@ -136,7 +132,7 @@ const KanbanHeader = () => {
   };
 
   // --- Render Logic ---
-  // Tính toán số lượng filter đang áp dụng để hiển thị badge (ví dụ)
+  // Tính toán số lượng filter đang áp dụng để hiển thị badge
   const activeFilterCount = [
     filters.users.length > 0,
     filters.author !== null,
@@ -238,9 +234,8 @@ const KanbanHeader = () => {
         </AnimatePresence>
       </div>
 
-      {/* Assignees (Placeholder - Cần logic thực tế) */}
+      {/* Assignees */}
       <span className="flex items-center space-x-2 cursor-pointer text-[#A6A6B2] text-sm font-medium hover:text-[#4F39F6] ml-auto">
-        {/* ... avatar placeholder giữ nguyên ... */}
       </span>
     </div>
   );
