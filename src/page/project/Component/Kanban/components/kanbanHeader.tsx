@@ -82,12 +82,10 @@ const KanbanHeader = () => {
   };
 
   const handleDateChange = useCallback((field: 'startTime' | 'expirationDate', date: Date | null) => {
-    console.log(`Setting ${field} to:`, date); // Log để debug
     setFilters(prev => ({
       ...prev,
-      [field]: date // Cập nhật startTime hoặc expirationDate
+      [field]: date
     }));
-    // Bạn có thể thêm logic ràng buộc ở đây nếu cần (ví dụ: startTime không được sau expirationDate)
   }, []);
 
   // --- Effects ---
