@@ -234,8 +234,8 @@ const KanBan = ({ projectId }: KanbanProps) => {
         <div
           style={{
             position: "fixed",
-            top: previewPosition.y - (kanbanRef.current?.getBoundingClientRect().top || 0),
-            left: previewPosition.x - (kanbanRef.current?.getBoundingClientRect().left || 0),
+            top: previewPosition.y - (kanbanRef.current?.getBoundingClientRect().top || 0), // duck this shit
+            left: previewPosition.x - (kanbanRef.current?.getBoundingClientRect().left || 0), // duck this shit
             pointerEvents: "none",
             zIndex: 50,
             width:
