@@ -4,6 +4,14 @@ import endpoint from "../../../services/endpoint";
 
 type Variables = {
   projectId: string;
+  expirationDate?: string | null;
+  isExpiration?: boolean;
+  startTime?: string | null;
+  priority?: string | string[];
+  name?: string;
+  authorId?: string | string[];
+  employeeId?: string | string[];
+  status?: string | string[];
 };
 
 type Response = {
@@ -12,20 +20,16 @@ type Response = {
 };
 
 const useGetProjectTasks = (variables: Variables) => {
-  const {
-    data,
-    error,
-    isError,
-    isFetching,
-    isRefetching,
-    isLoading,
-    refetch,
-  } = useQuery<Response, Error>({
-    queryKey: [endpoint.project_task_list, variables],
-    queryFn: async () => {
-      return rootApi.post<Variables, Response>(endpoint.project_task_list, variables);
-    },
-  });
+  const { data, error, isError, isFetching, isRefetching, isLoading, refetch } =
+    useQuery<Response, Error>({
+      queryKey: [endpoint.project_task_list, variables],
+      queryFn: async () => {
+        return rootApi.post<Variables, Response>(
+          endpoint.project_task_list,
+          variables
+        );
+      },
+    });
 
   return {
     isLoading,

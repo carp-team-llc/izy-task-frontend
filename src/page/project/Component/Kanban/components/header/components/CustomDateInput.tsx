@@ -2,12 +2,12 @@ import { Calendar, X } from "lucide-react";
 import React from "react";
 
 interface CustomDateInputProps {
-  value?: string; // Prop này sẽ được DatePicker truyền vào với ngày đã format
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void; // Prop này do DatePicker truyền để mở calendar
-  placeholder: string; // Prop chúng ta tự định nghĩa
-  selectedDate: Date | null; // Prop chúng ta tự định nghĩa để biết khi nào hiển thị nút X
-  onClear: () => void; // Prop chúng ta tự định nghĩa để xử lý clear
-  id?: string; // DatePicker có thể truyền id
+  value?: string;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  placeholder: string;
+  selectedDate: string | null;
+  onClear: () => void;
+  id?: string;
 }
 
 const CustomDateInput = React.forwardRef<
@@ -22,7 +22,7 @@ const CustomDateInput = React.forwardRef<
         className={`w-full text-left px-3 py-2 rounded hover:bg-[#0A061F] text-sm mb-1 flex items-center justify-between ${
           value ? "text-white" : "text-[#A6A6B2]" // Đổi màu text nếu có giá trị
         }`}
-        onClick={onClick} // Gắn onClick được DatePicker cung cấp
+        onClick={onClick}
         ref={ref}
         id={id}
       >
@@ -33,8 +33,6 @@ const CustomDateInput = React.forwardRef<
           <Calendar size={16} className="mr-2 text-[#A6A6B2] flex-shrink-0" />
           <span className="truncate">
             {" "}
-            {/* Đảm bảo text bị cắt nếu quá dài */}
-            {/* Ưu tiên hiển thị 'value' (ngày đã format) nếu có, nếu không thì hiển thị placeholder */}
             {value || placeholder}
           </span>
         </span>

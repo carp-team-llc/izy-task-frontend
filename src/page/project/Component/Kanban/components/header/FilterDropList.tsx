@@ -6,20 +6,21 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import CustomDateInput from "./components/CustomDateInput";
-import type { FilterState, Priority, Status, User } from "./type";
+import type { FilterState, Status, User } from "./type";
 
 interface FilterDropListProps {
   filters: FilterState; // Nhận state filter hiện tại
   users: User[]; // Nhận danh sách users từ props
   statuses: Status[]; // Nhận danh sách statuses từ props
-  priorities: Priority[]; // Nhận danh sách priorities từ props
   onClose: () => void;
   onUserSelect: (userId: string) => void;
   onAuthorSelect: (userId: string | null) => void; // Cho phép null để bỏ chọn
   onStatusSelect: (statusId: string) => void;
-  onPrioritySelect: (priorityId: string) => void;
   onExpirationToggle: (isChecked: boolean) => void;
-  onDateChange: (field: 'startTime' | 'expirationDate', date: Date | null) => void;
+  onDateChange: (
+    field: "startTime" | "expirationDate",
+    date: string | null
+  ) => void;
 }
 
 type ActiveNestedMenu = "assigned" | "author" | "status" | "priority" | null;
@@ -28,11 +29,9 @@ const FilterDropList: React.FC<FilterDropListProps> = ({
   users,
   filters,
   statuses,
-  priorities,
   onUserSelect,
   onAuthorSelect,
   onStatusSelect,
-  onPrioritySelect,
   onExpirationToggle,
   onDateChange,
 }) => {
@@ -99,12 +98,26 @@ const FilterDropList: React.FC<FilterDropListProps> = ({
         {/* Start Date Picker */}
         <div className="mb-1">
           <DatePicker
-            selected={filters.startTime} // Lấy từ state của KanbanHeader qua filters
-            onChange={(date) => onDateChange('startTime', date)} // Gọi callback chung
+            selected={filters.startTime ? new Date(filters.startTime) : null} // Chuyển đổi từ string sang Date
+            onChange={(date: Date | null) => {
+              if (date) {
+                const localDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+                const isoString = localDate.toISOString();
+                onDateChange("startTime", isoString);
+              } else {
+                onDateChange("startTime", null);
+              }
+            }}
             selectsStart
-            startDate={filters.startTime}
-            endDate={filters.expirationDate}
-            maxDate={filters.expirationDate || undefined} // Không cho chọn sau ngày hết hạn (nếu có)
+            startDate={filters.startTime ? new Date(filters.startTime) : null}
+            endDate={
+              filters.expirationDate ? new Date(filters.expirationDate) : null
+            }
+            maxDate={
+              filters.expirationDate
+                ? new Date(filters.expirationDate)
+                : undefined
+            } // Không cho chọn sau ngày hết hạn
             placeholderText="Start Date"
             dateFormat="dd/MM/yyyy"
             isClearable={false} // Tắt clear mặc định, dùng nút clear custom
@@ -124,12 +137,26 @@ const FilterDropList: React.FC<FilterDropListProps> = ({
         {/* Expiration Date Picker */}
         <div className="mb-1">
           <DatePicker
-            selected={filters.expirationDate}
-            onChange={(date) => onDateChange("expirationDate", date)} // Gọi callback chung
+            selected={
+              filters.expirationDate ? new Date(filters.expirationDate) : null
+            }
+            onChange={(date: Date | null) => {
+              if (date) {
+                const localDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+                const isoString = localDate.toISOString();
+                onDateChange("expirationDate", isoString);
+              } else {
+                onDateChange("expirationDate", null);
+              }
+            }}
             selectsEnd
-            startDate={filters.startTime}
-            endDate={filters.expirationDate}
-            minDate={filters.startTime || undefined} // Không cho chọn trước ngày bắt đầu (nếu có)
+            startDate={filters.startTime ? new Date(filters.startTime) : null}
+            endDate={
+              filters.expirationDate ? new Date(filters.expirationDate) : null
+            }
+            minDate={
+              filters.startTime ? new Date(filters.startTime) : undefined
+            } // Không cho chọn trước ngày bắt đầu
             placeholderText="Expiration Date"
             dateFormat="dd/MM/yyyy"
             isClearable={false}
@@ -179,21 +206,6 @@ const FilterDropList: React.FC<FilterDropListProps> = ({
           <span>
             Status{" "}
             {filters.statuses.length > 0 ? `(${filters.statuses.length})` : ""}
-          </span>
-          <ChevronRight size={16} />
-        </button>
-        {/* Priority */}
-        <button
-          onClick={() => handleMainMenuClick("priority")}
-          className={`w-full text-left px-3 py-2 rounded hover:bg-[#0A061F] text-sm flex justify-between items-center mb-1 ${
-            activeNestedMenu === "priority" ? "bg-[#0A061F]" : ""
-          }`}
-        >
-          <span>
-            Priority{" "}
-            {filters.priorities.length > 0
-              ? `(${filters.priorities.length})`
-              : ""}
           </span>
           <ChevronRight size={16} />
         </button>
@@ -292,7 +304,7 @@ const FilterDropList: React.FC<FilterDropListProps> = ({
                     key={status.id}
                     onClick={() => onStatusSelect(status.id)} // Gọi callback
                     className={`w-full text-left px-2 py-1.5 rounded hover:bg-[#0A061F] text-sm mb-1 flex items-center justify-between ${
-                      filters.statuses.includes(status.id) ? "bg-[#0A061F]" : ""
+                      filters.statuses.includes(status.id.toUpperCase()) ? "bg-[#0A061F]" : ""
                     }`}
                   >
                     <span className="flex items-center space-x-2">
@@ -301,26 +313,7 @@ const FilterDropList: React.FC<FilterDropListProps> = ({
                       ></span>
                       <span>{status.title}</span>
                     </span>
-                    {filters.statuses.includes(status.id) && (
-                      <span className="text-[#4F39F6]">✓</span>
-                    )}
-                  </button>
-                ))}
-
-              {/* Priorities */}
-              {activeNestedMenu === "priority" &&
-                priorities.map((priority) => (
-                  <button
-                    key={priority.id}
-                    onClick={() => onPrioritySelect(priority.id)} // Gọi callback
-                    className={`w-full text-left px-2 py-1.5 rounded hover:bg-[#0A061F] text-sm mb-1 flex items-center justify-between ${
-                      filters.priorities.includes(priority.id)
-                        ? "bg-[#0A061F]"
-                        : ""
-                    }`}
-                  >
-                    {priority.name}
-                    {filters.priorities.includes(priority.id) && (
+                    {filters.statuses.includes(status.id.toUpperCase()) && (
                       <span className="text-[#4F39F6]">✓</span>
                     )}
                   </button>
