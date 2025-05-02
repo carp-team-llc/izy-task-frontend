@@ -5,6 +5,13 @@ import React, {
   useRef,
   useState,
 } from "react";
+
+import {
+  notifyError,
+  notifySuccess,
+} from "../../../../component/toastify/Toastify";
+import Helper from "../../../../constant/Helper";
+import UseChangeStatusProject from "../../../../hook/Api/project/useChangeStatusProject";
 import useGetProjectTasks from "../../../../hook/Api/project/useGetProjectTasks";
 import Column from "./components/coulumn";
 import {
@@ -12,14 +19,9 @@ import {
   StatusId,
   type TaskResponse,
 } from "./components/data";
-import TaskCard from "./components/TaskCard";
-import UseChangeStatusProject from "../../../../hook/Api/project/useChangeStatusProject";
-import {
-  notifyError,
-  notifySuccess,
-} from "../../../../component/toastify/Toastify";
-import Helper from "../../../../constant/Helper";
+import type { FilterState, SortKey } from "./components/header/type";
 import KanbanHeader from "./components/kanbanHeader";
+import TaskCard from "./components/TaskCard";
 
 const columnsData: ColumnType[] = [
   // ... (same column data as before)
@@ -36,7 +38,23 @@ type KanbanProps = {
   projectId: string;
 };
 
+interface PreviewPosition {
+  x: number;
+  y: number;
+}
+
 const KanBan = ({ projectId }: KanbanProps) => {
+  const [filters, setFilters] = useState<FilterState>({
+    users: [],
+    author: null,
+    statuses: [],
+    isExpiration: false,
+    startTime: null,
+    expirationDate: null,
+  });
+  const [sortKey, setSortKey] = useState<SortKey>(null);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
   const [tasks, setTasks] = useState<TaskResponse[]>([]);
   const [draggedTask, setDraggedTask] = useState<string | null>(null);
   const [draggedTaskData, setDraggedTaskData] = useState<TaskResponse | null>(
@@ -48,7 +66,15 @@ const KanBan = ({ projectId }: KanbanProps) => {
   } | null>(null);
   const kanbanRef = useRef<HTMLDivElement>(null);
 
-  const { data } = useGetProjectTasks({ projectId });
+  const { data } = useGetProjectTasks({
+    projectId,
+    ...(filters.users && { employeeId: filters.users }),
+    ...(filters.author && { authorId: filters.author }),
+    ...(filters.statuses && { status: filters.statuses }),
+    ...(filters.isExpiration && { isExpiration: filters.isExpiration }),
+    ...(filters.startTime && { startTime: filters.startTime }),
+    ...(filters.expirationDate && { expirationDate: filters.expirationDate }),
+  });
   const { onChangeStatus } = UseChangeStatusProject();
 
   const handleDragStart = useCallback(
@@ -76,8 +102,10 @@ const KanBan = ({ projectId }: KanbanProps) => {
     (e: React.DragEvent<HTMLDivElement>) => {
       e.preventDefault();
       if (draggedTask) {
-        // Update preview position continuously with current mouse coords
-        setPreviewPosition({ x: e.clientX, y: e.clientY });
+        const adjustedX = e.clientX;
+        const adjustedY = e.clientY;
+
+        setPreviewPosition({ x: adjustedX, y: adjustedY });
       }
     },
     [draggedTask]
@@ -153,6 +181,18 @@ const KanBan = ({ projectId }: KanbanProps) => {
     return result;
   }, [tasks]);
 
+  const handleFiltersSelect = useCallback((newFilters: FilterState) => {
+    setFilters(newFilters);
+  }, []);
+
+  const handleSortChange = useCallback((newSort: SortKey) => {
+    setSortKey(newSort);
+  }, []);
+
+  const handleSearchChange = useCallback((term: string) => {
+    setSearchTerm(term);
+  }, []);
+
   useEffect(() => {
     if (data) {
       const normalizedData = data.map((task: any) => ({
@@ -165,7 +205,11 @@ const KanBan = ({ projectId }: KanbanProps) => {
 
   return (
     <>
-      <KanbanHeader />
+      <KanbanHeader
+        onFilterChange={handleFiltersSelect}
+        onSearchChange={handleSearchChange}
+        onSortChange={handleSortChange}
+      />
       <div
         ref={kanbanRef}
         className="flex space-x-6 overflow-x-auto p-4 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800/50 h-[calc(100vh-200px)] relative"
@@ -190,9 +234,8 @@ const KanBan = ({ projectId }: KanbanProps) => {
         <div
           style={{
             position: "fixed",
-            // Position top-left corner directly at the mouse coordinates
-            top: previewPosition.y - 250,
-            left: previewPosition.x - 350,
+            top: previewPosition.y - (kanbanRef.current?.getBoundingClientRect().top || 0),
+            left: previewPosition.x - (kanbanRef.current?.getBoundingClientRect().left || 0),
             pointerEvents: "none",
             zIndex: 50,
             width:

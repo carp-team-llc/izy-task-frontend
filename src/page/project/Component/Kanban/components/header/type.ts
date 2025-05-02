@@ -32,10 +32,9 @@ export interface FilterState {
   users: string[];       // IDs of selected users for 'assigned'
   author: string | null; // ID of the selected author
   statuses: string[];    // IDs of selected statuses
-  priorities: string[];  // IDs of selected priorities
   isExpiration: boolean;
-  startTime: Date | null;
-  expirationDate: Date | null;
+  startTime: string | null;
+  expirationDate: string | null;
 }
 
 // Kiểu dữ liệu cho State Sort

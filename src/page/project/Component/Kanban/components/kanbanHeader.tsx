@@ -2,23 +2,32 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Filter, Search, SortDesc } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
+
 import FilterDropList from "./header/FilterDropList";
 import SortDropList from "./header/SortDropList";
 import {
-  mockPriorities,
   mockStatuses,
   mockUsers,
   type FilterState,
   type SortKey,
 } from "./header/type";
 
-const KanbanHeader = () => {
+type KanbanHeaderProps = {
+  onFilterChange?: (filters: FilterState) => void;
+  onSortChange?: (sortKey: SortKey) => void;
+  onSearchChange?: (term: string) => void;
+};
+
+const KanbanHeader: React.FC<KanbanHeaderProps> = ({
+  onFilterChange,
+  onSortChange,
+  onSearchChange,
+}) => {
   // --- State Management ---
   const [filters, setFilters] = useState<FilterState>({
     users: [],
     author: null,
     statuses: [],
-    priorities: [],
     isExpiration: false,
     startTime: null,
     expirationDate: null,
@@ -44,24 +53,15 @@ const KanbanHeader = () => {
 
   const handleAuthorSelect = useCallback((userId: string | null) => {
     setFilters((prev) => ({ ...prev, author: userId }));
-    // Không đóng dropdown filter ở đây, để người dùng chọn tiếp
   }, []);
 
   const handleStatusSelect = useCallback((statusId: string) => {
+    const upperCaseStatusId = statusId.toUpperCase();
     setFilters((prev) => ({
       ...prev,
-      statuses: prev.statuses.includes(statusId)
-        ? prev.statuses.filter((id) => id !== statusId)
-        : [...prev.statuses, statusId],
-    }));
-  }, []);
-
-  const handlePrioritySelect = useCallback((priorityId: string) => {
-    setFilters((prev) => ({
-      ...prev,
-      priorities: prev.priorities.includes(priorityId)
-        ? prev.priorities.filter((id) => id !== priorityId)
-        : [...prev.priorities, priorityId],
+      statuses: prev.statuses.includes(upperCaseStatusId)
+        ? prev.statuses.filter((id) => id !== upperCaseStatusId)
+        : [...prev.statuses, upperCaseStatusId],
     }));
   }, []);
 
@@ -81,12 +81,15 @@ const KanbanHeader = () => {
     // TODO: Thêm logic debounce nếu cần gọi API search
   };
 
-  const handleDateChange = useCallback((field: 'startTime' | 'expirationDate', date: Date | null) => {
-    setFilters(prev => ({
-      ...prev,
-      [field]: date
-    }));
-  }, []);
+  const handleDateChange = useCallback(
+    (field: "startTime" | "expirationDate", date: String | null) => {
+      setFilters((prev) => ({
+        ...prev,
+        [field]: date,
+      }));
+    },
+    []
+  );
 
   // --- Effects ---
   // Effect để xử lý click outside
@@ -107,16 +110,19 @@ const KanbanHeader = () => {
   }, []);
 
   useEffect(() => {
-    console.log("Filters updated:", filters);
-  }, [filters]);
+    console.log("filters: ", filters)
+    onFilterChange?.(filters);
+  }, [filters, onFilterChange]);
 
   useEffect(() => {
-    console.log("Sort updated:", sortKey);
-  }, [sortKey]);
-
+    console.log("sortKey: ", sortKey)
+    onSortChange?.(sortKey);
+  }, [sortKey, onSortChange]);
+  
   useEffect(() => {
-    console.log("Search term:", searchTerm);
-  }, [searchTerm]);
+    console.log("searchTerm: ", searchTerm)
+    onSearchChange?.(searchTerm);
+  }, [searchTerm, onSearchChange]);
 
   // --- Toggle Dropdown Functions ---
   const toggleFilter = (e: React.MouseEvent) => {
@@ -137,10 +143,10 @@ const KanbanHeader = () => {
     filters.users.length > 0,
     filters.author !== null,
     filters.statuses.length > 0,
-    filters.priorities.length > 0,
     filters.isExpiration,
+    filters.expirationDate,
+    filters.startTime,
   ].filter(Boolean).length;
-  
 
   return (
     <div className="flex items-center px-4 py-2 bg-[#0F0F35] border-b rounded-t-md border-[#13172B] relative z-10">
@@ -182,14 +188,11 @@ const KanbanHeader = () => {
               filters={filters} // Truyền toàn bộ state filters
               users={mockUsers}
               statuses={mockStatuses}
-              priorities={mockPriorities}
               onClose={() => setIsFilterOpen(false)}
               onUserSelect={handleUserSelect}
               onAuthorSelect={handleAuthorSelect}
               onStatusSelect={handleStatusSelect}
-              onPrioritySelect={handlePrioritySelect}
               onExpirationToggle={handleExpirationToggle}
-              // *** TRUYỀN CALLBACK CHO DATEPICKER ***
               onDateChange={handleDateChange}
             />
           )}
@@ -235,8 +238,7 @@ const KanbanHeader = () => {
       </div>
 
       {/* Assignees */}
-      <span className="flex items-center space-x-2 cursor-pointer text-[#A6A6B2] text-sm font-medium hover:text-[#4F39F6] ml-auto">
-      </span>
+      <span className="flex items-center space-x-2 cursor-pointer text-[#A6A6B2] text-sm font-medium hover:text-[#4F39F6] ml-auto"></span>
     </div>
   );
 };
