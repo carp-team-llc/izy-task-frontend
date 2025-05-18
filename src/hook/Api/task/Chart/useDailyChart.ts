@@ -13,7 +13,7 @@ type Response = {
 
 const UseDailyChart = (variables: Variables) => {
   const { data, error, isError, isLoading, refetch } = useQuery({
-    queryKey: [endpoint.daily_chart, variables],
+    queryKey: [endpoint.daily_chart],
     queryFn: async () => {
       const response = await rootApi.post<Response>(
         endpoint.daily_chart,

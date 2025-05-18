@@ -75,6 +75,8 @@ const UsingRoundChart = () => {
         completed={totalCompleted?.total}
         completedColor={totalCompleted?.statusInfo?.color}
         completedName={totalCompleted?.statusInfo?.engName}
+        dataFrom={fromDate}
+        dataTo={toDate}
       />
     </div>
   );

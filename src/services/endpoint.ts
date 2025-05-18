@@ -13,6 +13,11 @@ export default {
   weekly_chart: "api/v1/task/weekly_chart",
   // #endregion
 
+  // #region dashboard
+  dashboard_info: "api/v1/user/dashboard/infomation",
+  dashboard_current: "api/v1/user/dashboard/current",
+  // #endregion
+
   load_new_notification: "api/v1/task/load_new_notification",
 
   // #region Task List
