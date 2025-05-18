@@ -17,6 +17,7 @@ import ResendVerification from "../page/404/ResendVerification";
 import ForgotPasswordPage from "../page/404/ForgotPassword";
 import NewPasswordPage from "../page/404/NewPassword";
 import CheckInfomation from "../page/404/CheckInfomation";
+import MyProfile from "../page/profile/MyProfile";
 
 // Lazy load các trang chính
 const HomePage = lazy(() => import("../page/home/HomePage"));
@@ -36,6 +37,7 @@ const router = createBrowserRouter([
       { path: "timeline", element: <TimeLine /> },
       { path: "profile", element: <CreateProfile /> },
       { path: "showprofile", element: <ShowProfile /> },
+      // { path: "my-profile", element: <MyProfile userId={userId} /> }, // Replace with actual userId
       { path: "tasklist", element: <TaskList /> },
       { path: "tasklist/:id", element: <DetailTaskList /> }, // Add dynamic route for DetailTaskList
       { path: "taskboard", element: <TaskBoard /> },

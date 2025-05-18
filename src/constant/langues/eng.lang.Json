@@ -1,0 +1,158 @@
+{
+    "Headers": {
+      "welcome": "Welcome",
+      "search": "Search"
+    },
+      "Project": {
+          "MainProject": {
+              "title": "All projects ",
+              "Create New Project": "Create New Project",
+              "Import": "Import",
+              "Activate": "Activate"
+          },
+          "DetailProject": {
+              "Overview": "Overview",
+              "List": "List",
+              "Invite": "Invite"
+          },
+          "CreateProject": {
+              "title": "New Project",
+              "Project Name": "Project Name ",
+              "description": "Description",
+              "Time Working": "Time Working",
+              "Time Start": "Time Start",  
+              "Time End": "Time End",
+              "Estimate": "Estimate",
+              "Add Team": "Add Team",
+              "Add Member": "Add Member",    
+              "Upload Image": "Upload Image",
+              "Create": "Create",
+              "Cancel": "Cancel"
+  
+          },
+          "OverviewProject": {
+              "Time Spent": " Time Spent",
+              "Task Spent": "Task Spent",
+              "Total Late": "Total Late",
+              "Total Cancel": "Total Cancel",
+              "Deadline": "Deadline",
+              "Task Estimator": "Task Estimator",
+              "Today Task": "Today Task",
+              "ALL": "ALL",
+              "Hight": "Hight", 
+              "Medium": "Medium",
+              "Low": "Low",
+              "Normal": "Normal",
+              "Project workload": "Project workload",
+              "Activity Stream": "Activity Stream",
+              "Total Task": "Total Task"
+              
+          },
+          "ListProject": {
+              "TITLE": "TITLE",
+              "ACTION REQUIRED": "ACTION REQUIRED",
+              "SCHEDULE": "SCHEDULE",
+              "PRIORITY": "PRIORITY",
+              "STATUS": "STATUS",
+              "New task": "New task",
+              "Folder": "Folder"
+          },
+          "KanBan": {
+              "Search tasks": "Search tasks",
+              "Filter": "Filter",
+              "Sort": "Sort",
+              "New": "New",
+              "Doing": "Doing",
+              "Completed": "Completed",
+              "Review": "Review",
+              "Pending": "Pending",
+              "Late": "Late",  
+              "Cancel": "Cancel"
+          },
+          "FilterProject": {
+              "Start Date": "Start Date",
+              "Expiration Date": "Expiration Date",
+              "Asigined": "Asigined",
+              "Author": "Author",
+              "Status": "Status",
+              "Is Expiration": "Is Expiration"
+              
+          },
+          "SortProject": {
+              "Sort A-Z": "Sort A-Z",
+              "Sort Z-A": "Sort Z-A",
+              "Newest First": "Newest First",
+              "Oldest First": " Oldest First"
+          } 
+      },
+      "Task": {
+          "MainTask": {
+              "title": "Task",
+              "TaskList": "TaskList",
+              "Create New Task": "Create New Task",
+              "Import": "Import"
+          },
+          "Personal Task": {
+              "title": "Personal Task",
+              "Name": "Name",
+              "Status": "Status",
+              "Last Modified": "Last Modified",
+              "Deadline": "Deadline",  
+              "Action": "Action"  
+          },
+          "Recent Task": {
+              "title": "Recent Task",
+              "Name": "Name",
+              "Status": "Status",
+              "Last Modified": "Last Modified",
+              "Deadline": "Deadline",  
+              "Action": "Action"  
+          },
+          "CreateTask": {
+              "title": "Create New Task",
+              "Task Name": "Task Name",
+              "description": "Description",
+              "Time Working": "Time Working",
+              "Time Start": "Time Start",  
+              "Time End": "Time End",
+              "Estimate": "Estimate",
+              "Add Tasklist": "Add Tasklist",  
+              "Upload Image": "Upload Image",
+              "Create": "Create",
+              "Cancel": "Cancel"
+          },
+          "DetailTask": {
+              "description": "Description",
+              "Attachments ": "Attachments",
+              "Status": "Status",  
+              "Author": "Author",
+              "Assigned to": "Assigned to",
+              "Task List": "Task List",  
+              "Team": "Team",
+              "Start time": "Start time",
+              "End time": "End time",
+              "Estimate": "Estimate",
+              "Comments": "Comments",
+              "Add Comment": "Add Comment",
+              "Activity": "Activity"
+          },
+          "ListTask": {
+              "TITLE": "Task List",
+              "Name": "Name",
+              "Create New Task List": "Create New Task List",
+              "Last Modified": "Last Modified",
+              "Deadline": "Deadline"
+          },
+          "CreateNewTaskList": {
+              "TITLE": "New Task List",
+              "Name": "Name",
+              "Description:": "Description",
+              "Upload Image": "Upload Image",
+              "Create": "Create",
+              "Cancel": "Cancel"
+          }
+  
+      }
+  
+  }
+  
