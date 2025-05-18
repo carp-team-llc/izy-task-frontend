@@ -1,4 +1,5 @@
-import { ChevronDown, Users } from "lucide-react";
+import { Users } from "lucide-react";
+import Helper from "../../constant/Helper";
 
 interface RoundChartProps {
   total: number;
@@ -8,6 +9,8 @@ interface RoundChartProps {
   late: number;
   lateName: string;
   lateColor: string;
+  dataFrom: string;
+  dataTo: string;
 }
 
 const RoundChart = ({
@@ -18,10 +21,12 @@ const RoundChart = ({
   late,
   lateName,
   lateColor,
+  dataFrom,
+  dataTo
 }: RoundChartProps) => {
   // Tính toán tỷ lệ phần trăm của từng phần
   const calculatePercentage = (value: number) => {
-    return (value / total) * 100
+    return (value / total) * 100;
   };
 
   const inactivePercentage = calculatePercentage(Number(completed || 0)); // tính phần trăm task completed
@@ -83,10 +88,8 @@ const RoundChart = ({
   return (
     <div className="bg-[#1a1f37] text-white p-6 rounded-lg max-w-md">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold">Weekly Task</h2>
         <div className="flex items-center text-sm text-gray-400">
-          <span>Aug 25-Sept 25</span>
-          <ChevronDown size={16} className="ml-2" />
+          <span>{Helper.formatDate(dataFrom)} - {Helper.formatDate(dataTo)}</span>
         </div>
       </div>
 
@@ -94,15 +97,25 @@ const RoundChart = ({
         <div className="space-y-4">
           <div>
             <div className="flex items-center">
-              <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: `${completedColor || "#0eb53b"}`}}></div>
-              <span className="text-sm text-gray-400">{completedName || "Completed"}</span>
+              <div
+                className="w-3 h-3 rounded-full mr-2"
+                style={{ backgroundColor: `${completedColor || "#0eb53b"}` }}
+              ></div>
+              <span className="text-sm text-gray-400">
+                {completedName || "Completed"}
+              </span>
             </div>
             <p className="text-2xl font-bold">{completed || 0}</p>
           </div>
           <div>
             <div className="flex items-center">
-              <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: `${lateColor || "#c9069c"}`}}></div>
-              <span className="text-sm text-gray-400">{lateName || "Late"}</span>
+              <div
+                className="w-3 h-3 rounded-full mr-2"
+                style={{ backgroundColor: `${lateColor || "#c9069c"}` }}
+              ></div>
+              <span className="text-sm text-gray-400">
+                {lateName || "Late"}
+              </span>
             </div>
             <p className="text-2xl font-bold">{late || 0}</p>
           </div>

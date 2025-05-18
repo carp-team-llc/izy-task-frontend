@@ -13,7 +13,7 @@ const Layout: React.FC = () => {
             <SidebarApp toggled={toggled} setBroken={setBroken} setToggled={setToggled} />
 
             {/* Main content */}
-            <main className=" w-full overflow-auto bg-[#0F0F35]">
+            <main className=" w-full overflow-auto bg-[#0F0F35] custom-scrollbar">
                 <div className="text-[#44596e]">
                     <div className="sticky top-0 left-0 z-10  w-f">
                         <Header broken={broken} toggled={toggled} setToggled={setToggled} />

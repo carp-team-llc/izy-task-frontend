@@ -46,6 +46,7 @@ const SidebarApp = (props: SidebarAppProps) => {
         },
         label: ({open}) => ({
             fontWeight: open ? 600 : undefined,
+            textAlign: 'left',
         }),
     };
 

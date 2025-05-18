@@ -45,9 +45,7 @@
 .read-the-docs {
   color: #888;
 }
-/* styles.css */
-/* Ẩn thanh cuộn cho Chrome, Safari và Opera */
-/* Ẩn thanh cuộn cho Chrome, Safari và Opera */
+
 .scrollbar-hide {
   -ms-overflow-style: none; /* IE và Edge */
   scrollbar-width: none; /* Firefox */
@@ -55,4 +53,17 @@
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Ẩn thanh cuộn cho Chrome, Safari và Opera */
+}
+
+
+/* custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #3e4a6e;
+  border-radius: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: #252c48;
 }

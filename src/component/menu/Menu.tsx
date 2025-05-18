@@ -70,7 +70,7 @@ export default function Menu({ className = "" }) {
             key={index}
             to={item.path}
             className={({ isActive }) =>
-              `flex items-center space-x-2 p-2 rounded-lg mb-2 transition-colors duration-300 ease-in-out ${
+              `flex items-center space-x-2 p-2 rounded-lg mb-2 cursor-pointer transition-colors duration-300 ease-in-out ${
                 isActive
                   ? "bg-purple-600 text-white"
                   : isMobile
@@ -80,7 +80,7 @@ export default function Menu({ className = "" }) {
             }
           >
             {item.icon}
-            {isOpen && <span className="text-sm">{item.label}</span>}
+            {isOpen && <span className="text-sm cursor-pointer">{item.label}</span>}
           </NavLink>
         ))}
       </div>

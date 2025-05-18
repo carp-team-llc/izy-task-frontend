@@ -38,7 +38,7 @@ const Header = (props: headerAppProps) => {
       <div className=" top-0 left-0 w-full h-20 z-50 flex justify-between items-center p-4 md:p-6 bg-[#0F0F35]">
         <div className={'flex'}>
           {broken && (
-              <button className="sb-button flex items-center mr-2" onClick={() => setToggled(!toggled)}>
+              <button className="sb-button flex items-center mr-2 cursor-pointer" onClick={() => setToggled(!toggled)}>
                 <FontAwesomeIcon icon={faBars} />
               </button>
           )}
