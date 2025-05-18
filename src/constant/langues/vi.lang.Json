@@ -1,0 +1,158 @@
+{
+  "Headers": {
+    "welcome": "Chào Mừng ",
+    "search": "Tìm Kiếm"
+  },
+    "Project": {
+        "MainProject": {
+            "title": "Tất cả dự án ",
+            "Create New Project": "Tạo Dự Án Mới",
+            "Import": "Tải lên File",
+            "Activate": "Kích Hoạt"
+        },
+        "DetailProject": {
+            "Overview": "Tổng Quan",
+            "List": "Danh Sách",
+            "Invite": "Mời"
+            
+        },
+        "CreateProject": {
+            "title": "Tạo Dự Án Mới",
+            "Project Name": "Tên Dự ",
+            "description": "Mô Tả",
+            "Time Working": "Thời Gian Làm Việc",
+            "Time Start": "Thời Gian Bắt Đầu",  
+            "Time End": "Thời Gian Kết Thúc",
+            "Estimate": "Thời Gian Dự Kiến",
+            "Add Team": "Thêm Nhóm",
+            "Add Member": "Thêm Thành Viên",    
+            "Upload Image": "Tải Lên Hình Ảnh",
+            "Create": "Tạo",
+            "Cancel": "Hủy"
+
+        },
+        "OverviewProject": {
+            "Time Spent": " Thời Gian Đã làm",
+            "Task Spent": "Thời Gian Làm Việc",
+            "Total Late": "Tổng Thời Gian Trễ",
+            "Total Cancel": "Tổng Thời Gian Hủy",
+            "Deadline": "Thời Gian Kết Thúc",
+            "Task Estimator": "Thời Gian Dự Kiến",
+            "Today Task": "Công Việc Hôm Nay",
+            "ALL": "Tất Cả",
+            "Hight": "Cao", 
+            "Medium": "Trung Bình",
+            "Low": "Thấp",
+            "Normal": "Bình Thường",
+            "Project workload": "Khối Lượng Công Việc",
+            "Activity Stream": "Dòng Hoạt Động",
+            "Total Task": "Tổng Công Việc"
+            
+        },
+        "ListProject": {
+            "TITLE": "Danh Sách Dự Án",
+            "ACTION REQUIRED": "Cần Hành Động",
+            "SCHEDULE": "Lịch Trình",
+            "PRIORITY": "Độ Ưu Tiên",
+            "STATUS": "Trạng Thái",
+            "New task": "Công Việc Mới",
+            "Folder": "Thư Mục"
+        },
+        "KanBan": {
+            "Search tasks": "Tìm kiếm công việc",
+            "Filter": "Lọc",
+            "Sort": "Sắp xếp",
+            "New": "Mới",
+            "Doing": "Đang làm",
+            "Completed": "Hoàn thành",
+            "Review": "Đánh giá",
+            "Pending": "Đang chờ",
+            "Late": "Trễ",  
+            "Cancel": "Hủy"
+        },
+        "FilterProject": {
+            "Start Date": "Thời Gian Bắt Đầu",
+            "Expiration Date": "Thời Gian Kết Thúc",
+            "Asigined": "Người Giao Công Việc",
+            "Author": "Người Tạo",
+            "Status": "Trạng Thái",
+            "Is Expiration": "Đã Hết Hạn"
+            
+        },
+        "SortProject": {
+            "Sort A-Z": "Sắp xếp A-Z",
+            "Sort Z-A": "Sắp xếp Z-A",
+            "Newest First": "Mới Nhất Trước",
+            "Oldest First": " Cũ Nhất Trước"
+        } 
+    },
+    "Task": {
+        "MainTask": {
+            "title": "Công việc",
+            "TaskList": "Danh Sách Công Việc",
+            "Create New Task": "Tạo Công Việc Mới",
+            "Import": "Tải lên File"
+        },
+        "Personal Task": {
+            "title": "Công việc cá nhân",
+            "Name": "Tên Công Việc",
+            "Status": "Trạng Thái",
+            "Last Modified": "Lần Chỉnh Sửa Cuối",
+            "Deadline": "Thời Gian Kết Thúc",  
+            "Action": "Hành Động"  
+        },
+        "Recent Task": {
+            "title": "Công việc cá nhân",
+            "Name": "Tên Công Việc",
+            "Status": "Trạng Thái",
+            "Last Modified": "Lần Chỉnh Sửa Cuối",
+            "Deadline": "Thời Gian Kết Thúc",  
+            "Action": "Hành Động"  
+        },
+        "CreateTask": {
+            "title": "Tạo Công Việc Mới",
+            "Task Name": "Tên Công Việc",
+            "description": "Mô Tả",
+            "Time Working": "Thời Gian Làm Việc",
+            "Time Start": "Thời Gian Bắt Đầu",  
+            "Time End": "Thời Gian Kết Thúc",
+            "Estimate": "Thời Gian Dự Kiến",
+            "Add Tasklist": "Thêm Danh Sách Công Việc",  
+            "Upload Image": "Tải Lên Hình Ảnh",
+            "Create": "Tạo",
+            "Cancel": "Hủy"
+        },
+        "DetailTask": {
+            "description": "Mô Tả",
+            "Attachments ": "Tệp Đính Kèm",
+            "Status": "Trạng Thái",  
+            "Author": "Người Tạo",
+            "Assigned to": "Người Giao Công Việc",
+            "Task List": "Danh Sách Công Việc",  
+            "Team": "Nhóm",
+            "Start time": "Thời Gian Bắt Đầu",
+            "End time": "Thời Gian Kết Thúc",
+            "Estimate": "Thời Gian Dự Kiến",
+            "Comments": "Bình Luận",
+            "Add Comment": "Thêm Bình Luận",
+            "Activity": "Hoạt Động"
+        },
+        "ListTask": {
+            "TITLE": "Danh Sách Công Việc",
+            "Name": "Tên Công Việc",
+            "Create New Task List": "Tạo Danh Sách Công Việc Mới",
+            "Last Modified": "Lần Chỉnh Sửa Cuối",
+            "Deadline": "Thời Gian Kết Thúc"
+        },
+        "CreateNewTaskList": {
+            "TITLE": "Tạo Danh Sách Công Việc Mới",
+            "Name": "Tên Công Việc",
+            "Description:": "Mô Tả",
+            "Upload Image": "Tải Lên Hình Ảnh",
+            "Create": "Tạo",
+            "Cancel": "Hủy"
+        }
+
+    }
+
+}

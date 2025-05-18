@@ -37,7 +37,7 @@ const router = createBrowserRouter([
       { path: "timeline", element: <TimeLine /> },
       { path: "profile", element: <CreateProfile /> },
       { path: "showprofile", element: <ShowProfile /> },
-      { path: "my-profile", element: <MyProfile userId={userId} /> }, // Replace with actual userId
+      // { path: "my-profile", element: <MyProfile userId={userId} /> }, // Replace with actual userId
       { path: "tasklist", element: <TaskList /> },
       { path: "tasklist/:id", element: <DetailTaskList /> }, // Add dynamic route for DetailTaskList
       { path: "taskboard", element: <TaskBoard /> },
