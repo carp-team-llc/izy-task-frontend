@@ -13,24 +13,16 @@ import StatsCard from "./components/StatsCard";
 import TaskList from "./components/TaskList";
 import UpcomingDeadlines from "./components/UpcomingDeadlines";
 
-import {
-  useMockDashboardData,
-} from "./components/useMockData";
+import { UseDashboardCurrent } from "../../hook/Api/dashboard/useDashboardCurrent";
+import { UseDashboardInfo } from "../../hook/Api/dashboard/useDashboardInfo";
+import { UseProjectProgres } from "../../hook/Api/dashboard/useProjectProgres";
+import UseDailyChart from "../../hook/Api/task/Chart/useDailyChart";
 import UsingRoundChart from "./components/UsingRoundChart";
 import { MockDailyChartResponse } from "./Dashboard.type";
-import UseDailyChart from "../../hook/Api/task/Chart/useDailyChart";
-import { UseDashboardInfo } from "../../hook/Api/dashboard/useDashboardInfo";
-import { UseDashboardCurrent } from "../../hook/Api/dashboard/useDashboardCurrent";
+import { UseDashboardUpcomming } from "../../hook/Api/dashboard/useDashboardUpcomming";
 
 
 export default function Dashboard() {
-
-  const {
-    projects,
-    ongoingTasks,
-    lateTasks,
-    upcomingDeadlines,
-  } = useMockDashboardData();
 
   const now = new Date();
   const timezoneOffset = now.getTimezoneOffset() * 60000;
@@ -48,7 +40,10 @@ export default function Dashboard() {
   const { data: dashboardInfoData, isLoading: infoLoading } = UseDashboardInfo();
 
   const { data: dashboardCurrentData, isLoading: currenLoading } = UseDashboardCurrent();
-  console.log("dashboardCurrentData ==> ", dashboardCurrentData)
+
+  const { data: projectProgresData, isLoading: progresLoading } = UseProjectProgres();
+
+  const { data: dashboardUpcommingData, isLoading: upcommingLoading } = UseDashboardUpcomming();
 
   return (
     <div className="flex-grow p-4 sm:p-6 bg-[#05051F] rounded-lg text-slate-100 min-h-screen">
@@ -107,8 +102,8 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
           <Section title="Project Progress">
             <ProjectProgressList
-              projects={projects}
-              loading={isLoading}
+              projects={projectProgresData?.data}
+              loading={progresLoading}
             />
           </Section>
 
@@ -116,7 +111,7 @@ export default function Dashboard() {
             <TaskList
               tasks={dashboardCurrentData?.inProgressTasks || []}
               title="In Progress"
-              loading={isLoading}
+              loading={currenLoading}
               icon={<Clock size={20} className="text-blue-400" />}
             />
             <div className="mt-4">
@@ -125,7 +120,7 @@ export default function Dashboard() {
               <TaskList
                 tasks={dashboardCurrentData?.lateTasks || []}
                 title="Late Tasks"
-                loading={isLoading}
+                loading={currenLoading}
                 icon={<AlertTriangleIcon size={20} className="text-red-400" />}
               />
             </div>
@@ -136,8 +131,8 @@ export default function Dashboard() {
             className="md:col-span-2 xl:col-span-1"
           >
             <UpcomingDeadlines
-              projects={upcomingDeadlines}
-              loading={isLoading}
+              projects={dashboardUpcommingData?.data || []}
+              loading={upcommingLoading}
             />
           </Section>
         </div>

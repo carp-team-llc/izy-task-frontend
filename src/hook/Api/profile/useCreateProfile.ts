@@ -15,7 +15,7 @@ type SocialLink = {
 type ProfileParams = {
   fullName: string;
   bio: string;
-  dateOfBirth: string;
+  dateOfBirth: string | undefined;
   gender: string;
   avatar?: string;
   socials?: SocialLink[];

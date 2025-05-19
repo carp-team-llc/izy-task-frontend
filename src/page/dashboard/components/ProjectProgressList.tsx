@@ -79,7 +79,7 @@ const ProjectProgressItem: React.FC<{ project: Project }> = ({ project }) => {
         />
       </div>
       <div className="flex justify-between text-xs text-slate-400">
-        <span>{project.progress}% Complete</span>
+        <span>{(project.progress * 100).toFixed(2)}% Complete</span>
         <span className={`${isOverdue ? "text-red-400 font-semibold" : ""}`}>
           Deadline: {new Date(project.deadline).toLocaleDateString()}
           {isOverdue && " (Overdue)"}
