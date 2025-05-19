@@ -16,6 +16,8 @@ export default {
   // #region dashboard
   dashboard_info: "api/v1/user/dashboard/infomation",
   dashboard_current: "api/v1/user/dashboard/current",
+  dashbord_project_progres: "api/v1/user/dashboard/project_progress",
+  dashboard_upcomming: "api/v1/user/dashboard/upcomming",
   // #endregion
 
   load_new_notification: "api/v1/task/load_new_notification",
@@ -58,5 +60,6 @@ export default {
 
   // #region profile
   create_profile: "api/v1/user/profile/create_profile",
+  detail_profile: "api/v1/user/profile/profile_detail",
   // #endergion
 };

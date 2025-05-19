@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { Upload, Calendar } from "lucide-react";
 import useCreateProfile from "../../hook/Api/profile/useCreateProfile";
+import DatePicker from "react-datepicker";
 
 const CreateProfileForm: React.FC = () => {
+  const [dob, setDob] = useState<Date | null>(null);
+  const [startDatePickerOpen, setStartDatePickerOpen] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
     dateOfBirth: "",
@@ -11,11 +14,13 @@ const CreateProfileForm: React.FC = () => {
     avatar: "",
     socials: [],
   });
-  const { onCreateProfile, isError, error } = useCreateProfile();
+  const { onCreateProfile } = useCreateProfile();
   const [socialInputs, setSocialInputs] = useState<{
     platform: string;
     url: string;
   } | null>(null);
+
+  console.log("dob ===> ", dob?.toISOString());
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -47,6 +52,8 @@ const CreateProfileForm: React.FC = () => {
 
     onCreateProfile(formData);
   };
+
+  console.log("formData.gender -----> ", formData)
 
   return (
     <div className="bg-[#1E1E2D] text-white p-6 rounded-lg w-full max-w-7xl mx-auto h-[calc(96vh-5rem)] overflow-y-auto relative ">
@@ -80,7 +87,7 @@ const CreateProfileForm: React.FC = () => {
                   className="w-full bg-[#151521] rounded-md p-2 text-sm text-white placeholder-gray-400"
                 />
               </div>
-              <div>
+              <div className="relative">
                 <label
                   htmlFor="dateOfBirth"
                   className="block text-sm font-medium mb-1"
@@ -92,7 +99,7 @@ const CreateProfileForm: React.FC = () => {
                     type="text"
                     id="dateOfBirth"
                     name="dateOfBirth"
-                    value={formData.dateOfBirth}
+                    value={dob ? dob.toLocaleDateString() : ""}
                     onChange={handleInputChange}
                     placeholder="Date of birth"
                     className="w-full bg-[#151521] rounded-md p-2 text-sm text-white placeholder-gray-400 pr-10"
@@ -100,8 +107,29 @@ const CreateProfileForm: React.FC = () => {
                   <Calendar
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
                     size={16}
+                    onClick={() => setStartDatePickerOpen(true)}
                   />
                 </div>
+                {startDatePickerOpen && (
+                  <DatePicker
+                    selected={dob}
+                    onChange={(date: Date | null) => {
+                      setDob(date);
+                      setFormData((prev) => ({
+                        ...prev,
+                        dateOfBirth: date ? date.toISOString() : "",
+                      }));
+                      setStartDatePickerOpen(false);
+                    }}
+                    onClickOutside={() => setStartDatePickerOpen(false)}
+                    open
+                    showYearDropdown
+                    showMonthDropdown
+                    dropdownMode="select"
+                    popperPlacement="bottom-start"
+                    popperClassName="z-[9999]"
+                  />
+                )}
               </div>
             </div>
             <div>

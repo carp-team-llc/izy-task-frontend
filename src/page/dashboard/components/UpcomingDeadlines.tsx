@@ -72,7 +72,7 @@ const UpcomingDeadlines: React.FC<UpcomingDeadlinesProps> = ({
     );
   }
 
-  if (projects.length === 0) {
+  if (projects?.length === 0) {
     return (
       <p className="text-slate-400 text-center py-4">
         No upcoming deadlines in the next 7 days.
@@ -83,9 +83,9 @@ const UpcomingDeadlines: React.FC<UpcomingDeadlinesProps> = ({
   return (
     <ul
       className="space-y-2 max-h-[300px] overflow-y-auto pr-1
-                   scrollbar-thin scrollbar-thumb-[#3e4a6e] scrollbar-track-[#252c48]"
+                  scrollbar-thin scrollbar-thumb-[#3e4a6e] scrollbar-track-[#252c48]"
     >
-      {projects.map((project) => (
+      {projects?.map((project) => (
         <DeadlineItem key={project.id} project={project} />
       ))}
     </ul>
