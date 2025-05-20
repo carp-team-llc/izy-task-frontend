@@ -185,7 +185,7 @@ const KanbanHeader: React.FC<KanbanHeaderProps> = ({
         <AnimatePresence>
           {isFilterOpen && (
             <FilterDropList
-              filters={filters} // Truyền toàn bộ state filters
+              filters={filters}
               users={mockUsers}
               statuses={mockStatuses}
               onClose={() => setIsFilterOpen(false)}

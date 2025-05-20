@@ -67,7 +67,7 @@ const ProjectProgressItem: React.FC<{ project: Project }> = ({ project }) => {
       <div className="mb-1">
         <LinearProgress
           variant="determinate"
-          value={project.progress}
+          value={Number((project.progress * 100).toFixed(2))}
           sx={{
             height: 8,
             borderRadius: 5,
