@@ -20,8 +20,6 @@ const CreateProfileForm: React.FC = () => {
     url: string;
   } | null>(null);
 
-  console.log("dob ===> ", dob?.toISOString());
-
   const handleInputChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -52,8 +50,6 @@ const CreateProfileForm: React.FC = () => {
 
     onCreateProfile(formData);
   };
-
-  console.log("formData.gender -----> ", formData)
 
   return (
     <div className="bg-[#1E1E2D] text-white p-6 rounded-lg w-full max-w-7xl mx-auto h-[calc(96vh-5rem)] overflow-y-auto relative ">
