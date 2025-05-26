@@ -64,7 +64,7 @@ export default function Menu({ className = "" }) {
           { icon: <FolderOpen size={20} />, label: "Projects", path: "/projectboard" },
           { icon: <Calendar size={20} />, label: "Meetings", path: "/meetings" },
           { icon: <CheckSquare size={20} />, label: "Tasks", path: "/task" },
-          { icon: <Settings size={20} />, label: "Settings", path: "/settings" },
+          { icon: <Settings size={20} />, label: "Settings", path: "/setting" },
         ].map((item, index) => (
           <NavLink
             key={index}
