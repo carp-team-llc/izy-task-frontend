@@ -17,7 +17,7 @@ import KabanBoard from "../page/Task/TaskBoard/components/KabanBoard";
 import TaskList from "../page/Task/TaskList";
 import ProtectedRoute from "./ProtectedRoute";
 import RedirectIfLoggedIn from "./RedirectIfLoggedIn";
-import SetTing from "../page/setting/SetTing";
+import SetTing from "../page/setting/Settings";
 
 // Lazy load các trang chính
 const HomePage = lazy(() => import("../page/home/HomePage"));

@@ -1,30 +1,12 @@
 import React from "react";
 import { Facebook, Twitter, Instagram } from "lucide-react";
 import Helper from "../../constant/Helper";
+import { useProfile } from "./context/ProfileContext";
 
-interface ProfileProps {
-  id: string;
-  fullName: string;
-  bio: string;
-  dateOfBirth: string;
-  avatar: string;
-  userId: string;
-  gender: string;
-  socials: [];
-  user: {
-    email: string;
-  };
-}
+const ShowProfile: React.FC = () => {
+  const { fullName, bio, dateOfBirth, avatar, gender, socials, user } =
+    useProfile();
 
-const ShowProfile: React.FC<ProfileProps> = ({
-  fullName,
-  bio,
-  dateOfBirth,
-  avatar,
-  gender,
-  socials,
-  user,
-}) => {
   return (
     <div className="w-full bg-[#0a061f] rounded-sm ">
       <div className="w-1/4 bg-[#0a061f] min-h-screen border-r border-gray-800 rounded-sm">

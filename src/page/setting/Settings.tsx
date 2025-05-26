@@ -18,7 +18,7 @@ export default function SettingsPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-12">
           <h1 className="text-4xl font-bold">Settings</h1>
-         
+        
         </div>
 
         <div className="space-y-10">
