@@ -17,6 +17,7 @@ import KabanBoard from "../page/Task/TaskBoard/components/KabanBoard";
 import TaskList from "../page/Task/TaskList";
 import ProtectedRoute from "./ProtectedRoute";
 import RedirectIfLoggedIn from "./RedirectIfLoggedIn";
+import SetTing from "../page/setting/SetTing";
 
 // Lazy load các trang chính
 const HomePage = lazy(() => import("../page/home/HomePage"));
@@ -42,6 +43,7 @@ const router = createBrowserRouter([
       { path: "projectboard", element: <ProjectDashboard /> },
       { path: "projectdetail/:id", element: <ProjectDetail /> },
       { path: "kaban", element: <KabanBoard /> },
+      { path: "setting", element: <SetTing /> },
       { path: "*", element: <Navigate to="/" /> },
     ],
   },

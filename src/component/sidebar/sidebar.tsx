@@ -105,7 +105,7 @@ const SidebarApp = (props: SidebarAppProps) => {
                             Tasks
                         </MenuItem>
                         <MenuItem
-                            component={<NavLink to="/settings"/>}
+                            component={<NavLink to="/setting"/>}
                             icon={<FontAwesomeIcon icon={faGear}/>}
                         >
                             Settings
