@@ -13,7 +13,7 @@ import {
 import Helper from "../../../../constant/Helper";
 import UseChangeStatusProject from "../../../../hook/Api/project/useChangeStatusProject";
 import useGetProjectTasks from "../../../../hook/Api/project/useGetProjectTasks";
-import Column from "./components/coulumn";
+import Column from "./components/columns";
 import {
   Column as ColumnType,
   StatusId,
@@ -212,7 +212,7 @@ const KanBan = ({ projectId }: KanbanProps) => {
       />
       <div
         ref={kanbanRef}
-        className="flex space-x-6 overflow-x-auto p-4 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800/50 h-[calc(100vh-200px)] relative"
+        className="flex space-x-6 overflow-x-auto p-4 custom-scrollbar h-[calc(100vh-200px)] relative"
         onDragOver={handleDragOver}
         onDragEnd={handleDragEnd}
       >

@@ -15,6 +15,31 @@ interface TaskCardProps {
   ) => void;
 }
 
+const setPriorityColor = (priority: string) => {
+  switch (priority) {
+    case "LOW":
+      return "#0eb53b";
+    case "NORMAL":
+      return "#06a2c9";
+    case "MEDIUM":
+      return "#c99506";
+    case "HIGH":
+      return "#c90000";
+    default:
+      return "#7d7d7d";
+  }
+};
+
+const isExpired = (expirationDate: string) => {
+  const isPast = new Date(expirationDate) < new Date();
+
+  return (
+    <p className={`italic ${isPast ? "text-red-500" : "text-gray-300"}`}>
+      {Helper.formatDate(expirationDate)}
+    </p>
+  );
+};
+
 const TaskCard: React.FC<TaskCardProps> = ({
   task,
   isDragging,
@@ -82,20 +107,32 @@ const TaskCard: React.FC<TaskCardProps> = ({
       >
         <div className="flex flex-col space-y-2">
           {/* Title nằm trên */}
-          <span className="text-md font-medium text-gray-200">{task.name}</span>
+          <div className="flex items-center">
+            <span className="text-md font-medium text-gray-200">
+              {task.name}
+            </span>
+            <span
+              className={`ml-2 text-xs bg-[${setPriorityColor(
+                task?.priority
+              )}] px-2 py-1 rounded-full text-white`}
+            >
+              {Helper.capitalize(task?.priority)}
+            </span>
+          </div>
 
           {/* Deadline + number nằm dưới cùng hàng */}
           <div className="flex justify-between items-center text-gray-400 text-xs">
             <span className="flex font-semibold text-gray-300">
               Deadline:
               <div className="w-1" />{" "}
-              <p className="italic">
-                {Helper.formatDateTime(task?.expirationDate)}
-              </p>
+              <p className="italic">{isExpired(task?.expirationDate)}</p>
             </span>
-            <span className={`ml-2 text-gray-500`}>
-              {Helper.capitalize(task?.priority)}
-            </span>
+            <img
+              className="w-8 h-8 rounded-full object-cover"
+              src={
+                "https://i0.wp.com/catcaresolutions.com/wp-content/uploads/2020/12/cute-cat-with-yellow-headband-on.png?fit=1000%2C1500&ssl=1"
+              }
+            />
           </div>
         </div>
       </div>

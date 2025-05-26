@@ -3,6 +3,7 @@ import ShowProfile from "./ShowProfile";
 import CreateProfile from "./CreateProfile";
 import { useAuth } from "../../services/authContext";
 import { useDetailProfile } from "../../hook/Api/profile/useDetailProfile";
+import { ProfileContext } from "./context/ProfileContext";
 
 interface ProfileData {
   id: string;
@@ -14,8 +15,8 @@ interface ProfileData {
   gender: string;
   socials: [];
   user: {
-    email: string
-  }
+    email: string;
+  };
 }
 
 const MyProfile: React.FC = () => {
@@ -39,7 +40,11 @@ const MyProfile: React.FC = () => {
   }
 
   if (hasProfile) {
-    return <ShowProfile {...profileData!} />;
+    return (
+      <ProfileContext.Provider  value={profileData!}>
+        <ShowProfile />
+      </ProfileContext.Provider>
+    );
   }
 
   return <CreateProfile />;
