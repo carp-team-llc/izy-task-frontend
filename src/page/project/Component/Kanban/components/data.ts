@@ -31,6 +31,8 @@ export interface TaskResponse {
   authorId: string;
   sprintId: string;
   taskListId: string;
+  employeeAvatar?: string;
+  employeeName?: string;
 }
 
 export type StatusId =
