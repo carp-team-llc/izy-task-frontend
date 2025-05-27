@@ -55,7 +55,6 @@ const TaskCard: React.FC<TaskCardProps> = ({
   };
 
   const handleTaskClose = () => {
-    console.log("Modal closed");
     setIsModalOpen(false);
     setSelectedTask(null);
   };
@@ -130,7 +129,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
             <img
               className="w-8 h-8 rounded-full object-cover"
               src={
-                "https://i0.wp.com/catcaresolutions.com/wp-content/uploads/2020/12/cute-cat-with-yellow-headband-on.png?fit=1000%2C1500&ssl=1"
+                task?.employeeAvatar || "https://i0.wp.com/catcaresolutions.com/wp-content/uploads/2020/12/cute-cat-with-yellow-headband-on.png?fit=1000%2C1500&ssl=1"
               }
             />
           </div>

@@ -1,5 +1,6 @@
 import { Filter, Plus, RefreshCcw, Search } from "lucide-react";
 import { useParams } from "react-router-dom";
+import { motion } from "framer-motion";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Helper from "../../../../../constant/Helper";
@@ -13,6 +14,8 @@ import {
 import FilterDropList from "../../Kanban/components/header/FilterDropList";
 import { AnimatePresence } from "framer-motion";
 import { priorityColorMap, statusColorMap } from "./list.type";
+import DetailTask from "../../../../Task/DetailTask/DetailTask";
+import type { Tasks } from "../../../../../constant/types/tasks/detail.types";
 
 interface Task {
   id: string;
@@ -22,6 +25,7 @@ interface Task {
   expirationDate: string;
   priority: string;
   status: string;
+  employeeAvatar?: string;
 }
 
 export default function Component() {
@@ -35,6 +39,9 @@ export default function Component() {
   });
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<Tasks | null>(null);
 
   const filterRef = useRef<HTMLDivElement>(null);
   const sortRef = useRef<HTMLDivElement>(null);
@@ -170,6 +177,16 @@ export default function Component() {
     return priorityColorMap[priority.toUpperCase()] || "#38bdf8";
   }
 
+  const handleTaskClick = (task: any) => {
+    setSelectedTask(task);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedTask(null);
+  };
+
   return (
     <div className="min-h-screen bg-[#0F0F35] text-gray-200">
       {/* Task Table */}
@@ -215,12 +232,6 @@ export default function Component() {
                 )}
               </AnimatePresence>
             </div>
-          </div>
-          <div className="flex items-center space-x-2">
-            <span className="text-xs text-gray-400">Status:</span>
-            <button className="px-2 py-1 bg-[#111111] rounded text-xs text-gray-300">
-              All <span className="ml-1">▼</span>
-            </button>
           </div>
         </div>
         <div className="w-full h-px bg-gray-300"></div>
@@ -294,7 +305,8 @@ export default function Component() {
               {data?.map((task: Task) => (
                 <tr
                   key={task.id}
-                  className="hover:bg-[#1a1940] transition-colors"
+                  onClick={() => handleTaskClick(task)}
+                  className="hover:bg-[#1a1940] transition-colors cursor-pointer"
                 >
                   <td
                     className="py-2 px-2 text-gray-400 text-sm border border-[#3b3d4f]"
@@ -315,16 +327,25 @@ export default function Component() {
                     className="py-2 px-2 text-center border border-[#3b3d4f]"
                     style={{ width: columnWidths.action }}
                   >
-                    {/* {task.actionRequired && (
-                      <div className="w-4 h-4 rounded-full bg-[#4646a4]" />
-                    )} */}
-                    {task.employeeName}
+                    <div className="flex items-center justify-center gap-2">
+                      <img
+                        className="w-8 h-8 rounded-full object-cover"
+                        src={
+                          task?.employeeAvatar ||
+                          "https://i0.wp.com/catcaresolutions.com/wp-content/uploads/2020/12/cute-cat-with-yellow-headband-on.png?fit=1000%2C1500&ssl=1"
+                        }
+                        alt="avatar"
+                      />
+                      <span className="text-sm text-white">
+                        {task.employeeName}
+                      </span>
+                    </div>
                   </td>
                   <td
                     className="py-2 px-2 text-sm text-center border border-[#3b3d4f]"
                     style={{ width: columnWidths.schedule }}
                   >
-                    {Helper.formatDateTime(task.expirationDate)}
+                    {Helper.formatDate(task.expirationDate)}
                   </td>
                   <td
                     className="py-2 px-2 text-center border border-[#3b3d4f]"
@@ -363,6 +384,25 @@ export default function Component() {
               ))}
             </tbody>
           </table>
+          {isModalOpen && selectedTask && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center"
+            >
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                className="bg-[#0f0a2a] rounded-lg max-w-5xl p-4 w-full max-h-[90vh] overflow-auto"
+              >
+                <DetailTask task={selectedTask} onClose={closeModal} />
+              </motion.div>
+            </motion.div>
+          )}
         </div>
         <div className="w-full h-px bg-gray-300"></div>
         <div className="flex items-center gap-2 mt-4 text-sm">

@@ -16,18 +16,7 @@ import Activities from "./component/Activities";
 import Description from "./component/Description";
 import Editt from "./component/Edit";
 import Status from "./component/Status";
-
-interface DetailTaskProps {
-  onClose: () => void;
-  task: {
-    id: string;
-    name: string;
-    status: string;
-    updatedAt: string;
-    expirationDate: string;
-    description?: string;
-  };
-}
+import type { DetailTaskProps } from "../../../constant/types/tasks/detail.types";
 
 const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
   const { data } = useTaskDetail({
@@ -41,6 +30,8 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const [description, setDescription] = useState<string>(data?.body || "");
+
+  if (!task) return null;
 
   const handleUpdate = (isUpdate: boolean) => {
     setIsUpdate(isUpdate);
@@ -62,6 +53,7 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
       notifyError("Failed to delete task. Please try again.");
     }
   };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {

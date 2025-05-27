@@ -1,10 +1,11 @@
+import { AnimatePresence, motion } from "framer-motion"
 import type React from "react"
 import { useState } from "react"
-import { FiFileText, FiMoreVertical, FiChevronLeft, FiChevronRight } from "react-icons/fi"
+import { FiChevronLeft, FiChevronRight, FiFileText, FiMoreVertical } from "react-icons/fi"
 import { NavLink } from "react-router-dom"
-import { motion, AnimatePresence } from "framer-motion"
 
 import Helper from "../../constant/Helper"
+import type { Tasks } from "../../constant/types/tasks/detail.types"
 import usePersonalTaskList from "../../hook/Api/task/TaskManager/usePersonalTask"
 import DetailTask from "../../page/Task/DetailTask/DetailTask"
 
@@ -16,7 +17,7 @@ type TaskListProps = {
 
 const TaskList: React.FC<TaskListProps> = ({ title, showAll = false }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedTask, setSelectedTask] = useState<any>(null)
+  const [selectedTask, setSelectedTask] = useState<Tasks | null>(null);
   const [currentPage, setCurrentPage] = useState(1)
   const tasksPerPage = 10
 
@@ -189,7 +190,7 @@ const TaskList: React.FC<TaskListProps> = ({ title, showAll = false }) => {
       )}
 
       <AnimatePresence>
-        {isModalOpen && (
+        {isModalOpen && selectedTask && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

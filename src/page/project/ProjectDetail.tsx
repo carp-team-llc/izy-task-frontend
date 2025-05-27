@@ -5,11 +5,13 @@ import UseProjectDetail from "../../hook/Api/project/useProjectDetail";
 import OverviewTab from "./Component/Detail/Overview";
 import ProjectTaskList from "./Component/Detail/ProjectTask/ProjectTaskList";
 import KanBan from "./Component/Kanban/Kanban";
+import ProjectMembersTab from "./Component/Detail/members/MemberList";
 
 const TABS: Record<string, (props: { id: string }) => JSX.Element> = {
   Overview: () => <OverviewTab />,
   List: () => <ProjectTaskList />,
   KanBan: ({ id }) => <KanBan projectId={id} />,
+  Members: ({ id }) => <ProjectMembersTab projectId={id} />,
 };
 
 const ProjectDetail = () => {
