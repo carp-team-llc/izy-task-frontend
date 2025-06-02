@@ -7,11 +7,11 @@ import ProjectTaskList from "./Component/Detail/ProjectTask/ProjectTaskList";
 import KanBan from "./Component/Kanban/Kanban";
 import ProjectMembersTab from "./Component/Detail/members/MemberList";
 
-const TABS: Record<string, (props: { id: string }) => JSX.Element> = {
+const TABS: Record<string, (props: { id: string, role: string }) => JSX.Element> = {
   Overview: () => <OverviewTab />,
   List: () => <ProjectTaskList />,
-  KanBan: ({ id }) => <KanBan projectId={id} />,
-  Members: ({ id }) => <ProjectMembersTab projectId={id} />,
+  KanBan: ({ id, role }) => <KanBan projectId={id} />,
+  Members: ({ id, role }) => <ProjectMembersTab projectId={id} />,
 };
 
 const ProjectDetail = () => {
@@ -40,7 +40,7 @@ const ProjectDetail = () => {
 
         <div className="mt-4 relative overflow-hidden">
           <TabTransition key={activeTab} direction={direction}>
-            {renderActiveTab({ id: id as string })}
+            {renderActiveTab({ id: id as string, role: "" })}
           </TabTransition>
         </div>
       </div>
@@ -110,7 +110,7 @@ const TabNav = ({
   activeTab,
   onChange,
 }: {
-  tabs: Record<string, (props: { id: string }) => JSX.Element>;
+  tabs: Record<string, (props: { id: string, role: string }) => JSX.Element>;
   activeTab: string;
   onChange: (tab: string) => void;
 }) => (
