@@ -1,7 +1,6 @@
 import { X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
-
 import CommentDetailTask from "../../../component/interactions/CommentDetailTask";
 import ShowFiles from "../../../component/ShowFiles/ShowFiles";
 import {
@@ -17,6 +16,7 @@ import Description from "./component/Description";
 import Editt from "./component/Edit";
 import Status from "./component/Status";
 import type { DetailTaskProps } from "../../../constant/types/tasks/detail.types";
+import { useAuth } from "../../../services/authContext";
 
 const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
   const { data } = useTaskDetail({
@@ -28,14 +28,19 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
   const [status, setStatus] = useState<string | null>(null);
   const [isUpdate, setIsUpdate] = useState<boolean>(true);
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isAuthor, setIsAuthor] = useState<boolean>(false);
 
   const [description, setDescription] = useState<string>(data?.body || "");
+
+  const { UserId } = useAuth();
 
   if (!task) return null;
 
   const handleUpdate = (isUpdate: boolean) => {
-    setIsUpdate(isUpdate);
-    setIsEditing(true);
+    if (isAuthor) {
+      setIsUpdate(isUpdate);
+      setIsEditing(true);
+    }
   };
   const handleChangeDescription = (newDescription: string) => {
     setDescription(newDescription);
@@ -71,7 +76,6 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
         setIsEditing(false);
       }
     } catch (err) {
-
       if (err instanceof Error) {
         if ((err as any)?.response && (err as any)?.response?.data) {
           notifyError(`${(err as any)?.response?.data?.message}`);
@@ -95,6 +99,12 @@ const DetailTask: React.FC<DetailTaskProps> = ({ onClose, task }) => {
       setDescription(data?.body || "");
     }
   }, [data]);
+
+  useEffect(() => {
+    if (UserId === task?.authorId) {
+      setIsAuthor(true);
+    }
+  }, [task]);
 
   return (
     <div className="text-white  text-start max-w-5xl max-h-max mx-auto px-2 py-1.5">

@@ -34,7 +34,6 @@ export default {
   // #region personal tasks
   createtask: "api/v1/task/create_task",
   personal_tasks: "api/v1/task/tasks_list",
-  comments: "api/v1/comments/create_comment",
   detailtask: "api/v1/task/task_detail",
   updatetask: "api/v1/task/update_task",
   // #endregion
@@ -62,4 +61,9 @@ export default {
   create_profile: "api/v1/user/profile/create_profile",
   detail_profile: "api/v1/user/profile/profile_detail",
   // #endergion
+
+  // #region comments
+  view_comments: "api/v1/comments/view_comments",
+  comments: "api/v1/comments/create_comment",
+  // #endregion
 };
